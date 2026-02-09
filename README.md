@@ -21,6 +21,36 @@ Perfect for when you need to understand why an agent did what it did, or when yo
 
 [📖 Read the full skill documentation](./agent-feedback/SKILL.md)
 
+### 🏗️ implement-with-feedback
+
+**Git-centric implementation workflow for local-only development with continuous progress tracking.**
+
+A disciplined workflow that keeps your work organized without polluting remote with WIP commits:
+- ✅ Pre-flight checks (clean checkout, branch verification)
+- 🌿 Automatic branch creation with proper naming
+- 📝 Living WIP documentation that tracks progress
+- 💾 Commit early, commit often (locally)
+- 🎯 Phase-based workflow from start to completion
+
+Perfect for solo development work where you want to maintain clean commit history without pushing every intermediate step.
+
+[📖 Read the full skill documentation](./implement-with-feedback/SKILL.md)
+
+### 🌐 implement-with-remote-feedback
+
+**Git-centric implementation workflow with continuous remote push for collaborative monitoring.**
+
+Same disciplined workflow as above, but designed for scenarios where others need real-time visibility:
+- 🚀 Push after every commit for live monitoring
+- 👥 Perfect for pairing, mentoring, or remote supervision
+- 📡 Remote git logs serve as primary monitoring channel
+- 🔍 Others can track progress via `git log` and WIP files
+- 💬 Real-time feedback integration
+
+Use this when working with a team lead, mentor, or when your work needs to be visible to collaborators in real-time.
+
+[📖 Read the full skill documentation](./implement-with-remote-feedback/SKILL.md)
+
 ## 🚀 Installation
 
 ### Using the skills CLI
@@ -60,18 +90,22 @@ Agent Skills are packaged instructions that extend AI agent capabilities. Each s
 ```
 agent-skills/
 ├── README.md
-├── LICENSE
-└── agent-feedback/
-    ├── SKILL.md       # Agent instructions
-    └── LICENSE        # MIT License
+├── LICENSE                           # MIT License for all skills
+├── AGENTS.md                         # Skill design guide
+├── agent-feedback/
+│   └── SKILL.md                      # Session analysis & feedback
+├── implement-with-feedback/
+│   └── SKILL.md                      # Local-only git workflow
+└── implement-with-remote-feedback/
+    └── SKILL.md                      # Remote-push git workflow
 ```
 ## 🤝 Contributing
 
 Got a cool skill idea? Contributions welcome! Each skill should:
 - ✅ Have a clear, specific purpose
 - 📝 Include comprehensive SKILL.md documentation
-- ⚖️ Include an MIT License
 - 🎯 Follow the Agent Skills format specification
+- 📚 See AGENTS.md for design patterns and best practices
 
 ## 📋 Skill Format
 
