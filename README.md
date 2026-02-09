@@ -2,7 +2,7 @@
 
 > Like [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills), but cooler. Because emojis. 😎
 
-A curated collection of AI agent skills that extend Claude Code's capabilities with packaged instructions and scripts.
+My curated collection of AI agent skills that extend ~~Claude Code~~ "Your Agentic Agent"'s capabilities with packaged instructions and scripts.
 
 ## 🌟 Available Skills
 
@@ -26,14 +26,20 @@ Perfect for when you need to understand why an agent did what it did, or when yo
 ### Using the skills CLI
 
 ```bash
-npx skills add <your-github-username>/agent-skills
+npx skills add Xalior/agent-skills
+```
+
+### Install a specific skill with the CLI
+
+```bash
+npx skills add Xalior/agent-skills --skill agent-feedback
 ```
 
 ### Manual Installation
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/<your-github-username>/agent-skills.git
+   git clone https://github.com/Xalior/agent-skills.git
    ```
 
 2. Add the skill to your Claude Code configuration:
@@ -59,7 +65,6 @@ agent-skills/
     ├── SKILL.md       # Agent instructions
     └── LICENSE        # MIT License
 ```
-
 ## 🤝 Contributing
 
 Got a cool skill idea? Contributions welcome! Each skill should:
@@ -80,20 +85,12 @@ license: MIT
 ---
 ```
 
-## 🎉 Why This Repo?
-
-Because sometimes you need agent skills that match your vibe. Vercel's collection is great, but variety is the spice of life! Plus:
-- 😊 More emojis
-- 🔥 Different perspectives
-- 🎨 Unique skill ideas
-- 💪 Community-driven awesomeness
-
 ## 📜 License
 
 MIT © 2026
 
 ---
 
-Made with 💙 by someone cooler than Vercel (kidding, we love them really)
+Made with 💜 by someone cooler than Vercel (kidding, love them really)
 
 *P.S. - If you're reading this and work at Vercel, this is all in good fun. Your agent-skills repo is genuinely awesome and inspired this one!* 🙏
