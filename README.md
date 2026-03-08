@@ -51,6 +51,21 @@ Use this when working with a team lead, mentor, or when your work needs to be vi
 
 [📖 Read the full skill documentation](./implement-with-remote-feedback/SKILL.md)
 
+### 🖥️ cmux
+
+**Control the cmux terminal multiplexer from your agent.**
+
+Full CLI knowledge for managing the cmux terminal multiplexer without rediscovery:
+- 🪟 Windows, workspaces, panes, and splits management
+- 📖 Read other terminal screens and send commands to panes
+- 🌐 Built-in browser pane control (navigate, click, snapshot, eval JS)
+- 📊 Sidebar metadata, progress bars, and notifications
+- 🔗 Hooks, signals, buffers, and clipboard integration
+
+Use this when you need to orchestrate multi-terminal workflows, monitor other panes, or control browser splits.
+
+[📖 Read the full skill documentation](./cmux/SKILL.md)
+
 ## 🚀 Installation
 
 ### Using the skills CLI
@@ -94,6 +109,8 @@ agent-skills/
 ├── AGENTS.md                         # Skill design guide
 ├── agent-feedback/
 │   └── SKILL.md                      # Session analysis & feedback
+├── cmux/
+│   └── SKILL.md                      # Terminal multiplexer control
 ├── implement-with-feedback/
 │   └── SKILL.md                      # Local-only git workflow
 └── implement-with-remote-feedback/
