@@ -66,6 +66,21 @@ Use this when you need to orchestrate multi-terminal workflows, monitor other pa
 
 [📖 Read the full skill documentation](./cmux/SKILL.md)
 
+### 📜 nicelicense
+
+**Add, validate, and manage open-source LICENSE files using the nicelicense CLI.**
+
+Quick license management for any project without remembering SPDX IDs or CLI flags:
+- 📝 Add any common open-source license non-interactively
+- 🔍 Identify existing LICENSE files with confidence scoring
+- 📋 Supports MIT, Apache-2.0, BSD, ISC, MPL, GPL, Unlicense, and more
+- 🤖 Machine-readable JSON output for automation
+- 👀 Preview with `--stdout` or `--dry-run` before writing
+
+Use this when you need to add a license to a new project, change an existing license, or audit what license a project currently uses.
+
+[📖 Read the full skill documentation](./nicelicense/SKILL.md)
+
 ## 🚀 Installation
 
 ### Using the skills CLI
@@ -113,8 +128,10 @@ agent-skills/
 │   └── SKILL.md                      # Terminal multiplexer control
 ├── implement-with-feedback/
 │   └── SKILL.md                      # Local-only git workflow
-└── implement-with-remote-feedback/
-    └── SKILL.md                      # Remote-push git workflow
+├── implement-with-remote-feedback/
+│   └── SKILL.md                      # Remote-push git workflow
+└── nicelicense/
+    └── SKILL.md                      # License management CLI
 ```
 ## 🤝 Contributing
 
