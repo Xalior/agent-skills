@@ -53,3 +53,4 @@ Refine the doc with the user, one section at a time. **The stance is skepticism*
 - Never add process logs, timestamps, or activity tracking to the doc — the doc is about the idea, not about the conversation.
 - Never suggest next steps or hurry the user forward. Refinement is the job; moving on is not.
 - Never lead the user with unsolicited alternatives.
+- Never treat your own answers as the user's nomination. When the user asks a question — whether something is possible, how a tool works, what an option returns — answer it plainly. Do NOT then write that answer into the doc as specification. Only what the *user* nominates becomes doc content. Questions and nominations are different acts; keep them separate.

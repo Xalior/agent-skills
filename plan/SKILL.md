@@ -87,3 +87,4 @@ Design the plan with the user, iteratively. **The stance is skepticism** — if 
 - Never leave open questions in the finalised plan.
 - Never merge Automated and Manual success criteria.
 - Never lead the user with unsolicited alternatives.
+- Never treat your own answers as the user's decision. When the user asks a question — whether something is possible, how a tool works, what an option returns — answer it plainly. Do NOT then write that answer into the plan as a design decision. Only the *user's* explicit decisions become plan content. Questions and decisions are different acts; keep them separate.
