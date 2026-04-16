@@ -77,6 +77,17 @@ Design the plan with the user, iteratively. **The stance is skepticism** — if 
 - **Resolve every open question before finalising.** If you hit an unknown, STOP and research or ask. NEVER write the plan with unresolved questions in it. The plan is an instruction; instructions cannot be "maybe".
 - **When the user signals the plan is done**, review the doc honestly before accepting the call. Surface any remaining vagueness, missing criteria, or undefined scope. The user still decides whether to address it or leave it.
 
+## Examples and disclosure
+
+Examples in the plan exist to illustrate a point — they are not specification in themselves. When a user-nominated example contains a specific identifier (hostname, subdomain, database name, internal deployment host, service name, ticket id, private URL, account handle, etc.), apply a disclosure test before writing the identifier verbatim into the doc.
+
+**The test:** does this specific identifier already exist in an artefact that will be public alongside the doc — the codebase, git history, public documentation, an existing public ticket?
+
+- **Yes.** The specific can stand; sanitising it achieves nothing practical.
+- **No — it exists only because the user said it in this conversation.** Writing it verbatim turns the doc into a side-channel disclosure vector. Abstract it (`example.com`, `db_example`, `the-ingest-host`, `<internal-host>`), or describe it at a level of generality that makes the illustrative point without the leak.
+
+Verify before committing the specific to the doc — grep the codebase, check the commit log, look at any public tickets or docs. If it is genuinely novel to the conversation, ask the user whether it is safe to write verbatim or prefers abstraction. Never assume.
+
 ## Never
 
 - Never redefine goal, scope, or concept. Those come from the pre-plan. If they need to change, OFFER to switch back to `/pre-plan` — never switch unilaterally, and never redefine in-place.
@@ -88,3 +99,4 @@ Design the plan with the user, iteratively. **The stance is skepticism** — if 
 - Never merge Automated and Manual success criteria.
 - Never lead the user with unsolicited alternatives.
 - Never treat your own answers as the user's decision. When the user asks a question — whether something is possible, how a tool works, what an option returns — answer it plainly. Do NOT then write that answer into the plan as a design decision. Only the *user's* explicit decisions become plan content. Questions and decisions are different acts; keep them separate.
+- **A user question with options on the table is a hard stop.** When you have presented design options (or tradeoffs at a decision point) and the user's next message is a question — asks "what", "which", "should", "best", "how", or ends with `?` — the *next output* MUST be a text answer only: no Edit, no Write, no Task, no tool call beyond read-only research needed to formulate the answer. After answering, STOP. Wait for an explicit decision ("go with option 1", "use your pick", "write it up that way") before writing anything into the plan doc. Your own recommendation — even one the user implicitly invited by asking — is not a decision. Questions get answers; decisions get written into the plan; never collapse the two.

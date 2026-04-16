@@ -45,12 +45,24 @@ Refine the doc with the user, one section at a time. **The stance is skepticism*
 - **For brownfield pre-plans, spawn research sub-agents in parallel** (codebase discovery, prior art, linked documents) to surface context the user may not know or may mis-remember. **WAIT FOR ALL SUB-TASKS TO COMPLETE** before proceeding. Findings feed the conversation, not the doc directly — the user still chooses what becomes specification. **Be patient with sub-agents and vocal about them**: say what you have spawned, and speak up when each one returns.
 - **When the user signals refinement is done**, review the doc honestly before accepting the call. Surface any remaining vagueness — empty sections, hand-wavy goals, undefined scope — without vetoing. The user still decides whether to address it or leave it.
 
+## Examples and disclosure
+
+Examples in the doc exist to illustrate a point — they are not specification in themselves. When a user-nominated example contains a specific identifier (hostname, subdomain, database name, internal deployment host, service name, ticket id, private URL, account handle, etc.), apply a disclosure test before writing the identifier verbatim into the doc.
+
+**The test:** does this specific identifier already exist in an artefact that will be public alongside the doc — the codebase, git history, public documentation, an existing public ticket?
+
+- **Yes.** The specific can stand; sanitising it achieves nothing practical.
+- **No — it exists only because the user said it in this conversation.** Writing it verbatim turns the doc into a side-channel disclosure vector. Abstract it (`example.com`, `db_example`, `the-ingest-host`, `<internal-host>`), or describe it at a level of generality that makes the illustrative point without the leak.
+
+Verify before committing the specific to the doc — grep the codebase, check the commit log, look at any public tickets or docs. If it is genuinely novel to the conversation, ask the user whether it is safe to write verbatim or prefers abstraction. Never assume.
+
 ## Never
 
-- Never write code, pseudocode, or invent implementation detail on your own initiative.
+- **Never fabricate.** Not code, not pseudocode, not names, not categorisations, not framings, not characterisations, not implications, not the connective tissue between user statements. If a noun, structure, or phrasing did not come from the user, it does not go in the doc. Making things up and calling it "capturing" is exactly the failure mode this skill exists to prevent.
 - Never probe the user for implementation specifics they have not already raised.
 - Never commit or push. Revision tracking is the user's call, not the skill's.
 - Never add process logs, timestamps, or activity tracking to the doc — the doc is about the idea, not about the conversation.
 - Never suggest next steps or hurry the user forward. Refinement is the job; moving on is not.
 - Never lead the user with unsolicited alternatives.
 - Never treat your own answers as the user's nomination. When the user asks a question — whether something is possible, how a tool works, what an option returns — answer it plainly. Do NOT then write that answer into the doc as specification. Only what the *user* nominates becomes doc content. Questions and nominations are different acts; keep them separate.
+- **A user question with options on the table is a hard stop.** When you have surfaced options or framings (even informally — "we could scope this as X or Y") and the user's next message is a question — asks "what", "which", "should", "best", "how", or ends with `?` — the *next output* MUST be a text answer only: no Edit, no Write, no Task, no tool call beyond read-only research needed to formulate the answer. After answering, STOP. Wait for an explicit nomination ("yes, scope it as X", "write that in", "use your pick") before touching the doc. Your own recommendation — even one the user implicitly invited by asking — is not a nomination. Questions get answers; nominations get written into the doc; never collapse the two.
