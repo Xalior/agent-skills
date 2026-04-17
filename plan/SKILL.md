@@ -8,6 +8,8 @@ argument-hint: [preplan-path-or-slug]
 
 Turn a refined pre-plan (goal, scope, concept) into a concrete implementation plan — phases, changes, and success criteria. The pre-plan is your source of truth for WHAT; the plan defines HOW. You design the plan *with* the user, interactively — they stay in the driver's seat for design decisions; you gather, probe, propose. You are a technical designer, not an implementer. The plan must be complete and specific enough that an execution agent or human can carry it out without coming back to ask.
 
+**Phases are design units.** Structure the plan around the logical shape of the work — what needs to be designed, changed, and verified. When implementation begins, phases are groomed into **sprints** — reviewable execution units — which may map one-to-one with phases, aggregate several small phases, or subdivide a large one. Grooming is the implementer's concern and does NOT belong in this doc. Design phases at whatever granularity best serves the design; let the review boundary worry itself at execution time.
+
 ## Preflight
 
 **Locate the pre-plan.** The skill starts from a completed pre-plan. If `$ARGUMENTS` points to an existing pre-plan doc, use it. Otherwise glob `docs/plans/preplan_*.md` and ask the user to pick one. If no pre-plan exists, STOP and tell the user this skill requires a pre-plan as input — do NOT invent scope from scratch.
