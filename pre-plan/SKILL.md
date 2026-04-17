@@ -12,7 +12,16 @@ Refine a half-formed idea into a clear statement of goal, scope, and concept, in
 
 Confirm the document path with the user. The default is `docs/plans/preplan_<slug>.md`. Present this single default; do not enumerate alternatives. If the user proposes a different location or a different backend, accept it.
 
-If `$ARGUMENTS` points to an existing pre-plan doc, read it and resume from its current state. Otherwise derive a slug from `$ARGUMENTS`, or ask the user for a short working title if nothing was given.
+If `$ARGUMENTS` points to an existing pre-plan doc, **resume it** — but resuming is not skipping ahead. A cold agent has no memory of prior sessions. Follow these steps before your first question to the user:
+
+1. **Read the doc in full** (no limit/offset).
+2. **Investigate everything the doc references** — files, docs, tickets, codebase areas mentioned in any section. Spawn research sub-agents in parallel exactly as "The Work" requires for brownfield pre-plans. Wait for all to complete.
+3. **Identify the current state**: which sections have content, which are empty or vague, what the next open question is.
+4. **Tell the user what you found** — summarise the doc's state and your investigation findings in a few sentences, then ask your first focused question about whatever is unresolved.
+
+Do not skip steps 2-3 because the doc "already exists." The doc is the persistence layer, but the investigation context is not in the doc — it must be rebuilt every session.
+
+Otherwise derive a slug from `$ARGUMENTS`, or ask the user for a short working title if nothing was given.
 
 ## The Doc
 
@@ -41,7 +50,7 @@ Refine the doc with the user, one section at a time. **The stance is skepticism*
 - **If the user nominates implementation detail** — a technology, an interface shape, a constraint, a file or schema — that IS their specification at that moment. Capture it faithfully in the section it belongs to.
 - **INVESTIGATE BEFORE ASKING.** When context exists — a linked ticket, a referenced doc, a brownfield codebase — gather it FIRST. Then ask only what investigation can't answer. NEVER question the user about things you could have looked up.
 - **READ REFERENCED MATERIALS IN FULL.** If the user points to a doc, paste, or file, read the WHOLE thing. Use the Read tool WITHOUT limit/offset parameters. NEVER skim. NEVER summarise-and-move-on.
-- **VERIFY, DO NOT ADOPT.** User claims about existing systems, prior art, and constraints get verified before they shape the doc. Corrections to your own statements ALSO get verified — never accept on faith. Spawn a sub-agent to verify where possible.
+- **VERIFY, DO NOT ADOPT.** User claims about existing systems, prior art, and constraints get verified before they shape the doc. Corrections to your own statements ALSO get verified — never accept on faith. Spawn a sub-agent to verify where possible. **This includes your own technical knowledge.** Before presenting a technology, library, or tool as an option — stating its capabilities, maintenance status, compatibility, or fitness for purpose — verify those claims against current sources. Your training data is stale and your recall is unreliable. An unverified recommendation is fabrication with extra steps.
 - **For brownfield pre-plans, spawn research sub-agents in parallel** (codebase discovery, prior art, linked documents) to surface context the user may not know or may mis-remember. **WAIT FOR ALL SUB-TASKS TO COMPLETE** before proceeding. Findings feed the conversation, not the doc directly — the user still chooses what becomes specification. **Be patient with sub-agents and vocal about them**: say what you have spawned, and speak up when each one returns.
 - **When the user signals refinement is done**, review the doc honestly before accepting the call. Surface any remaining vagueness — empty sections, hand-wavy goals, undefined scope — without vetoing. The user still decides whether to address it or leave it.
 
