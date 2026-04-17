@@ -1,16 +1,16 @@
 ---
 name: implement-with-remote-feedback
-description: Execute a plan document into code through a disciplined, git-centric workflow — clean checkout, properly named branch, continuous WIP tracking, small meaningful commits, and a push after every commit so the remote branch is the monitoring channel. Use when a plan doc exists, the user is ready to build it, and others need live visibility, with optional in-flight PR, per-phase PR, or PR-at-end strategies elected up front.
+description: Execute a plan document into code through a disciplined, git-centric workflow — plan's phases groomed into reviewable sprints up front, clean checkout, properly named branch, continuous WIP tracking, small meaningful commits, and a push after every commit so the remote branch is the monitoring channel. Use when a plan doc exists, the user is ready to build it, and others need live visibility, with optional in-flight PR, per-sprint PR, or PR-at-end strategies elected up front.
 argument-hint: [plan-path-or-slug]
 ---
 
 # Implement with Remote Feedback
 
-Execute a plan document into code, publishing every commit so the remote branch serves as the primary monitoring channel. The plan is your source of truth for WHAT to build and HOW to phase it. You are an implementer, not a designer.
+Execute a plan document into code, publishing every commit so the remote branch serves as the primary monitoring channel. The plan defines **phases** (design units); implementation grooms them into **sprints** (reviewable execution units) and ships sprint by sprint. You are an implementer, not a designer.
 
 ## Preflight
 
-Preflight is a questionnaire. Work through the twelve steps in order; every election has a named destination in the implementation tracker's `Preflight Decisions` section. The agent MUST NOT begin phase work until all twelve steps are complete.
+Preflight is a questionnaire. Work through the eleven steps in order; every election has a named destination in the implementation tracker's `Preflight Decisions` section. The agent MUST NOT begin Sprint Grooming until all eleven steps are complete.
 
 1. **Locate the plan.** If `$ARGUMENTS` points to an existing plan doc, use it. Otherwise glob `docs/plans/plan_*.md` and ask the user to pick one. If no plan exists, STOP and tell the user this skill requires a plan doc as input — do NOT invent scope or design from scratch.
 
@@ -39,9 +39,9 @@ Preflight is a questionnaire. Work through the twelve steps in order; every elec
    ```
 
 7. **Elect PR strategy.** Present the four options and ask the user to pick one. There is **no default** — the agent MUST NOT proceed without an explicit election. Present these options verbatim:
-   - **from-start** — a real, non-draft PR opened now, marked `[In Flight]` until completion. Feedback loop runs from the first commit. Best when others need live visibility.
-   - **at-end** — branch-only during work. PR offered at final completion. Current behaviour of the skill.
-   - **per-phase** — a separate PR opened at the end of each phase. Each stands alone and targets `main`. If a prior phase's PR is unmerged when the next phase ends, stop and ask.
+   - **from-start** — a real, non-draft PR opened after Sprint Grooming, marked `[In Flight]` until completion. Body lists the groomed sprints as a checklist. Feedback loop runs from the first commit after grooming. Best when others need live visibility.
+   - **at-end** — branch-only during work. PR offered at final completion, body consolidates all sprints' manual test plans.
+   - **per-sprint** — a separate PR opened at the end of each sprint. Each stands alone and targets `main`. If a prior sprint's PR is unmerged when the next sprint ends, stop and ask.
    - **none** — no PR. User handles PR creation manually later.
 
    Record the election in the tracker's `Preflight Decisions → PR strategy`.
@@ -65,30 +65,13 @@ Preflight is a questionnaire. Work through the twelve steps in order; every elec
     ```
     If either command fails (e.g. the token lacks `labels:write`), that is a blocker — STOP, record in the tracker, and ask the user. Do NOT silently skip label creation. Record success in the tracker's `Preflight Decisions → In-flight labels created`. For any other strategy, mark this step as `n/a`.
 
-11. **PR creation (conditional on from-start).** If the elected strategy is **from-start**:
-    - First detect any existing PR for the branch: `gh pr view --json url,number,title,labels`. If one exists, reuse it — record the URL in the tracker and skip creation. Do NOT attempt to open a second PR for the same branch.
-    - Otherwise create a **non-draft** PR:
-      ```
-      gh pr create \
-        --title "[In Flight] <plan title>" \
-        --body "<body>" \
-        --label in-flight \
-        --label do-not-merge
-      ```
-    - Body template, built from the plan:
-      - `## Goal` — copied from the plan's Overview.
-      - `## Phases` — one checklist item per plan phase, all unchecked.
-      - `## Manual Test Plan` — empty placeholder; filled in at phase ends.
-    - Do NOT include an automation-authored banner in the body. The PR is team-neutral.
-    - Record the PR URL in the tracker header and in `Preflight Decisions`.
-
-    For any other strategy, skip this step.
-
-12. **Elect comment trust scope.** Detect repo visibility:
+11. **Elect comment trust scope.** Detect repo visibility:
     ```
     gh repo view --json visibility
     ```
     Suggest the default: `write` for `PUBLIC`, `triage` for `PRIVATE` / `INTERNAL`. Ask the user to confirm or pick a different minimum permission level from the six GitHub values: `admin`, `maintain`, `write`, `triage`, `read`, `none`. Record the chosen minimum in the tracker's `Preflight Decisions → Comment trust minimum`. This step runs regardless of elected PR strategy — even for `at-end` and `none`, the scope is set so if a PR is later opened the feedback loop has its trust threshold.
+
+PR creation happens after Sprint Grooming (see Sprint Grooming → Procedure) so the PR body reflects the groomed sprints, not the plan's raw phases.
 
 ## The Doc
 
@@ -104,17 +87,20 @@ Create the implementation tracker at `docs/plans/plan_<slug>_implementation.md` 
 
 ## Preflight Decisions
 
-- **PR strategy:** `<from-start | at-end | per-phase | none>`
+- **PR strategy:** `<from-start | at-end | per-sprint | none>`
 - **Comment trust minimum:** `<admin | maintain | write | triage | read | none>`
 - **Baseline verification:** `<command run + result, or "no baseline target found">`
 - **In-flight labels created:** `<yes | no | n/a>`
 - **Plan-deferred decisions:**
   - `<item>`: `<resolution>`
 
+## Sprints
+
+<!-- Filled in during Sprint Grooming, one entry per sprint -->
+
 ## Tasks
 
-- [ ] Phase 1: <name>
-- [ ] Phase 2: <name>
+<!-- Sprint-keyed progress checklist. Filled in during Sprint Grooming. -->
 
 ## Progress Log
 
@@ -137,6 +123,70 @@ The tracker is a living document — update it continuously. It tells the story 
 
 Commit AND push the tracker immediately with a message like `chore: init implementation tracker for <slug>`.
 
+## Sprint Grooming
+
+After creating the tracker and before touching any code, groom the plan's phases into sprints. **A sprint is a managably-reviewable, shippable unit of work** — small enough that a reviewer can hold the whole change in their head in one sitting, large enough to be meaningful on its own. The review boundary drives sprint shape, not the plan's phase boundary.
+
+Sprints and phases are orthogonal. Grooming maps one onto the other:
+
+- A sprint can cover **one whole phase** — the simple case.
+- A sprint can cover **several small phases** — e.g. a "bootstrap" sprint covering repo-init + deps + CI + linter-config phases from the plan.
+- A sprint can cover **part of a large phase** — a big phase groomed into multiple sprints (e.g. "auth rewrite" → read-path sprint, write-path sprint, migration sprint).
+
+### Procedure
+
+Propose the full sprint breakdown in ONE pass. Do NOT round-robin with the user sprint-by-sprint — that is slow and loses the whole-picture view that makes good grooming possible.
+
+1. Write the proposal directly into the tracker's `Sprints` section. For each proposed sprint, fill in:
+   - **Name** — short, descriptive.
+   - **Covers** — which phase(s) by name, and what portion of each (`full`, or `Changes Required items X and Y`, or `read-path only`).
+   - **Success Criteria** — split into Automated and Manual, drawn from the covered phases' criteria. Where a sprint covers only part of a phase, include only the portion of that phase's criteria the sprint is responsible for.
+   - **Status** — `not started`.
+2. Populate the tracker's `Tasks` checklist with one entry per proposed sprint (`- [ ] Sprint 1: <name>`).
+3. Keep **vertical slices the default**. Each sprint should be a thin end-to-end cut through the layers it touches, unless the plan's Approach section says otherwise.
+4. Surface the completed proposal to the user and ask them to accept or nudge. Their response is a decision — log it to the `Progress Log` with a timestamp.
+5. Once accepted, commit and push the tracker with a message like `chore: groom <slug> into N sprints`.
+6. **PR creation (conditional on from-start).** If the elected strategy is **from-start**:
+    - First detect any existing PR for the branch: `gh pr view --json url,number,title,labels`. If one exists, reuse it — record the URL in the tracker and skip creation. Do NOT attempt to open a second PR for the same branch.
+    - Otherwise create a **non-draft** PR:
+      ```
+      gh pr create \
+        --title "[In Flight] <plan title>" \
+        --body "<body>" \
+        --label in-flight \
+        --label do-not-merge
+      ```
+    - Body template, built from the plan and the groomed sprint list:
+      - `## Goal` — copied from the plan's Overview.
+      - `## Sprints` — one checklist item per groomed sprint, all unchecked.
+      - `## Manual Test Plan` — empty placeholder; filled in at sprint ends.
+    - Do NOT include an automation-authored banner in the body. The PR is team-neutral.
+    - Record the PR URL in the tracker header and in `Preflight Decisions`.
+
+    For any other strategy, skip this step.
+
+### Sizing for manageable review
+
+Err small. A sprint that would take a reviewer more than an hour to review carefully is probably two sprints. Signals a sprint is too large:
+
+- More than ~5 distinct logical units of change.
+- Touches unrelated subsystems that don't need to land together.
+- Would require the reviewer to hold two separate mental models at once.
+
+Signals a sprint is too small:
+
+- Doesn't ship anything end-to-end (unless the plan's Approach explicitly non-slices).
+- Can't be verified independently.
+- Has no meaningful Success Criteria of its own.
+
+### Re-grooming mid-flight
+
+If executing Sprint N surfaces that a later sprint is wrong — wrong split, wrong order, missing scope, too large — that is a **blocker-class decision**. Stop, record in the tracker, surface to the user, and re-groom only with their explicit go-ahead. NEVER silently reshape future sprints.
+
+If re-grooming changes the sprint list on a from-start PR, update the PR body's `## Sprints` checklist to match after the user accepts.
+
+If re-grooming would change phase-level Success Criteria or scope, that is a plan-scope change, per Plan Immutability — offer to switch back to `/plan`.
+
 ## Plan Immutability
 
 The plan is set in stone during implementation. Two exceptions only:
@@ -145,6 +195,8 @@ The plan is set in stone during implementation. Two exceptions only:
 - A direct user instruction during implementation ("add that to the plan").
 
 Anything else that would require a plan change — scope creep, new phases, altered Success Criteria, a better idea that emerged while implementing — is a **blocker**. Stop, record in the tracker, surface to the user, and offer to switch back to `/plan`. NEVER redefine scope, phases, or Success Criteria in-place.
+
+**Grooming decomposes and regroups; it never redefines.** A sprint's Success Criteria are drawn from — not in addition to — the phases it covers. If grooming reveals missing or wrong phase criteria, that is a blocker, not a grooming freedom.
 
 **Planning-doc updates do NOT require a mode switch.** An explicit, unambiguous user instruction to update the plan, pre-plan, or tracker is adhered to inline — no bounce back to `/pre-plan` or `/plan`.
 
@@ -160,7 +212,7 @@ Applies regardless of the elected PR strategy. Between stop conditions, proceed 
 
 ### Stop conditions (only these)
 
-1. **End of a phase** — pause for manual verification of the phase's Success Criteria.
+1. **End of a sprint** — pause for manual verification of the sprint's Success Criteria.
 2. **True blocker** — you cannot proceed without user input.
 3. **Any decision the plan does not already answer** — the plan is the arbiter of autonomy. If the plan covers it, act. If the plan is silent or ambiguous, stop.
 
@@ -171,9 +223,10 @@ Applies regardless of the elected PR strategy. Between stop conditions, proceed 
 - Conflicts between plan instructions and reviewer instructions.
 - Failing CI with unclear cause, after one honest attempt to fix.
 - Any user input or opinion needed that the plan does not already answer.
-- Anything that would change plan scope, phases, or Success Criteria — offer to switch back to `/plan`; never redefine in place.
+- Anything that would change plan scope, phases, or phase-level Success Criteria — offer to switch back to `/plan`; never redefine in place.
+- Any need to re-groom future sprints mid-flight — see Sprint Grooming → Re-grooming mid-flight.
 - `gh label create --force` failing during Preflight.
-- A per-phase PR about to be opened while the prior phase's PR is still unmerged.
+- A per-sprint PR about to be opened while the prior sprint's PR is still unmerged.
 
 ### What is NOT a blocker (handle inline)
 
@@ -183,11 +236,11 @@ Applies regardless of the elected PR strategy. Between stop conditions, proceed 
 
 ### Blocker procedure
 
-Record the blocker in the tracker's `Blockers` section, commit, push, then surface it to the user. Do NOT spin on a blocker silently. Do NOT route around a blocker by reinterpreting the plan.
+Record the blocker in the tracker's `Blockers` section, commit, push, then surface it to the user. Do NOT spin on a blocker silently. Do NOT route around a blocker by reinterpreting the plan or silently re-grooming sprints.
 
 ## Feedback Integration Loop
 
-Applies whenever a PR exists for this branch — from-start from the first commit, per-phase from the first phase's PR onward, at-end from the final PR, never for no-PR. Feedback is **input to the work**, not a reason to halt; blockers still halt per the Autonomy Contract.
+Applies whenever a PR exists for this branch — from-start from the first commit after grooming, per-sprint from the first sprint's PR onward, at-end from the final PR, never for no-PR. Feedback is **input to the work**, not a reason to halt; blockers still halt per the Autonomy Contract.
 
 ### After each push
 
@@ -216,31 +269,32 @@ Direct instructions from the invoking user in the Claude Code session are a diff
 
 - **Non-blocker items** (see Autonomy Contract): handle inline — commit, push, and reply on the PR with `Addressed in <sha>` (or resolve the thread via `gh api`).
 - **Blocker items**: follow the Blocker procedure.
-- **Mid-phase preemption only at commit boundaries** — finish the current atomic commit first. Do NOT leave half-work when switching attention to a new feedback item.
+- **Mid-sprint preemption only at commit boundaries** — finish the current atomic commit first. Do NOT leave half-work when switching attention to a new feedback item.
 
 ## The Work
 
-Execute the plan's phases in order. **The stance is skepticism** — if a Success Criterion isn't verifiable (Automated = a command to run; Manual = a specific thing to observe), it isn't done. NEVER mark a phase complete on vibes.
+Execute the groomed sprints in order. **The stance is skepticism** — if a Success Criterion isn't verifiable (Automated = a command to run; Manual = a specific thing to observe), it isn't done. NEVER mark a sprint complete on vibes.
 
-- **FOLLOW THE PLAN.** Execute its phases in the order they're written. NEVER batch across phases, NEVER skip ahead, NEVER silently merge two phases.
-- **HONOR THE APPROACH.** If the plan specifies vertical slices (the default), each phase cuts end-to-end through the stack — e.g. DB → model → server → api → client lib → frontend, or whichever layers the feature touches. NEVER complete one layer across all features when the plan calls for slices. If the plan specifies something else, follow it as written. When building tests always used the red/green TDD pattern.
+- **FOLLOW THE GROOMED SPRINT LIST.** Execute sprints in the order they were groomed. NEVER batch across sprints, NEVER skip ahead, NEVER silently merge two sprints. Re-grooming is blocker-class, per Sprint Grooming.
+- **HONOR THE APPROACH.** If the plan specifies vertical slices (the default), each sprint cuts end-to-end through the stack — e.g. DB → model → server → api → client lib → frontend, or whichever layers the sprint touches. NEVER complete one layer across all features when the plan calls for slices. If the plan specifies something else, follow it as written. When building tests always use the red/green TDD pattern.
 - **AUTONOMY IS CONTRACT-BOUND.** Work proceeds autonomously per the Autonomy Contract. Stop only on its three stop conditions.
 - **THE PLAN IS IMMUTABLE.** Plan changes follow Plan Immutability — two named exceptions only; everything else is a blocker.
 - **INVESTIGATE BEFORE ASKING.** Before questioning the user, read the plan, read referenced files in full, and look at the current code. Spawn research sub-agents in parallel when broad coverage is needed. Then ask only what investigation can't answer. NEVER ask the user about things you could have looked up.
 - **READ REFERENCED MATERIALS IN FULL.** The plan. Files named in Key Discoveries. Related code the plan references. Use the Read tool WITHOUT limit/offset. NEVER skim. NEVER summarise-and-move-on.
 - **VERIFY, DO NOT ADOPT.** Claims the user makes mid-implementation — about constraints, existing behaviour, intent in the plan — get verified before they change direction. Corrections to your own statements ALSO get verified. Spawn a sub-agent to verify where possible. **This includes your own technical knowledge.** Before presenting a technology, library, or tool as an option — stating its capabilities, maintenance status, compatibility, or fitness for purpose — verify those claims against current sources. Your training data is stale and your recall is unreliable. An unverified recommendation is fabrication with extra steps.
 - **WAIT FOR ALL SUB-TASKS TO COMPLETE** before acting on their findings. Be patient with sub-agents and vocal about them: say what you have spawned, and speak up when each one returns.
-- **Update the tracker FIRST, then do the work.** Mark the current task in progress, append a progress log entry with a timestamp. Then write the code.
-- **Prefer Makefile targets for verification** (`make test`, `make lint`, `make -C <subproject> check`). The plan's Success Criteria should name them; run what the plan names. If a needed target is missing, extend the Makefile as part of this phase.
-- **Run ALL Automated Success Criteria before marking a phase complete.** Every checkbox. No selective verification.
-- **Pause for Manual Success Criteria.** When a phase has Manual criteria, STOP after Automated checks pass and tell the user exactly what needs observing. Do NOT proceed to the next phase until they confirm.
-- **End-of-phase behaviour depends on the elected PR strategy** (`Preflight Decisions → PR strategy`):
-  - **from-start** — update the existing PR body: tick that phase's checkbox and append its manual test plan under `## Manual Test Plan`. Do NOT open a new PR.
-  - **per-phase** — open a new PR for this phase's changes with `gh pr create`. Title has no `[In Flight]` prefix (the phase is complete). Body contains the phase's Overview, Changes Required summary, and manual test plan. Target `main`. If the prior phase's PR is still unmerged, that is a blocker.
-  - **at-end** — no PR action at phase end; continue to the next phase.
-  - **none** — no PR action at phase end; continue to the next phase.
+- **Update the tracker FIRST, then do the work.** Mark the current sprint in progress, append a progress log entry with a timestamp. Then write the code.
+- **Prefer Makefile targets for verification** (`make test`, `make lint`, `make -C <subproject> check`). The plan's Success Criteria should name them; run what the plan names. If a needed target is missing, extend the Makefile as part of this sprint.
+- **Run ALL Automated Success Criteria for the sprint before marking it complete.** Every checkbox. No selective verification.
+- **Pause for Manual Success Criteria at the end of each sprint.** When a sprint has Manual criteria, STOP after Automated checks pass and tell the user exactly what needs observing. Do NOT proceed to the next sprint until they confirm.
+- **Phase-level Success Criteria are the cumulative gate.** When a sprint ships the last portion of a phase it covers, additionally verify that phase's full plan-level Success Criteria have been met cumulatively across all sprints that contributed to it. Record this check in the tracker.
+- **End-of-sprint behaviour depends on the elected PR strategy** (`Preflight Decisions → PR strategy`):
+  - **from-start** — update the existing PR body: tick that sprint's checkbox under `## Sprints` and append its manual test plan under `## Manual Test Plan`. Do NOT open a new PR.
+  - **per-sprint** — open a new PR for this sprint's changes with `gh pr create`. Title has no `[In Flight]` prefix (the sprint is complete). Body contains the sprint's name, what it covers, and its manual test plan. Target `main`. If the prior sprint's PR is still unmerged, that is a blocker.
+  - **at-end** — no PR action at sprint end; continue to the next sprint.
+  - **none** — no PR action at sprint end; continue to the next sprint.
 
-  In all strategies, the phase's manual test plan is a numbered, step-by-step checklist covering the golden path and the important edge cases from the phase's Success Criteria. **Every item in the main list MUST use a markdown checkbox** (`1. [ ] …`) so the reviewer can tick items off as they verify. Numbers + checkboxes together — GitHub renders `1. [ ] …` correctly. An unchecked numbered list without `[ ]` is not acceptable.
+  In all strategies, the sprint's manual test plan is a numbered, step-by-step checklist covering the golden path and the important edge cases from the sprint's Success Criteria. **Every item in the main list MUST use a markdown checkbox** (`1. [ ] …`) so the reviewer can tick items off as they verify. Numbers + checkboxes together — GitHub renders `1. [ ] …` correctly. An unchecked numbered list without `[ ]` is not acceptable.
 
   **Every item in the main list MUST be verifiable against the state at the moment the PR is opened.** Items that require post-release, post-merge, or other one-time setup that hasn't happened yet are NOT testable and do NOT belong in the main list — they go under a `### Not Locally Testable` subsection with a clear reason (e.g. "requires a GitHub Release to be drafted first"). A test plan that asks the reviewer to do manual setup just to make the item testable is not a test plan.
 - **Commit early, commit often, in small logical units.** One reason per commit. If you touched 5 files for 3 reasons, that's 3 commits. Prefixes:
@@ -261,26 +315,27 @@ Execute the plan's phases in order. **The stance is skepticism** — if a Succes
 - **After each push, run the Feedback Integration Loop** when a PR exists for this branch. For no-PR and for at-end before the final PR, skip the loop.
 - **Update the tracker after each commit** — tick off tasks, append progress, note decisions or blockers. Commit and push the tracker update too.
 - **If blocked, record the blocker in the tracker, commit, push, then ask the user.** Do NOT spin on a blocker silently.
-- **When all phases are complete and all Success Criteria met**, set the tracker's Status to `Complete`, make a final commit and push, and then perform the strategy's completion action:
-  - **from-start** — edit the PR: strip the `[In Flight]` prefix from the title; remove the `in-flight` and `do-not-merge` labels (`gh pr edit --title "<title>" --remove-label in-flight --remove-label do-not-merge`). Body already contains the consolidated test plan from phase ends.
-  - **per-phase** — every phase's PR is already open and standalone. Confirm all are merged or queued for merge; tell the user.
-  - **at-end** — offer to open the final PR now. Body consolidates each phase's manual test plan into one end-to-end test plan.
+- **When all sprints are complete and all phase-level Success Criteria met**, set the tracker's Status to `Complete`, make a final commit and push, and then perform the strategy's completion action:
+  - **from-start** — edit the PR: strip the `[In Flight]` prefix from the title; remove the `in-flight` and `do-not-merge` labels (`gh pr edit --title "<title>" --remove-label in-flight --remove-label do-not-merge`). Body already contains the consolidated test plan from sprint ends.
+  - **per-sprint** — every sprint's PR is already open and standalone. Confirm all are merged or queued for merge; tell the user.
+  - **at-end** — offer to open the final PR now. Body consolidates each sprint's manual test plan into one end-to-end test plan.
   - **none** — tell the user the branch is ready and the commits are on the remote.
 
 ## Monitoring
 
 Others can watch progress via:
 
-- The **PR** (when one exists): comments, reviews, checks, body checklist, and the `in-flight` / `do-not-merge` labels if from-start. For from-start and per-phase, the PR is the primary channel.
+- The **PR** (when one exists): comments, reviews, checks, body sprint checklist, and the `in-flight` / `do-not-merge` labels if from-start. For from-start and per-sprint, the PR is the primary channel.
 - The **branch**: `git log --oneline origin/<type>/<slug>` and `git diff main..origin/<type>/<slug>`.
-- The **tracker** on the remote branch: `docs/plans/plan_<slug>_implementation.md`. The `Preflight Decisions` subsection tells a cold reader how this session was configured; `Last-seen Feedback State` tells them what feedback has been processed.
+- The **tracker** on the remote branch: `docs/plans/plan_<slug>_implementation.md`. The `Preflight Decisions` subsection tells a cold reader how this session was configured; `Sprints` shows the groomed execution shape; `Last-seen Feedback State` tells them what feedback has been processed.
 
 ## Never
 
 - **NEVER skip pushing.** Every commit must be pushed immediately. The remote branch is the monitoring channel — a local-only commit defeats the entire purpose of this skill.
 - **NEVER force push.** History is sacred in this workflow.
 - **NEVER amend pushed commits.** Make a new commit instead.
-- **NEVER batch multiple phases into one commit or one chunk of work.**
+- **NEVER batch multiple sprints into one commit or one chunk of work.**
+- **NEVER silently re-groom sprints mid-flight.** Re-grooming is blocker-class; stop, record, ask.
 - **NEVER commit with vague messages.** `wip` alone is not a commit message.
 - **NEVER lead the user with unsolicited alternatives.**
 - **NEVER treat your own answers as the user's instruction.** When the user asks a question — whether something is possible, how a tool works, what an option returns — answer it plainly. Do NOT then act on that answer as if the user had instructed the action, and do NOT record it in the tracker as a decision. Only the *user's* explicit instructions direct the work. Questions and instructions are different acts; keep them separate.
