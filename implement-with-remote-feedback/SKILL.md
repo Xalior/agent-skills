@@ -1,12 +1,12 @@
 ---
 name: implement-with-remote-feedback
-description: Execute a plan document into code through a disciplined, git-centric workflow — plan's phases groomed into reviewable sprints up front, clean checkout, properly named branch, continuous WIP tracking, small meaningful commits, and a push after every commit so the remote branch is the monitoring channel. Use when a plan doc exists, the user is ready to build it, and others need live visibility, with optional in-flight PR, per-sprint PR, or PR-at-end strategies elected up front.
+description: Execute a plan document into code through a disciplined, git-centric workflow — plan's phases refined into reviewable sprints up front, clean checkout, properly named branch, continuous WIP tracking, small meaningful commits, and a push after every commit so the remote branch is the monitoring channel. Use when a plan doc exists, the user is ready to build it, and others need live visibility, with optional in-flight PR, per-sprint PR, or PR-at-end strategies elected up front.
 argument-hint: [plan-path-or-slug]
 ---
 
 # Implement with Remote Feedback
 
-Execute a plan document into code, publishing every commit so the remote branch serves as the primary monitoring channel. The plan defines **phases** (design units); implementation grooms them into **sprints** (reviewable execution units) and ships sprint by sprint. You are an implementer, not a designer.
+Execute a plan document into code, publishing every commit so the remote branch serves as the primary monitoring channel. The plan defines **phases** (design units); implementation refines them into **sprints** (reviewable execution units) and ships sprint by sprint. You are an implementer, not a designer.
 
 ## Preflight
 
@@ -39,7 +39,7 @@ Preflight is a questionnaire. Work through the eleven steps in order; every elec
    ```
 
 7. **Elect PR strategy.** Present the four options and ask the user to pick one. There is **no default** — the agent MUST NOT proceed without an explicit election. Present these options verbatim:
-   - **from-start** — a real, non-draft PR opened after Sprint Grooming, marked `[In Flight]` until completion. Body lists the groomed sprints as a checklist. Feedback loop runs from the first commit after grooming. Best when others need live visibility.
+   - **from-start** — a real, non-draft PR opened after Sprint Grooming, marked `[In Flight]` until completion. Body lists the refined sprints as a checklist. Feedback loop runs from the first commit after grooming. Best when others need live visibility.
    - **at-end** — branch-only during work. PR offered at final completion, body consolidates all sprints' manual test plans.
    - **per-sprint** — a separate PR opened at the end of each sprint. Each stands alone and targets `main`. If a prior sprint's PR is unmerged when the next sprint ends, stop and ask.
    - **none** — no PR. User handles PR creation manually later.
@@ -71,7 +71,7 @@ Preflight is a questionnaire. Work through the eleven steps in order; every elec
     ```
     Suggest the default: `write` for `PUBLIC`, `triage` for `PRIVATE` / `INTERNAL`. Ask the user to confirm or pick a different minimum permission level from the six GitHub values: `admin`, `maintain`, `write`, `triage`, `read`, `none`. Record the chosen minimum in the tracker's `Preflight Decisions → Comment trust minimum`. This step runs regardless of elected PR strategy — even for `at-end` and `none`, the scope is set so if a PR is later opened the feedback loop has its trust threshold.
 
-PR creation happens after Sprint Grooming (see Sprint Grooming → Procedure) so the PR body reflects the groomed sprints, not the plan's raw phases.
+PR creation happens after Sprint Grooming (see Sprint Grooming → Procedure) so the PR body reflects the refined sprints, not the plan's raw phases.
 
 ## The Doc
 
@@ -131,7 +131,7 @@ Sprints and phases are orthogonal. Grooming maps one onto the other:
 
 - A sprint can cover **one whole phase** — the simple case.
 - A sprint can cover **several small phases** — e.g. a "bootstrap" sprint covering repo-init + deps + CI + linter-config phases from the plan.
-- A sprint can cover **part of a large phase** — a big phase groomed into multiple sprints (e.g. "auth rewrite" → read-path sprint, write-path sprint, migration sprint).
+- A sprint can cover **part of a large phase** — a big phase refined into multiple sprints (e.g. "auth rewrite" → read-path sprint, write-path sprint, migration sprint).
 
 ### Procedure
 
@@ -156,9 +156,9 @@ Propose the full sprint breakdown in ONE pass. Do NOT round-robin with the user 
         --label in-flight \
         --label do-not-merge
       ```
-    - Body template, built from the plan and the groomed sprint list:
+    - Body template, built from the plan and the refined sprint list:
       - `## Goal` — copied from the plan's Overview.
-      - `## Sprints` — one checklist item per groomed sprint, all unchecked.
+      - `## Sprints` — one checklist item per refined sprint, all unchecked.
       - `## Manual Test Plan` — empty placeholder; filled in at sprint ends.
     - Do NOT include an automation-authored banner in the body. The PR is team-neutral.
     - Record the PR URL in the tracker header and in `Preflight Decisions`.
@@ -273,9 +273,9 @@ Direct instructions from the invoking user in the Claude Code session are a diff
 
 ## The Work
 
-Execute the groomed sprints in order. **The stance is skepticism** — if a Success Criterion isn't verifiable (Automated = a command to run; Manual = a specific thing to observe), it isn't done. NEVER mark a sprint complete on vibes.
+Execute the refined sprints in order. **The stance is skepticism** — if a Success Criterion isn't verifiable (Automated = a command to run; Manual = a specific thing to observe), it isn't done. NEVER mark a sprint complete on vibes.
 
-- **FOLLOW THE GROOMED SPRINT LIST.** Execute sprints in the order they were groomed. NEVER batch across sprints, NEVER skip ahead, NEVER silently merge two sprints. Re-grooming is blocker-class, per Sprint Grooming.
+- **FOLLOW THE REFINED SPRINT LIST.** Execute sprints in the order they were refined. NEVER batch across sprints, NEVER skip ahead, NEVER silently merge two sprints. Re-grooming is blocker-class, per Sprint Grooming.
 - **HONOR THE APPROACH.** If the plan specifies vertical slices (the default), each sprint cuts end-to-end through the stack — e.g. DB → model → server → api → client lib → frontend, or whichever layers the sprint touches. NEVER complete one layer across all features when the plan calls for slices. If the plan specifies something else, follow it as written. When building tests always use the red/green TDD pattern.
 - **AUTONOMY IS CONTRACT-BOUND.** Work proceeds autonomously per the Autonomy Contract. Stop only on its three stop conditions.
 - **THE PLAN IS IMMUTABLE.** Plan changes follow Plan Immutability — two named exceptions only; everything else is a blocker.
@@ -327,7 +327,7 @@ Others can watch progress via:
 
 - The **PR** (when one exists): comments, reviews, checks, body sprint checklist, and the `in-flight` / `do-not-merge` labels if from-start. For from-start and per-sprint, the PR is the primary channel.
 - The **branch**: `git log --oneline origin/<type>/<slug>` and `git diff main..origin/<type>/<slug>`.
-- The **tracker** on the remote branch: `docs/plans/plan_<slug>_implementation.md`. The `Preflight Decisions` subsection tells a cold reader how this session was configured; `Sprints` shows the groomed execution shape; `Last-seen Feedback State` tells them what feedback has been processed.
+- The **tracker** on the remote branch: `docs/plans/plan_<slug>_implementation.md`. The `Preflight Decisions` subsection tells a cold reader how this session was configured; `Sprints` shows the refined execution shape; `Last-seen Feedback State` tells them what feedback has been processed.
 
 ## Never
 

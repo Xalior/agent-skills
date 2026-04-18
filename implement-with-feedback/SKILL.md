@@ -1,12 +1,12 @@
 ---
 name: implement-with-feedback
-description: Execute a plan document into code through a disciplined, git-centric workflow — plan's phases groomed into reviewable sprints up front, clean checkout, properly named branch, continuous WIP tracking, small meaningful commits. Use when a plan doc exists and the user is ready to build it. LOCAL-ONLY — never pushes during the implementation loop.
+description: Execute a plan document into code through a disciplined, git-centric workflow — plan's phases refined into reviewable sprints up front, clean checkout, properly named branch, continuous WIP tracking, small meaningful commits. Use when a plan doc exists and the user is ready to build it. LOCAL-ONLY — never pushes during the implementation loop.
 argument-hint: [plan-path-or-slug]
 ---
 
 # Implement with Feedback
 
-Execute a plan document into code. The plan defines **phases** (design units); implementation grooms them into **sprints** (reviewable execution units) and ships sprint by sprint. You are an implementer, not a designer. Local-only: commits stay on disk until the user explicitly asks for a push.
+Execute a plan document into code. The plan defines **phases** (design units); implementation refines them into **sprints** (reviewable execution units) and ships sprint by sprint. You are an implementer, not a designer. Local-only: commits stay on disk until the user explicitly asks for a push.
 
 ## Preflight
 
@@ -95,7 +95,7 @@ Sprints and phases are orthogonal. Grooming maps one onto the other:
 
 - A sprint can cover **one whole phase** — the simple case.
 - A sprint can cover **several small phases** — e.g. a "bootstrap" sprint covering repo-init + deps + CI + linter-config phases from the plan.
-- A sprint can cover **part of a large phase** — a big phase groomed into multiple sprints (e.g. "auth rewrite" → read-path sprint, write-path sprint, migration sprint).
+- A sprint can cover **part of a large phase** — a big phase refined into multiple sprints (e.g. "auth rewrite" → read-path sprint, write-path sprint, migration sprint).
 
 ### Procedure
 
@@ -181,9 +181,9 @@ Record the blocker in the tracker's `Blockers` section, commit, then surface it 
 
 ## The Work
 
-Execute the groomed sprints in order. **The stance is skepticism** — if a Success Criterion isn't verifiable (Automated = a command to run; Manual = a specific thing to observe), it isn't done. NEVER mark a sprint complete on vibes.
+Execute the refined sprints in order. **The stance is skepticism** — if a Success Criterion isn't verifiable (Automated = a command to run; Manual = a specific thing to observe), it isn't done. NEVER mark a sprint complete on vibes.
 
-- **FOLLOW THE GROOMED SPRINT LIST.** Execute sprints in the order they were groomed. NEVER batch across sprints, NEVER skip ahead, NEVER silently merge two sprints. Re-grooming is blocker-class, per Sprint Grooming.
+- **FOLLOW THE REFINED SPRINT LIST.** Execute sprints in the order they were refined. NEVER batch across sprints, NEVER skip ahead, NEVER silently merge two sprints. Re-grooming is blocker-class, per Sprint Grooming.
 - **HONOR THE APPROACH.** If the plan specifies vertical slices (the default), each sprint cuts end-to-end through the stack — e.g. DB → model → server → api → client lib → frontend, or whichever layers the sprint touches. NEVER complete one layer across all features when the plan calls for slices. If the plan specifies something else, follow it as written. When building tests always use the red/green TDD pattern.
 - **AUTONOMY IS CONTRACT-BOUND.** Work proceeds autonomously per the Autonomy Contract. Stop only on its three stop conditions.
 - **THE PLAN IS IMMUTABLE.** Plan changes follow Plan Immutability — two named exceptions only; everything else is a blocker.
