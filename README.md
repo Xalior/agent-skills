@@ -21,6 +21,38 @@ Perfect for when you need to understand why an agent did what it did, or when yo
 
 [📖 Read the full skill documentation](./agent-feedback/SKILL.md)
 
+### 🔎 discovery
+
+**Interactive requirement discovery before planning starts.**
+
+Develop a half-formed idea into a clear statement of goal, scope, and approach, in conversation with the user:
+- 💡 Turn loose ideas into sharp, captured intent
+- 🗺️ Establish goal, scope, and approach before anyone writes code
+- 📄 Produces a single markdown document that survives context reset
+- 🤝 You act as thinking partner — not planner, not implementer
+- 🔁 Feeds directly into the `plan` skill
+
+Use this when the user has an idea but isn't yet ready to commit to *how* it gets built.
+
+> 🔗 Previously named `pre-plan`. A `pre-plan/` symlink still points at `discovery/` for backwards compatibility.
+
+[📖 Read the full skill documentation](./discovery/SKILL.md)
+
+### 🧭 plan
+
+**Turn a refined discovery session into a concrete implementation plan.**
+
+Take a discovery doc (goal, scope, concept) and interactively design HOW it will be built:
+- 📐 Break work into phases with clear success criteria
+- 🎯 User stays in the driver's seat for design decisions
+- 🧩 Captures file-level changes, risks, and trade-offs
+- 📄 Produces a plan doc an implementer (agent or human) can execute from
+- 🔗 Pairs naturally with `implement-with-feedback` / `implement-with-remote-feedback`
+
+Use this when a discovery document exists and the user is ready to design the implementation.
+
+[📖 Read the full skill documentation](./plan/SKILL.md)
+
 ### 🏗️ implement-with-feedback
 
 **Git-centric implementation workflow for local-only development with continuous progress tracking.**
@@ -126,6 +158,11 @@ agent-skills/
 │   └── SKILL.md                      # Session analysis & feedback
 ├── cmux/
 │   └── SKILL.md                      # Terminal multiplexer control
+├── discovery/
+│   └── SKILL.md                      # Requirement discovery
+├── pre-plan -> discovery/            # Legacy alias (symlink)
+├── plan/
+│   └── SKILL.md                      # Implementation planning
 ├── implement-with-feedback/
 │   └── SKILL.md                      # Local-only git workflow
 ├── implement-with-remote-feedback/
