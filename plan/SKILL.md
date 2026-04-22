@@ -6,17 +6,23 @@ argument-hint: "[discovery-path-or-slug]"
 
 # Plan
 
-Turn a refined discovery session (goal, scope, concept) into a concrete implementation plan — phases, changes, and success criteria. The original document is your source of truth for WHAT; the plan defines HOW. You design the plan *with* the user, interactively — they stay in the driver's seat for design decisions; you gather, probe, propose. You are a technical designer, not an implementer. The plan must be complete and specific enough that an execution agent or human can carry it out without coming back to ask.
+Turn a refined discovery session (goal, scope, concept) into a concrete implementation plan — phases, changes, success criteria. The source document is the arbiter of WHAT; the plan defines HOW. You design the plan *with* the user: they stay in the driver's seat for decisions; you gather, probe, propose. You are a technical designer, not an implementer. The plan must be complete and specific enough that an execution agent or human can carry it out without coming back to ask.
 
-**Phases are design units.** Structure the plan around the logical shape of the work — what needs to be designed, changed, and verified. When implementation begins, phases are groomed into **sprints** — reviewable execution units — which may map one-to-one with phases, aggregate several small phases, or subdivide a large one. Grooming is the implementer's concern and does NOT belong in this doc. Design phases at whatever granularity best serves the design; let the review boundary worry itself at execution time.
+**Phases are design units.** Structure the plan around the logical shape of the work — what needs designing, changing, verifying. At implementation time, phases are refined into **sprints** (review units) which may map one-to-one, aggregate several small phases, or subdivide a large one. Refinement is the implementer's concern and does not belong in this doc. Design phases at whatever granularity serves the design best.
+
+## Flow at a glance
+
+1. **Preflight** — locate the source doc (discovery or pre-plan), read it in full, confirm the plan doc path.
+2. **The Doc** — create `docs/plans/plan_<slug>.md` with the skeleton.
+3. **Outline** — propose phase names + one-line summaries; get the user's sign-off on the structure before writing detail.
+4. **Phase-by-phase design** — fill each phase in order (Overview, Changes Required, Success Criteria split Automated/Manual). Confirm each before moving on.
+5. **Finalise** — every question resolved, every criterion verifiable, What We're NOT Doing explicit; a cold reader plus the source doc can execute from here.
 
 ## Preflight
 
-**Locate the source.** The skill starts from a completed document — either a discovery doc or a pre-plan doc; both are equally valid. If `$ARGUMENTS` points to an existing one, use it. Otherwise glob `docs/discovery/discovery_*.md` and `docs/plans/preplan_*.md` and ask the user to pick one. If no source doc exists, STOP and tell the user this skill requires a discovery or pre-plan document as input — do NOT invent scope from scratch.
-
-**Read the provided document in full.** Use the Read tool WITHOUT limit/offset. The document IS your source of truth for Goal / Scope / Concept — do not redefine them. If they need to change, say so and OFFER to switch back to `/discovery` — never switch unilaterally.
-
-**Confirm the plan doc path with the user.** The default is `docs/plans/plan_<slug>.md`, where `<slug>` matches the source doc's slug. Present this single default; do not enumerate alternatives. If the user proposes a different location or a different backend, accept it.
+1. **Locate the source.** This skill starts from a completed document — discovery or pre-plan. If `$ARGUMENTS` points to one, use it. Otherwise glob `docs/discovery/discovery_*.md` and `docs/plans/preplan_*.md` and ask the user to pick. No source → STOP: this skill does not invent scope. Offer `/discovery` or `/pre-plan`.
+2. **Read the source in full.** Read tool, no limit/offset. The source is the arbiter of Goal / Scope / Concept for the whole session; later "is this in scope?" questions get answered by re-reading it. If the source clearly needs changes before planning, say so and offer `/discovery` (or `/pre-plan`). Never switch unilaterally.
+3. **Confirm the plan doc path.** Default `docs/plans/plan_<slug>.md`, where `<slug>` matches the source's slug. Present the single default; don't enumerate alternatives. If the user proposes a different location, accept it.
 
 ## The Doc
 
@@ -55,50 +61,78 @@ Create the doc with this skeleton. Omit sections that don't apply:
 ## References
 ````
 
-The file on disk is the persistence layer — a cold agent reading this doc plus the linked source doc must be able to execute without further human input.
+The file on disk is the persistence layer — a cold agent reading this doc plus the linked source must be able to execute without further human input. The doc is a specification, not a conversation log: no process logs, timestamps, or activity tracking.
 
-## The Work
+## Design the plan
 
-Design the plan with the user, iteratively. **The stance is skepticism** — if a step isn't specific enough that an implementer could execute it without asking, it isn't done. Probe vagueness. NEVER accept "we'll figure it out during implementation" as a design decision.
+Design iteratively, with the user. Stance is skepticism: a step that isn't specific enough for an implementer to execute without asking isn't done. Probe vagueness. Never accept "we'll figure it out during implementation" as a design decision. Don't hurry the user forward — designing is the job; moving on is not.
 
-- **Ask ONE focused question at a time**, when you need to ask. Don't batch. Don't run down a list. Conversation, not questionnaire.
-- **Reflect what you heard back before writing** — catches misunderstandings cheaply.
-- **Present design options with tradeoffs at real decision points.** When multiple valid approaches exist, lay them out with pros and cons and ask the user to decide. NEVER silently pick a direction on the user's behalf for a choice that genuinely matters.
-- **Check in at each phase boundary.** Before moving from one phase's design to the next, confirm the current one is settled. NEVER run ahead and design three phases the user hasn't yet seen.
-- **INVESTIGATE BEFORE ASKING.** Gather codebase and prior-art context FIRST. Use Read WITHOUT limit/offset. Spawn research sub-agents in parallel when broad coverage is needed. Then ask only what investigation can't answer. NEVER question the user about things you could have looked up.
-- **READ REFERENCED MATERIALS IN FULL.** The source doc. Any docs it links. Files named in Key Discoveries. NEVER skim. NEVER summarise-and-move-on.
-- **VERIFY, DO NOT ADOPT.** Claims about the existing system, prior art, and constraints get verified before they land in the plan. Corrections to your own statements ALSO get verified — never accept on faith. Spawn a sub-agent to verify where possible. **This includes your own technical knowledge.** Before presenting a technology, library, or tool as an option — stating its capabilities, maintenance status, compatibility, or fitness for purpose — verify those claims against current sources. Your training data is stale and your recall is unreliable. An unverified recommendation is fabrication with extra steps.
-- **WAIT FOR ALL SUB-TASKS TO COMPLETE** before synthesising. Be patient with sub-agents and vocal about them: say what you have spawned, and speak up when each one returns.
-- **Outline before detail.** Propose the phase shape first (names + what each phase accomplishes). Get the user's sign-off on the structure BEFORE writing changes or criteria. Do NOT write the full plan in one shot.
-- **Default to vertical slices.** Each phase delivers a thin end-to-end increment that could, in principle, ship on its own — a thin cut through every layer the feature touches (e.g. DB → model → server → api → client lib → frontend) — rather than completing one layer across all features. This yields smaller, testable PRs when implemented. Name and justify any deviation (horizontal layer, feature flag, dark launch, groundwork-first) in the Approach section; NEVER silently pick a non-slice shape. Specifics of HOW the method is executed belong to the implementer, not here.
+### Iterative rhythm
+
+1. **Outline first.** Propose the phase shape — names + what each phase accomplishes — and get the user's sign-off on the structure before writing any phase's detail. Don't write the full plan in one shot.
+
+2. **Design one phase at a time, in order.** For each phase, fill Overview, Changes Required, Success Criteria (Automated and Manual, separately). Don't run ahead and design three phases the user hasn't yet seen.
+
+3. **Ask one focused question at a time**, when you need to ask. Don't batch, don't run down a list. Conversation, not questionnaire.
+
+4. **Reflect back what you heard before writing it into the doc** — after each answer, restate, confirm, then write. Catches misunderstandings cheaply.
+
+5. **Present design options with tradeoffs at real decision points.** Multiple valid approaches? Lay them out with pros and cons and ask the user to decide. Never silently pick a direction for a choice that genuinely matters.
+
+6. **Check in at each phase boundary.** Confirm the current phase is settled before moving to the next.
+
+### Phase design rules
+
+- **Default to vertical slices.** Each phase delivers a thin end-to-end increment that could, in principle, ship on its own — a thin cut through every layer the feature touches (DB → model → api → client lib → frontend) — rather than completing one layer across all features. Yields smaller, testable PRs when implemented. Name and justify any deviation (horizontal layer, feature flag, dark launch, groundwork-first) in the Approach section; never silently pick a non-slice shape. Specifics of HOW belong to the implementer.
 - **Each phase is a logical, testable unit.** Small enough to verify in isolation; large enough to mean something.
-- **Every phase has Success Criteria, split into Automated and Manual.** Automated = commands an execution agent can run (tests, linters, type checks, migrations). Manual = things a human must observe (UI behaviour, performance under load, UX judgment). NEVER merge them. NEVER write criteria that can't be checked.
-- **Prefer Makefile targets for Automated criteria** (`make test`, `make lint`, `make migrate`, `make -C <subproject> check`) over raw toolchain commands. If the needed targets don't exist, propose adding them AS PART OF the plan — the plan is allowed to extend the Makefile.
+- **Every phase has Success Criteria, split Automated and Manual.** Automated = commands an execution agent can run (tests, linters, type checks, migrations). Manual = things a human must observe (UI behaviour, performance under load, UX judgment). If you can't describe how to check a criterion, it isn't one — it's a hope.
+- **Prefer Makefile targets for Automated criteria** (`make test`, `make lint`, `make migrate`, `make -C <subproject> check`) over raw toolchain commands. Needed targets don't exist? Propose adding them as part of the plan — the plan is allowed to extend the Makefile.
 - **Include file:line references** for any discovery the plan depends on. "We change X" is not a design; "We change `src/auth.ts:42` so that Y" is.
-- **Include What We're NOT Doing** explicitly, seeded from the source doc's Scope (out) and extended with anything that emerged during design.
-- **Resolve every open question before finalising.** If you hit an unknown, STOP and research or ask. NEVER write the plan with unresolved questions in it. The plan is an instruction; instructions cannot be "maybe".
-- **When the user signals the plan is done**, review the doc honestly before accepting the call. Surface any remaining vagueness, missing criteria, or undefined scope. The user still decides whether to address it or leave it.
+- **Include What We're NOT Doing** explicitly, seeded from the source's Scope (out) and extended with anything that emerged during design.
 
-## Examples and disclosure
+### Research rigor
 
-Examples in the plan exist to illustrate a point — they are not specification in themselves. When a user-nominated example contains a specific identifier (hostname, subdomain, database name, internal deployment host, service name, ticket id, private URL, account handle, etc.), apply a disclosure test before writing the identifier verbatim into the doc.
+- **Investigate before asking.** Read the source, read referenced files in full (skim-and-summarise is how context drifts), look at the current code. Spawn research sub-agents in parallel for broad coverage. Ask only what investigation can't answer; don't ask about things already written down.
+- **Verify claims, don't adopt them.** Claims about the existing system, prior art, constraints get verified before they land in the plan. Corrections to your own statements too. Spawn a sub-agent to verify where possible. This includes your own technical knowledge: before presenting a library, tool, or version as suitable, verify against current sources. Training data is stale; an unverified recommendation is fabrication with extra steps.
+- **Wait for sub-tasks before synthesising.** Say what you've spawned; announce when each returns; don't act on partial findings.
+
+### Finalising
+
+- **Resolve every open question before finalising.** Unknown → STOP and research, or ask. Never write the plan with unresolved questions in it. The plan is an instruction; instructions cannot be "maybe".
+- **When the user signals the plan is done, review it honestly before accepting the call.** Surface remaining vagueness, missing criteria, undefined scope. The user still decides whether to address or leave it.
+
+## Disclosure test for examples
+
+Examples illustrate a point — they're not specification themselves. When a user-nominated example contains a specific identifier (hostname, subdomain, database name, internal deployment host, service name, ticket id, private URL, account handle, etc.), apply a disclosure test before writing it verbatim.
 
 **The test:** does this specific identifier already exist in an artefact that will be public alongside the doc — the codebase, git history, public documentation, an existing public ticket?
 
-- **Yes.** The specific can stand; sanitising it achieves nothing practical.
+- **Yes.** The specific can stand; sanitising achieves nothing practical.
 - **No — it exists only because the user said it in this conversation.** Writing it verbatim turns the doc into a side-channel disclosure vector. Abstract it (`example.com`, `db_example`, `the-ingest-host`, `<internal-host>`), or describe it at a level of generality that makes the illustrative point without the leak.
 
-Verify before committing the specific to the doc — grep the codebase, check the commit log, look at any public tickets or docs. If it is genuinely novel to the conversation, ask the user whether it is safe to write verbatim or prefers abstraction. Never assume.
+Verify before committing the specific — grep the codebase, check the commit log, look at any public tickets or docs. Genuinely novel to the conversation? Ask the user whether verbatim is safe or they prefer abstraction. Never assume.
 
-## Never
+## Hard limits
 
-- Never redefine goal, scope, or concept. Those come from the source doc. If they need to change, OFFER to switch back to `/discovery` or `/pre-plan` (whichever produced the source) — never switch unilaterally, and never redefine in-place.
-- Never modify the codebase. Code snippets WITHIN the plan doc are specification, which is fine — running, writing, or committing them is the implementer's job.
-- Never commit or push. Revision tracking is the user's call, not the skill's.
-- Never add process logs, timestamps, or activity tracking to the doc — the doc is a specification, not a conversation log.
-- Never suggest next steps or hurry the user forward. Designing is the job; moving on is not.
-- Never leave open questions in the finalised plan.
-- Never merge Automated and Manual success criteria.
-- Never lead the user with unsolicited alternatives.
-- Never treat your own answers as the user's decision. When the user asks a question — whether something is possible, how a tool works, what an option returns — answer it plainly. Do NOT then write that answer into the plan as a design decision. Only the *user's* explicit decisions become plan content. Questions and decisions are different acts; keep them separate.
-- **A user question with options on the table is a hard stop.** When you have presented design options (or tradeoffs at a decision point) and the user's next message is a question — asks "what", "which", "should", "best", "how", or ends with `?` — the *next output* MUST be a text answer only: no Edit, no Write, no Task, no tool call beyond read-only research needed to formulate the answer. After answering, STOP. Wait for an explicit decision ("go with option 1", "use your pick", "write it up that way") before writing anything into the plan doc. Your own recommendation — even one the user implicitly invited by asking — is not a decision. Questions get answers; decisions get written into the plan; never collapse the two.
+Rules a session cannot violate and still count as an instance of this workflow. Each has a *why*; the reasoning is what lets the rule generalise. Other rules in this skill are directional advice. The ones below are gates.
+
+1. **Don't redefine goal, scope, or concept in place.**
+    - *Why:* the source doc is the arbiter; redefining scope under the plan's title breaks the promise that an implementer can trust plan + source. Source needs to change? Offer `/discovery` or `/pre-plan`. Never switch unilaterally, and never rewrite scope in-place.
+
+2. **Don't modify the codebase.**
+    - *Why:* this skill is specification, not execution. Code snippets inside the plan doc are fine — they're part of the spec. Running, writing, or committing code is the implementer's job, and blurring the boundary collapses the plan/implement separation the workflow depends on.
+
+3. **Don't commit, push, or track revisions.**
+    - *Why:* revision tracking is the user's call; the plan doc is a living draft until the user says it's done. Auto-committing turns in-progress thinking into recorded history the user didn't approve.
+
+4. **Don't merge Automated and Manual Success Criteria.**
+    - *Why:* Automated = a command an execution agent can run without judgment; Manual = a specific thing a human must observe. Merging means the implementer can't tell which bucket a criterion belongs in, and criteria that need human judgment get "automated" in ways that don't actually check them.
+
+5. **Don't leave open questions in the finalised plan.**
+    - *Why:* the plan is an instruction; instructions cannot be "maybe". An unresolved question is a deferred decision an implementer can't make alone — it forces them back to the user and undermines the "executable without coming back to ask" contract.
+
+6. **Don't lead the user with unsolicited alternatives.**
+    - *Why:* options the user didn't ask for bias the decision — the first option gets disproportionate weight, the fifth feels like filler. Default specified? Propose the default. Decision needed? Present options neutrally. Don't stack the deck.
+
+7. **Answering a question is not the same as being instructed to act.**
+    - *Why:* when the user asks "what should I...", "which of these...", "should we...", or ends in `?`, that is a request for information. Collapsing question into plan-change is an autonomy-creep failure: the agent answers its own question, writes its answer into the plan, records the action as if the user approved. After design options on the table, if the user's next message is a question, the next output is text only — no Edit, no Write, no tool call beyond read-only research — then stop. Wait for an explicit decision ("go with option 1", "use your pick", "write it up that way") before any plan-doc edit. Your own recommendation, even one the user implicitly invited, is not a decision.
