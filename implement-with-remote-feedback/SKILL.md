@@ -10,68 +10,23 @@ Execute a plan document into code, publishing every commit so the remote branch 
 
 ## Preflight
 
-Preflight is a questionnaire. Work through the eleven steps in order; every election has a named destination in the implementation tracker's `Preflight Decisions` section. The agent MUST NOT begin Sprint Grooming until all eleven steps are complete.
+Preflight is an eleven-step questionnaire. Every step's outcome lands in the tracker's `Preflight Decisions` block. Do not begin Sprint Grooming until every step is resolved — later behaviour forks on these elections, so getting them right up front is what keeps the sprint loop autonomous.
 
-1. **Locate the plan.** If `$ARGUMENTS` points to an existing plan doc, use it. Otherwise glob `docs/plans/plan_*.md` and ask the user to pick one. If no plan exists, STOP and tell the user this skill requires a plan doc as input — do NOT invent scope or design from scratch.
+See `references/preflight.md` for the full procedure on each step (exact commands, defaults, prompts to present, failure handling). The checklist here is the map; the reference is the detail.
 
-2. **Read the plan in full.** Use the Read tool WITHOUT limit/offset. The plan IS your source of truth for scope, phases, and Success Criteria. Do not redefine them. If they need to change, say so and OFFER to switch back to `/plan` — never switch unilaterally.
+1. **Locate the plan.** Use `$ARGUMENTS` if it points to one; otherwise glob `docs/plans/plan_*.md` and ask. No plan → STOP; this skill does not invent scope.
+2. **Read the plan in full.** Read tool, no limit/offset. The plan is the arbiter of scope, phases, and Success Criteria for the rest of the session.
+3. **Clean working tree.** `git status`. Dirty → STOP.
+4. **Branch check.** If on `main`/`master`, warn and ask before proceeding.
+5. **Pull latest.** `git pull`.
+6. **Confirm and create the branch.** Default `<type>/<slug>`; types: `feature` / `bugfix` / `spike` / `refactor` / `docs` / `chore`. Create and `git push -u`.
+7. **Elect PR strategy.** Four options, no default: `from-start`, `at-end`, `per-sprint`, `none`. The user must pick.
+8. **Baseline verification audit.** Find the repo's test target, ask whether to run it against the base branch now.
+9. **Surface plan-deferred choices.** Scan the plan for TBD markers; resolve each with the user upfront so the sprint loop stays autonomous.
+10. **Label setup** (from-start only). `gh label create --force in-flight` and `do-not-merge`. Failure is a blocker — labels are load-bearing for this strategy.
+11. **Elect comment trust scope.** Detect repo visibility, propose a default, record the minimum. Runs even for no-PR strategies so the threshold is ready if a PR is opened later.
 
-3. **Verify the working tree is clean.** Run `git status`. If there are ANY uncommitted or untracked non-ignored changes, STOP and tell the user:
-   > "Working tree is not clean. Please commit or stash your changes before starting."
-
-4. **Verify if we are on main/master.** If so, warn the user and ask whether to continue from the current branch or switch to a dev branch first.
-
-5. **Pull latest.** `git pull` to ensure we're up to date.
-
-6. **Confirm the branch name with the user.** The default is `<type>/<slug>`, where `<slug>` matches the plan's slug. Valid types:
-   - `feature/` — new functionality
-   - `bugfix/` — fixing a defect
-   - `spike/` — exploratory / research / prototype
-   - `refactor/` — restructuring without behaviour change
-   - `docs/` — documentation only
-   - `chore/` — maintenance, deps, tooling
-
-   Present the single default and ask the user to confirm or override. Do not enumerate alternatives beyond the type list above. Once confirmed, create and publish the branch:
-
-   ```
-   git checkout -b <type>/<slug>
-   git push -u origin <type>/<slug>
-   ```
-
-7. **Elect PR strategy.** Present the four options and ask the user to pick one. There is **no default** — the agent MUST NOT proceed without an explicit election. Present these options verbatim:
-   - **from-start** — a real, non-draft PR opened after Sprint Grooming, marked `[In Flight]` until completion. Body lists the refined sprints as a checklist. Feedback loop runs from the first commit after grooming. Best when others need live visibility.
-   - **at-end** — branch-only during work. PR offered at final completion, body consolidates all sprints' manual test plans.
-   - **per-sprint** — a separate PR opened at the end of each sprint. Each stands alone and targets `main`. If a prior sprint's PR is unmerged when the next sprint ends, stop and ask.
-   - **none** — no PR. User handles PR creation manually later.
-
-   Record the election in the tracker's `Preflight Decisions → PR strategy`.
-
-8. **Baseline verification audit.** Before asking anything, scan the checkout for a baseline verification target. Look (in this order) for:
-   - a `Makefile` with a `test` / `check` / `ci` target,
-   - a `package.json` `scripts.test`,
-   - a `pyproject.toml` / `setup.cfg` `[tool.pytest]` section,
-   - a `go.mod` (implies `go test ./...`),
-   - a `Cargo.toml` (implies `cargo test`),
-   - a `.github/workflows/` file that names a test command.
-
-   If one is found, name it to the user and ask whether to run it against the base branch now before starting work. If none is found, say so and proceed without one. Record the outcome in the tracker's `Preflight Decisions → Baseline verification`.
-
-9. **Surface plan-deferred choices.** Scan the plan doc for text matching `implementer's choice`, `TBD`, `to be decided`, `leave for implementation`, or an empty Changes Required / Success Criteria block. Surface each match to the user as an upfront decision. Record resolutions in the tracker's `Preflight Decisions → Plan-deferred decisions`.
-
-10. **Label setup (conditional on from-start).** If the elected strategy is **from-start**, run:
-    ```
-    gh label create --force in-flight
-    gh label create --force do-not-merge
-    ```
-    If either command fails (e.g. the token lacks `labels:write`), that is a blocker — STOP, record in the tracker, and ask the user. Do NOT silently skip label creation. Record success in the tracker's `Preflight Decisions → In-flight labels created`. For any other strategy, mark this step as `n/a`.
-
-11. **Elect comment trust scope.** Detect repo visibility:
-    ```
-    gh repo view --json visibility
-    ```
-    Suggest the default: `write` for `PUBLIC`, `triage` for `PRIVATE` / `INTERNAL`. Ask the user to confirm or pick a different minimum permission level from the six GitHub values: `admin`, `maintain`, `write`, `triage`, `read`, `none`. Record the chosen minimum in the tracker's `Preflight Decisions → Comment trust minimum`. This step runs regardless of elected PR strategy — even for `at-end` and `none`, the scope is set so if a PR is later opened the feedback loop has its trust threshold.
-
-PR creation happens after Sprint Grooming (see Sprint Grooming → Procedure) so the PR body reflects the refined sprints, not the plan's raw phases.
+PR creation happens after Sprint Grooming, not here — the PR body needs the refined sprints, not the plan's raw phases.
 
 ## The Doc
 
