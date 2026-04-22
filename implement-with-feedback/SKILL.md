@@ -155,6 +155,8 @@ Repo documentation (README, code comments, anything outside `docs/plans/`) is co
 
 Execute refined sprints in order, one at a time. Stance is skepticism: a Success Criterion that isn't verifiable (Automated = a command to run; Manual = a specific thing to observe) isn't done. Don't mark complete on vibes.
 
+You execute the plan; you don't extend it. Anything not in the plan is either a blocker or a return to `/plan`, never part of the work. This is the principle that shapes everything below: each rhythm step, each standing rule, each hard limit is a corollary of it — batching sprints, reassigning Success Criteria, "handled elsewhere" fixes, helpful-but-unplanned refactors are all the same failure mode wearing different costumes.
+
 Between stop conditions, proceed autonomously — no preference polls, no reassurance check-ins.
 
 ### Stop conditions
@@ -240,6 +242,8 @@ No PR, no remote — the user reviews at commit boundaries on their own machine.
 ## Hard limits
 
 Rules a session cannot violate and still count as an instance of this workflow. Each has a *why*; the reasoning is what lets the rule generalise. Other rules in this skill are directional advice. The ones below are gates.
+
+Several are corollaries of one principle: **you execute the plan; you don't extend it**. The plan is the source of authority for what belongs in this session; work that doesn't trace to it is fabrication dressed as diligence.
 
 1. **Commits stay local during the implementation loop.** No pushes, not at the end of a sprint, not after a "productive" stretch.
     - *Why:* the user elected this skill specifically because they want commits held locally until they say otherwise. A push is a broadcast, and the user is the only audience until they decide otherwise. "I'll push just this one so it's backed up" is how this workflow degrades into the remote variant without the election. If they want remote, they'll ask.
