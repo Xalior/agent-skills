@@ -10,7 +10,7 @@ Execute a plan document into code, publishing every commit so the remote branch 
 
 ## Preflight
 
-Preflight is an eleven-step questionnaire. Every step's outcome lands in the tracker's `Preflight Decisions` block. Do not begin Sprint Grooming until every step is resolved — later behaviour forks on these elections, so getting them right up front is what keeps the sprint loop autonomous.
+Preflight is an eleven-step questionnaire. Every step's outcome lands in the tracker's `Preflight Decisions` block. Do not begin Sprint Refinement until every step is resolved — later behaviour forks on these elections, so getting them right up front is what keeps the sprint loop autonomous.
 
 See `references/preflight.md` for the full procedure on each step (exact commands, defaults, prompts to present, failure handling). The checklist here is the map; the reference is the detail.
 
@@ -26,7 +26,7 @@ See `references/preflight.md` for the full procedure on each step (exact command
 10. **Label setup** (from-start only). `gh label create --force in-flight` and `do-not-merge`. Failure is a blocker — labels are load-bearing for this strategy.
 11. **Elect comment trust scope.** Detect repo visibility, propose a default, record the minimum. Runs even for no-PR strategies so the threshold is ready if a PR is opened later.
 
-PR creation happens after Sprint Grooming, not here — the PR body needs the refined sprints, not the plan's raw phases.
+PR creation happens after Sprint Refinement, not here — the PR body needs the refined sprints, not the plan's raw phases.
 
 ## The Doc
 
@@ -51,11 +51,11 @@ Create the implementation tracker at `docs/plans/plan_<slug>_implementation.md` 
 
 ## Sprints
 
-<!-- Filled in during Sprint Grooming, one entry per sprint -->
+<!-- Filled in during Sprint Refinement, one entry per sprint -->
 
 ## Tasks
 
-<!-- Sprint-keyed progress checklist. Filled in during Sprint Grooming. -->
+<!-- Sprint-keyed progress checklist. Filled in during Sprint Refinement. -->
 
 ## Progress Log
 
@@ -78,88 +78,77 @@ The tracker is a living document — update it continuously. It tells the story 
 
 Commit AND push the tracker immediately with a message like `chore: init implementation tracker for <slug>`.
 
-## Sprint Grooming
+## Sprint Refinement
 
-After creating the tracker and before touching any code, groom the plan's phases into sprints. **A sprint is a managably-reviewable, shippable unit of work** — small enough that a reviewer can hold the whole change in their head in one sitting, large enough to be meaningful on its own. The review boundary drives sprint shape, not the plan's phase boundary.
+After the tracker exists and before any code is touched, refine the plan's phases into **sprints**. A sprint is a manageably-reviewable, shippable unit of work — small enough that a reviewer can hold the whole change in their head in one sitting, large enough to be meaningful on its own. The review boundary drives sprint shape, not the plan's phase boundary.
 
-Sprints and phases are orthogonal. Grooming maps one onto the other:
+### Sprints and phases are orthogonal
 
-- A sprint can cover **one whole phase** — the simple case.
-- A sprint can cover **several small phases** — e.g. a "bootstrap" sprint covering repo-init + deps + CI + linter-config phases from the plan.
-- A sprint can cover **part of a large phase** — a big phase refined into multiple sprints (e.g. "auth rewrite" → read-path sprint, write-path sprint, migration sprint).
+Refinement maps one onto the other three ways:
+
+- One whole phase → one sprint. The simple case.
+- Several small phases → one sprint. E.g. a "bootstrap" sprint covering repo-init + deps + CI + linter-config phases together.
+- One large phase → several sprints. E.g. an auth rewrite refined into read-path sprint, write-path sprint, migration sprint.
+
+**Refinement decomposes and regroups; it never redefines.** A sprint's Success Criteria are drawn from — not added to — the phases it covers. If refinement reveals a missing or wrong phase criterion, that is a blocker, not a refinement freedom. The plan is the arbiter; refinement is a structural projection of it onto review units.
 
 ### Procedure
 
-Propose the full sprint breakdown in ONE pass. Do NOT round-robin with the user sprint-by-sprint — that is slow and loses the whole-picture view that makes good grooming possible.
+Propose the full sprint breakdown in one pass. Don't round-robin sprint-by-sprint — that loses the whole-picture view that makes good refinement possible, and it slows the user down.
 
-1. Write the proposal directly into the tracker's `Sprints` section. For each proposed sprint, fill in:
+1. Write the proposal directly into the tracker's `Sprints` section. Per sprint:
    - **Name** — short, descriptive.
    - **Covers** — which phase(s) by name, and what portion of each (`full`, or `Changes Required items X and Y`, or `read-path only`).
-   - **Success Criteria** — split into Automated and Manual, drawn from the covered phases' criteria. Where a sprint covers only part of a phase, include only the portion of that phase's criteria the sprint is responsible for.
+   - **Success Criteria** — Automated and Manual, drawn from the covered phases. When a sprint covers only part of a phase, include only the portion it owns.
    - **Status** — `not started`.
 2. Populate the tracker's `Tasks` checklist with one entry per proposed sprint (`- [ ] Sprint 1: <name>`).
-3. Keep **vertical slices the default**. Each sprint should be a thin end-to-end cut through the layers it touches, unless the plan's Approach section says otherwise.
-4. Surface the completed proposal to the user and ask them to accept or nudge. Their response is a decision — log it to the `Progress Log` with a timestamp.
-5. Once accepted, commit and push the tracker with a message like `chore: groom <slug> into N sprints`.
-6. **PR creation (conditional on from-start).** If the elected strategy is **from-start**:
-    - First detect any existing PR for the branch: `gh pr view --json url,number,title,labels`. If one exists, reuse it — record the URL in the tracker and skip creation. Do NOT attempt to open a second PR for the same branch.
-    - Otherwise create a **non-draft** PR:
-      ```
-      gh pr create \
-        --title "[In Flight] <plan title>" \
-        --body "<body>" \
-        --label in-flight \
-        --label do-not-merge
-      ```
-    - Body template, built from the plan and the refined sprint list:
-      - `## Goal` — copied from the plan's Overview.
-      - `## Sprints` — one checklist item per refined sprint, all unchecked.
-      - `## Manual Test Plan` — empty placeholder; filled in at sprint ends.
-    - Do NOT include an automation-authored banner in the body. The PR is team-neutral.
-    - Record the PR URL in the tracker header and in `Preflight Decisions`.
-
-    For any other strategy, skip this step.
+3. Default to **vertical slices**: each sprint is a thin end-to-end cut through the layers it touches, unless the plan's Approach section says otherwise. Vertical slices ship value and can be verified independently; horizontal slices (all DB, then all API, then all frontend) defer verification and hide integration risk until late.
+4. Show the proposal to the user and ask them to accept or nudge. Log their response in `Progress Log` with a timestamp.
+5. Once accepted, commit the tracker: `chore: refine <slug> into N sprints`.
+6. **If PR strategy is `from-start`**, create the PR now — procedure in `references/pr-strategies.md`. Skip for any other strategy; those strategies create PRs later or not at all.
 
 ### Sizing for manageable review
 
-Err small. A sprint that would take a reviewer more than an hour to review carefully is probably two sprints. Signals a sprint is too large:
+Err small. A sprint that would take a reviewer more than an hour to review carefully is probably two sprints.
+
+Signals a sprint is too large:
 
 - More than ~5 distinct logical units of change.
 - Touches unrelated subsystems that don't need to land together.
-- Would require the reviewer to hold two separate mental models at once.
+- Requires the reviewer to hold two separate mental models at once.
 
 Signals a sprint is too small:
 
-- Doesn't ship anything end-to-end (unless the plan's Approach explicitly non-slices).
+- Ships nothing end-to-end (and the plan's Approach doesn't call for a non-sliced shape).
 - Can't be verified independently.
 - Has no meaningful Success Criteria of its own.
 
-### Re-grooming mid-flight
+### Re-refining mid-flight
 
-If executing Sprint N surfaces that a later sprint is wrong — wrong split, wrong order, missing scope, too large — that is a **blocker-class decision**. Stop, record in the tracker, surface to the user, and re-groom only with their explicit go-ahead. NEVER silently reshape future sprints.
+If executing Sprint N surfaces that a later sprint is wrong — wrong split, wrong order, missing scope, too large — that is a blocker. Stop, record in the tracker, surface to the user, re-refine only with their explicit go-ahead. Silently reshaping future sprints is the single most corrosive failure mode for this workflow: it makes the refined sprint list a lie, breaks any PR body that references it, and hides scope changes from reviewers.
 
-If re-grooming changes the sprint list on a from-start PR, update the PR body's `## Sprints` checklist to match after the user accepts.
+If re-refinement changes the sprint list on a `from-start` PR, update the PR body's `## Sprints` checklist to match after the user accepts.
 
-If re-grooming would change phase-level Success Criteria or scope, that is a plan-scope change, per Plan Immutability — offer to switch back to `/plan`.
+If re-refinement would change phase-level Success Criteria or scope, that is a plan change, not a refinement — offer to switch back to `/plan`. See *Planning docs during implementation* below.
 
-## Plan Immutability
+### Planning docs during implementation
 
-The plan is set in stone during implementation. Two exceptions only:
+The plan is set in stone for the duration of this session. Two exceptions only:
 
-- The plan itself instructs a return to plan mode (e.g. "implement Phase 1, then return to `/plan` for Phase 2").
+- The plan itself instructs a return to plan mode ("implement Phase 1, then return to `/plan` for Phase 2").
 - A direct user instruction during implementation ("add that to the plan").
 
-Anything else that would require a plan change — scope creep, new phases, altered Success Criteria, a better idea that emerged while implementing — is a **blocker**. Stop, record in the tracker, surface to the user, and offer to switch back to `/plan`. NEVER redefine scope, phases, or Success Criteria in-place.
+Anything else that would require a plan change — scope creep, new phases, altered Success Criteria, a better idea that emerged mid-work — is a blocker. Stop, record, surface to the user, offer `/plan`. Never redefine scope, phases, or Success Criteria in place; doing so makes the plan and the implementation drift, and reviewers lose the ability to trust either as a record of intent.
 
-**Grooming decomposes and regroups; it never redefines.** A sprint's Success Criteria are drawn from — not in addition to — the phases it covers. If grooming reveals missing or wrong phase criteria, that is a blocker, not a grooming freedom.
+Document status during implementation:
 
-**Planning-doc updates do NOT require a mode switch.** An explicit, unambiguous user instruction to update the plan, pre-plan, or tracker is adhered to inline — no bounce back to `/pre-plan` or `/plan`.
+- **Pre-plan** — immutable once a plan has been made from it; decision changes are tracked through plan revisions, not pre-plan edits. Updates only via explicit user instruction.
+- **Plan** — set in stone, per the two exceptions above.
+- **Tracker** — living document, updated continuously; the record of how the work unfolded.
 
-- **Pre-plan** — ideally immutable once a plan has been made from it; decision changes are tracked through plan revisions, not pre-plan edits. Updates only via explicit user instruction.
-- **Plan** — set in stone during implementation, per the two exceptions above.
-- **Implementation tracker** — updated continuously; it is the living record of progress.
+An explicit, unambiguous user instruction to update any of these inline is honoured — no bounce back to `/pre-plan` or `/plan`.
 
-This immutability applies to the planning docs only. **Repo documentation (README, code docs, etc.) is code** — maintained only when the plan instructs it, subject to the same rules as any other code change.
+Repo documentation (README, code comments, docs/ files not in `docs/plans/`) is code — maintained only when the plan instructs it, subject to the same rules as any other code change. The immutability above applies to the planning docs only.
 
 ## Autonomy Contract
 
@@ -179,7 +168,7 @@ Applies regardless of the elected PR strategy. Between stop conditions, proceed 
 - Failing CI with unclear cause, after one honest attempt to fix.
 - Any user input or opinion needed that the plan does not already answer.
 - Anything that would change plan scope, phases, or phase-level Success Criteria — offer to switch back to `/plan`; never redefine in place.
-- Any need to re-groom future sprints mid-flight — see Sprint Grooming → Re-grooming mid-flight.
+- Any need to re-refine future sprints mid-flight — see Sprint Refinement → Re-refining mid-flight.
 - `gh label create --force` failing during Preflight.
 - A per-sprint PR about to be opened while the prior sprint's PR is still unmerged.
 
@@ -191,11 +180,11 @@ Applies regardless of the elected PR strategy. Between stop conditions, proceed 
 
 ### Blocker procedure
 
-Record the blocker in the tracker's `Blockers` section, commit, push, then surface it to the user. Do NOT spin on a blocker silently. Do NOT route around a blocker by reinterpreting the plan or silently re-grooming sprints.
+Record the blocker in the tracker's `Blockers` section, commit, push, then surface it to the user. Do NOT spin on a blocker silently. Do NOT route around a blocker by reinterpreting the plan or silently re-refining sprints.
 
 ## Feedback Integration Loop
 
-Applies whenever a PR exists for this branch — from-start from the first commit after grooming, per-sprint from the first sprint's PR onward, at-end from the final PR, never for no-PR. Feedback is **input to the work**, not a reason to halt; blockers still halt per the Autonomy Contract.
+Applies whenever a PR exists for this branch — from-start from the first commit after refinement, per-sprint from the first sprint's PR onward, at-end from the final PR, never for no-PR. Feedback is **input to the work**, not a reason to halt; blockers still halt per the Autonomy Contract.
 
 ### After each push
 
@@ -230,10 +219,10 @@ Direct instructions from the invoking user in the Claude Code session are a diff
 
 Execute the refined sprints in order. **The stance is skepticism** — if a Success Criterion isn't verifiable (Automated = a command to run; Manual = a specific thing to observe), it isn't done. NEVER mark a sprint complete on vibes.
 
-- **FOLLOW THE REFINED SPRINT LIST.** Execute sprints in the order they were refined. NEVER batch across sprints, NEVER skip ahead, NEVER silently merge two sprints. Re-grooming is blocker-class, per Sprint Grooming.
+- **FOLLOW THE REFINED SPRINT LIST.** Execute sprints in the order they were refined. NEVER batch across sprints, NEVER skip ahead, NEVER silently merge two sprints. Re-refining is blocker-class, per Sprint Refinement.
 - **HONOR THE APPROACH.** If the plan specifies vertical slices (the default), each sprint cuts end-to-end through the stack — e.g. DB → model → server → api → client lib → frontend, or whichever layers the sprint touches. NEVER complete one layer across all features when the plan calls for slices. If the plan specifies something else, follow it as written. When building tests always use the red/green TDD pattern.
 - **AUTONOMY IS CONTRACT-BOUND.** Work proceeds autonomously per the Autonomy Contract. Stop only on its three stop conditions.
-- **THE PLAN IS IMMUTABLE.** Plan changes follow Plan Immutability — two named exceptions only; everything else is a blocker.
+- **THE PLAN IS IMMUTABLE.** Plan changes follow Sprint Refinement → Planning docs during implementation — two named exceptions only; everything else is a blocker.
 - **INVESTIGATE BEFORE ASKING.** Before questioning the user, read the plan, read referenced files in full, and look at the current code. Spawn research sub-agents in parallel when broad coverage is needed. Then ask only what investigation can't answer. NEVER ask the user about things you could have looked up.
 - **READ REFERENCED MATERIALS IN FULL.** The plan. Files named in Key Discoveries. Related code the plan references. Use the Read tool WITHOUT limit/offset. NEVER skim. NEVER summarise-and-move-on.
 - **VERIFY, DO NOT ADOPT.** Claims the user makes mid-implementation — about constraints, existing behaviour, intent in the plan — get verified before they change direction. Corrections to your own statements ALSO get verified. Spawn a sub-agent to verify where possible. **This includes your own technical knowledge.** Before presenting a technology, library, or tool as an option — stating its capabilities, maintenance status, compatibility, or fitness for purpose — verify those claims against current sources. Your training data is stale and your recall is unreliable. An unverified recommendation is fabrication with extra steps.
@@ -270,7 +259,7 @@ Execute the refined sprints in order. **The stance is skepticism** — if a Succ
 - **Before every `git add`, audit the diff for prompt-derived context** — filenames, identifiers, comments, test descriptions, string literals. Anything that only makes sense if you've read the plan, the conversation, or the tracker must be rewritten to stand on its own. This is where the "never leak" rule from the Never section actually gets enforced.
 - **After each push, run the Feedback Integration Loop** when a PR exists for this branch. For no-PR and for at-end before the final PR, skip the loop.
 - **Update the tracker after each commit** — tick off tasks, append progress, note decisions or blockers. Commit and push the tracker update too.
-- **Tracker phrase gate.** Before committing any tracker edit, grep the staged diff for the phrases `deferred`, `defer to`, `moved to Phase`, `handled in Phase`, `covered by Phase`, `belongs in Phase`, `will happen in Phase`, and close paraphrases. Any such phrase in a staged edit requires a corresponding Blocker entry in the same tracker, authorised by the user (tracked via an entry in `Decisions & Notes` or `Blockers` that names the user instruction). A tracker edit containing these phrases without a linked Blocker is a silent re-grooming and a plan mutation — revert the edit and open the Blocker instead.
+- **Tracker phrase gate.** Before committing any tracker edit, grep the staged diff for the phrases `deferred`, `defer to`, `moved to Phase`, `handled in Phase`, `covered by Phase`, `belongs in Phase`, `will happen in Phase`, and close paraphrases. Any such phrase in a staged edit requires a corresponding Blocker entry in the same tracker, authorised by the user (tracked via an entry in `Decisions & Notes` or `Blockers` that names the user instruction). A tracker edit containing these phrases without a linked Blocker is a silent re-refinement and a plan mutation — revert the edit and open the Blocker instead.
 - **If blocked, record the blocker in the tracker, commit, push, then ask the user.** Do NOT spin on a blocker silently.
 - **When all sprints are complete and all phase-level Success Criteria met**, set the tracker's Status to `Complete`, make a final commit and push, and then perform the strategy's completion action:
   - **from-start** — edit the PR: strip the `[In Flight]` prefix from the title; remove the `in-flight` and `do-not-merge` labels (`gh pr edit --title "<title>" --remove-label in-flight --remove-label do-not-merge`). Body already contains the consolidated test plan from sprint ends.
@@ -292,7 +281,7 @@ Others can watch progress via:
 - **NEVER force push.** History is sacred in this workflow.
 - **NEVER amend pushed commits.** Make a new commit instead.
 - **NEVER batch multiple sprints into one commit or one chunk of work.**
-- **NEVER silently re-groom sprints mid-flight.** Re-grooming is blocker-class; stop, record, ask.
+- **NEVER silently re-refine sprints mid-flight.** Re-refining is blocker-class; stop, record, ask.
 - **NEVER defer, move, or reassign a plan-level Success Criterion to a later phase.** Writing "deferred to Phase N", "moved to Phase N", "covered by Phase N instead", or any synonym — in the tracker, the PR body, or anywhere else — IS a plan mutation, by a different spelling. The phase the plan assigned an SC to is the phase that owns it. If an SC truly cannot be met in its assigned phase, stop, record a Blocker citing the specific SC and the reason, surface to the user. Never route around by re-attributing. A tracker that attributes plan-level SC to a phase other than the one the plan assigns them to is forbidden.
 - **NEVER commit with vague messages.** `wip` alone is not a commit message.
 - **NEVER lead the user with unsolicited alternatives.**
