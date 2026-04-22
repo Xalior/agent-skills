@@ -67,6 +67,8 @@ The file on disk is the persistence layer — a cold agent reading this doc plus
 
 Design iteratively, with the user. Stance is skepticism: a step that isn't specific enough for an implementer to execute without asking isn't done. Probe vagueness. Never accept "we'll figure it out during implementation" as a design decision. Don't hurry the user forward — designing is the job; moving on is not.
 
+You propose; the user decides. Nothing enters the plan on your own authority — every design choice traces to either the source doc or an explicit user decision. Proposing options and tradeoffs is the job; converting your own proposal into plan content without the user's yes is not. This is the principle that shapes everything below: each rhythm step, each research rule, each hard limit is a corollary of it.
+
 ### Iterative rhythm
 
 1. **Outline first.** Propose the phase shape — names + what each phase accomplishes — and get the user's sign-off on the structure before writing any phase's detail. Don't write the full plan in one shot.
@@ -75,7 +77,7 @@ Design iteratively, with the user. Stance is skepticism: a step that isn't speci
 
 3. **Ask one focused question at a time**, when you need to ask. Don't batch, don't run down a list. Conversation, not questionnaire.
 
-4. **Reflect back what you heard before writing it into the doc** — after each answer, restate, confirm, then write. Catches misunderstandings cheaply.
+4. **Reflect back what you heard before writing it into the doc** — after each answer, restate (only what they said, without adjacent framing or what you think they meant), confirm, then write. Catches misunderstandings cheaply and stops the reflection itself from becoming a fabrication vector.
 
 5. **Present design options with tradeoffs at real decision points.** Multiple valid approaches? Lay them out with pros and cons and ask the user to decide. Never silently pick a direction for a choice that genuinely matters.
 
@@ -94,7 +96,7 @@ Design iteratively, with the user. Stance is skepticism: a step that isn't speci
 
 - **Investigate before asking.** Read the source, read referenced files in full (skim-and-summarise is how context drifts), look at the current code. Spawn research sub-agents in parallel for broad coverage. Ask only what investigation can't answer; don't ask about things already written down.
 - **Verify claims, don't adopt them.** Claims about the existing system, prior art, constraints get verified before they land in the plan. Corrections to your own statements too. Spawn a sub-agent to verify where possible. This includes your own technical knowledge: before presenting a library, tool, or version as suitable, verify against current sources. Training data is stale; an unverified recommendation is fabrication with extra steps.
-- **Wait for sub-tasks before synthesising.** Say what you've spawned; announce when each returns; don't act on partial findings.
+- **Wait for sub-tasks before synthesising.** Say what you've spawned; announce when each returns; don't act on partial findings. Findings inform the proposals you bring to the user — they don't become plan content by themselves. A sub-agent's output is not a user decision; presenting it as one is fabrication with an extra tool call.
 
 ### Finalising
 
@@ -115,6 +117,8 @@ Verify before committing the specific — grep the codebase, check the commit lo
 ## Hard limits
 
 Rules a session cannot violate and still count as an instance of this workflow. Each has a *why*; the reasoning is what lets the rule generalise. Other rules in this skill are directional advice. The ones below are gates.
+
+Several are corollaries of one principle: **nothing enters the plan on your own authority**. Every piece of plan content traces to the source doc or an explicit user decision; deviating makes the plan a fabrication dressed as a specification.
 
 1. **Don't redefine goal, scope, or concept in place.**
     - *Why:* the source doc is the arbiter; redefining scope under the plan's title breaks the promise that an implementer can trust plan + source. Source needs to change? Offer `/discovery` or `/pre-plan`. Never switch unilaterally, and never rewrite scope in-place.
