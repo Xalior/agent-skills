@@ -10,7 +10,7 @@ Execute a plan document into code, publishing every commit so the remote branch 
 
 ## Flow at a glance
 
-1. **Preflight** — 11-step election: locate plan, clean tree, branch name, PR strategy, baseline test target, deferred choices, labels, comment-trust scope. Results recorded in the tracker's `Preflight Decisions` block.
+1. **Preflight** — 12-step election: locate plan, clean tree, branch name, PR strategy, baseline test target, deferred choices, labels, comment-trust scope, tracker layout. Results recorded in the tracker's `Preflight Decisions` block.
 2. **The tracker** — create `docs/plans/plan_<slug>_implementation.md`, commit, push. Living document for the rest of the session.
 3. **Sprint Refinement** — decompose the plan's phases into reviewable sprints in one pass; if strategy is `from-start`, open the PR now.
 4. **Execute sprints** — per-sprint rhythm of code → commit → push → feedback → tracker update, one sprint at a time. Stop only at sprint boundaries or blockers.
@@ -20,7 +20,7 @@ Each phase has a section below; procedural detail for Preflight, PR strategies, 
 
 ## Preflight
 
-Preflight is an eleven-step questionnaire. Every step's outcome lands in the tracker's `Preflight Decisions` block. Do not begin Sprint Refinement until every step is resolved — later behaviour forks on these elections, so getting them right up front is what keeps the sprint loop autonomous.
+Preflight is a twelve-step questionnaire. Every step's outcome lands in the tracker's `Preflight Decisions` block. Do not begin Sprint Refinement until every step is resolved — later behaviour forks on these elections, so getting them right up front is what keeps the sprint loop autonomous.
 
 See `references/preflight.md` for the full procedure on each step (exact commands, defaults, prompts to present, failure handling). The checklist here is the map; the reference is the detail.
 
@@ -35,6 +35,7 @@ See `references/preflight.md` for the full procedure on each step (exact command
 9. **Surface plan-deferred choices.** Scan the plan for TBD markers; resolve each with the user upfront so the sprint loop stays autonomous.
 10. **Label setup** (from-start only). `gh label create --force in-flight` and `do-not-merge`. Failure is a blocker — labels are load-bearing for this strategy.
 11. **Elect comment trust scope.** Detect repo visibility, propose a default, record the minimum. Runs even for no-PR strategies so the threshold is ready if a PR is opened later.
+12. **Elect tracker layout.** `single` (default — one file) or `split-by-sprint` (index file + one file per sprint). Recommend `split-by-sprint` when the work parcel is large enough that a single tracker will bloat.
 
 PR creation happens after Sprint Refinement, not here — the PR body needs the refined sprints, not the plan's raw phases.
 
@@ -56,6 +57,7 @@ Create the implementation tracker at `docs/plans/plan_<slug>_implementation.md` 
 - **Comment trust minimum:** `<admin | maintain | write | triage | read | none>`
 - **Baseline verification:** `<command run + result, or "no baseline target found">`
 - **In-flight labels created:** `<yes | no | n/a>`
+- **Tracker layout:** `<single | split-by-sprint>`
 - **Plan-deferred decisions:**
   - `<item>`: `<resolution>`
 
@@ -86,7 +88,13 @@ Create the implementation tracker at `docs/plans/plan_<slug>_implementation.md` 
 
 The tracker is a living document — update it continuously. It tells the story of the implementation to anyone reading the git log. The file on disk plus the remote branch are the persistence layer.
 
-Commit AND push the tracker immediately with a message like `chore: init implementation tracker for <slug>`.
+Commit the tracker immediately with a message like `chore: init implementation tracker for <slug>` — then push.
+
+### When `Tracker layout: split-by-sprint`
+
+The file above becomes the **index** (session-global state only). Per-sprint state (`Tasks`, `Progress Log`, `Decisions & Notes`, `Blockers`, `Commits`) moves to sibling files named `plan_<slug>_implementation_sprint_<N>.md`, one per refined sprint. See `references/preflight.md → §12` for the full section-to-file mapping.
+
+Throughout the rest of this skill, "the tracker's <section>" resolves to the right file by layout — the mapping is set once at Preflight step 12 and need not be restated at every reference.
 
 ## Sprint Refinement
 
@@ -106,12 +114,15 @@ Refinement maps one onto the other three ways:
 
 Propose the full sprint breakdown in one pass. Don't round-robin sprint-by-sprint — that loses the whole-picture view that makes good refinement possible, and it slows the user down.
 
-1. Write the proposal directly into the tracker's `Sprints` section. Per sprint:
+1. Write the proposal into the tracker's `Sprints` section (the index, when layout is `split-by-sprint`). Per sprint:
    - **Name** — short, descriptive.
    - **Covers** — which phase(s) by name, and what portion of each (`full`, or `Changes Required items X and Y`, or `read-path only`).
    - **Success Criteria** — Automated and Manual, drawn from the covered phases. When a sprint covers only part of a phase, include only the portion it owns.
    - **Status** — `not started`.
-2. Populate the tracker's `Tasks` checklist with one entry per proposed sprint (`- [ ] Sprint 1: <name>`).
+
+   When layout is `split-by-sprint`, also create `docs/plans/plan_<slug>_implementation_sprint_<N>.md` for each proposed sprint — skeleton only (sprint header + empty `Tasks`, `Progress Log`, `Decisions & Notes`, `Blockers`, `Commits`). Link each from the index's `Sprints` overview. This gets the shape on the remote branch in one commit; bodies fill in as sprints run.
+
+2. Populate the tracker's `Tasks` checklist with one entry per proposed sprint (`- [ ] Sprint 1: <name>`). Under `split-by-sprint`, this overview lives on the index; the per-sprint Tasks checklist goes into each sprint file.
 3. Default to **vertical slices**: each sprint is a thin end-to-end cut through the layers it touches, unless the plan's Approach section says otherwise. Vertical slices ship value and can be verified independently; horizontal slices (all DB, then all API, then all frontend) defer verification and hide integration risk until late.
 4. Show the proposal to the user and ask them to accept or nudge. Log their response in `Progress Log` with a timestamp.
 5. Once accepted, commit the tracker: `chore: refine <slug> into N sprints`.

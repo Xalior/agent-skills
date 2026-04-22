@@ -1,6 +1,6 @@
 # Preflight — detailed procedure
 
-Preflight has eleven steps. Each step's outcome lands in a named slot in the tracker's `Preflight Decisions` block; the slot names below match the tracker skeleton exactly. Do not start Sprint Grooming until every step is resolved.
+Preflight has twelve steps. Each step's outcome lands in a named slot in the tracker's `Preflight Decisions` block; the slot names below match the tracker skeleton exactly. Do not start Sprint Refinement until every step is resolved.
 
 ## 1. Locate the plan
 
@@ -60,7 +60,7 @@ Publishing the branch immediately is deliberate — the monitoring channel exist
 
 No default. The user must pick one of four — proceeding without an election is not allowed, because later behaviour (end-of-sprint actions, feedback loop activation) forks on this. Present verbatim:
 
-- **from-start** — a real, non-draft PR opened after Sprint Grooming, marked `[In Flight]` until completion. Body lists the refined sprints as a checklist. Feedback loop runs from the first commit after grooming. Best when others need live visibility.
+- **from-start** — a real, non-draft PR opened after Sprint Refinement, marked `[In Flight]` until completion. Body lists the refined sprints as a checklist. Feedback loop runs from the first commit after refinement. Best when others need live visibility.
 - **at-end** — branch-only during work. PR offered at final completion, body consolidates all sprints' manual test plans.
 - **per-sprint** — a separate PR opened at the end of each sprint. Each stands alone and targets `main`. If a prior sprint's PR is unmerged when the next sprint ends, stop and ask.
 - **none** — no PR. User handles PR creation manually later.
@@ -116,3 +116,34 @@ Suggest a default based on visibility:
 Ask the user to confirm or pick a different minimum from the six GitHub permission levels, highest to lowest: `admin`, `maintain`, `write`, `triage`, `read`, `none`.
 
 Record the chosen minimum in `Preflight Decisions → Comment trust minimum`. The feedback loop's trust check (see `references/feedback-loop.md`) resolves every comment against this value.
+
+## 12. Elect tracker layout
+
+Ask the user: **"Should the tracker be split by sprint?"** Default is `single` — the skeleton in SKILL.md `## The Doc`, one file. Recommend `split-by-sprint` when the work parcel is large enough that a single-file tracker will bloat: many sprints, long-running feedback loops, substantial Decisions & Notes expected. The user knows their own appetite for bloat better than a threshold rule does.
+
+Record the election in `Preflight Decisions → Tracker layout`.
+
+### Layout: `split-by-sprint`
+
+Index and per-sprint state live in sibling files under `docs/plans/`:
+
+- `plan_<slug>_implementation.md` — the **index**, session-global only.
+- `plan_<slug>_implementation_sprint_<N>.md` — one per refined sprint, per-sprint state only. Created during Sprint Refinement as each sprint is written into the index's `Sprints` overview.
+
+**What lives where:**
+
+| Section | File |
+|---|---|
+| Header (Status, Branch, Plan, PR) | index |
+| Preflight Decisions | index |
+| Sprints (overview with links to sprint files) | index |
+| Phase-level Success Criteria rollup | index |
+| Last-seen Feedback State | index |
+| Sprint header (Name, Covers, Success Criteria, sprint Status) | sprint file |
+| Tasks | sprint file |
+| Progress Log | sprint file |
+| Decisions & Notes | sprint file |
+| Blockers | sprint file |
+| Commits | sprint file |
+
+`Last-seen Feedback State` stays on the index because it's a session-global cursor; migrating it between sprint files at each boundary would break the "process new items only" diff the feedback loop depends on.
