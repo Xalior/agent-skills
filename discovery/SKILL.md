@@ -10,7 +10,7 @@ Develop a half-formed idea into a clear statement of goal, scope, and approach, 
 
 ## Flow at a glance
 
-1. **Preflight** — new doc: confirm the path, derive a slug. Resume: read the existing doc in full, investigate everything it references, identify the next open question.
+1. **Preflight** — new doc: confirm the path, derive a slug. Resume: read the existing doc in full, investigate everything it references, identify the next open question. Brownfield sweep either way: README, manifest, `docs/`, directory tree, recent commits.
 2. **The Doc** — create `docs/discovery/discovery_<slug>.md` with the skeleton.
 3. **Discovery conversation** — section-by-section: Goal → Scope (in) → Scope (out) → Approach / Hypothesis → Open Questions. One question at a time; write the user's answer in immediately.
 4. **Finalise** — user signals done → honest review → flip `Status` to `Ready for Planning`. Hand off to `/plan`.
@@ -31,6 +31,20 @@ Develop a half-formed idea into a clear statement of goal, scope, and approach, 
    4. Tell the user what you found — summarise what's actually in the doc and what your investigation actually returned. Don't narrate implications the doc doesn't make explicit, and don't paper over gaps; a silent gap is an open question, not a filled section. Then ask your first focused question about whatever is unresolved.
 
    Don't skip these because the doc "already exists." The user's next sentence depends on you knowing what's in the doc and what it refers to.
+
+4. **Brownfield sweep** (when the project contains a codebase alongside this discovery).
+
+   Before your first question to the user, read the project-standard artifacts that would answer dumb questions on the user's behalf — even the ones the user didn't explicitly point at:
+
+   - `README.md`, `CONTRIBUTING.md`, and any top-level `*.md` docs.
+   - The manifest: `package.json` / `pyproject.toml` / `Cargo.toml` / `go.mod` (or equivalent).
+   - `docs/` directory if present.
+   - Top-level directory tree (`ls`).
+   - Recent commit history (`git log --oneline -20`).
+
+   Not to fill the doc — just to understand what exists, so your first question is about what's missing or unclear rather than what's visible on `ls`. Findings feed the conversation, not the doc (same discipline as the Research rigor brownfield bullet: a sub-agent's output — or a README you read — is not a user nomination).
+
+   Skip for greenfield (no code, or the repo is blank). On resume, this sweep complements the resume procedure above by picking up project-standard artifacts the doc doesn't mention.
 
 ## The Doc
 
