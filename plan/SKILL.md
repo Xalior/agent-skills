@@ -123,22 +123,25 @@ Several are corollaries of one principle: **nothing enters the plan on your own 
 1. **Don't redefine goal, scope, or concept in place.**
     - *Why:* the source doc is the arbiter; redefining scope under the plan's title breaks the promise that an implementer can trust plan + source. Source needs to change? Offer `/discovery` or `/pre-plan`. Never switch unilaterally, and never rewrite scope in-place.
 
-2. **Don't modify the codebase.**
+2. **Write decisions to the plan doc before the next question.**
+    - *Why:* the doc is the persistence layer; conversation is volatile. Decisions held across multiple turns evaporate at context reset, tab close, or session resume — and they evaporate without warning, since you don't know which turn will be the last. Worse, your next questions stack up against unrecorded prior decisions, the user has to keep correcting "we already settled that", and the conversation transcript drifts away from the doc until the doc is a lie about what's been agreed. The rhythm is: user decides → reflect back → write to doc → ask the next question. Not: decide → ask → decide → ask → eventually write a summary. If you've accumulated three settled decisions and made zero doc edits between them, you've already failed — recover by writing now, not after the next question.
+
+3. **Don't modify the codebase.**
     - *Why:* this skill is specification, not execution. Code snippets inside the plan doc are fine — they're part of the spec. Running, writing, or committing code is the implementer's job, and blurring the boundary collapses the plan/implement separation the workflow depends on.
 
-3. **Don't commit, push, or track revisions.**
+4. **Don't commit, push, or track revisions.**
     - *Why:* revision tracking is the user's call; the plan doc is a living draft until the user says it's done. Auto-committing turns in-progress thinking into recorded history the user didn't approve.
 
-4. **Don't merge Automated and Manual Success Criteria.**
+5. **Don't merge Automated and Manual Success Criteria.**
     - *Why:* Automated = a command an execution agent can run without judgment; Manual = a specific thing a human must observe. Merging means the implementer can't tell which bucket a criterion belongs in, and criteria that need human judgment get "automated" in ways that don't actually check them.
 
-5. **Don't leave open questions in the finalised plan.**
+6. **Don't leave open questions in the finalised plan.**
     - *Why:* the plan is an instruction; instructions cannot be "maybe". An unresolved question is a deferred decision an implementer can't make alone — it forces them back to the user and undermines the "executable without coming back to ask" contract.
 
-6. **Don't lead the user with unsolicited alternatives.**
+7. **Don't lead the user with unsolicited alternatives.**
     - *Why:* options the user didn't ask for bias the decision — the first option gets disproportionate weight, the fifth feels like filler. Default specified? Propose the default. Decision needed? Present options neutrally. Don't stack the deck.
 
-7. **Answer the question, don't hedge or pivot.**
+8. **Answer the question, don't hedge or pivot.**
     - *Why:* user questions ("what X?", "which Y?", "should we Z?", or ending in `?`) are requests for information. Three failure modes, all misreads of what the user actually asked for:
       - **Conclusion instead of answer.** A verdict ("yes it matters" / "no it doesn't") without the explanation the question asked for. "What does X matter here?" wants *why* X mattered in your prior reasoning, not a yes/no on whether X matters.
       - **Hedging.** Giving a conclusion AND starting to investigate in the same turn. You're asserting a stance you haven't verified while simultaneously implying you don't trust it enough to let it stand alone. Pick one posture: either you know and explain, or you don't and you research first.
