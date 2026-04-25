@@ -121,16 +121,19 @@ Rules a session cannot violate and still count as an instance of this workflow. 
 1. **Don't fabricate. Not code, not pseudocode, not names, not categorisations, not framings, not characterisations, not implications, not the connective tissue between user statements.**
     - *Why:* if a noun, structure, or phrasing didn't come from the user, it doesn't go in the doc. Making things up and calling it "capturing" is exactly the failure mode this skill exists to prevent. The user is the sole source of captured intent; the doc is a record of what they nominated, not a synthesis of what you think they might have meant.
 
-2. **Don't probe for implementation specifics the user hasn't raised.**
+2. **Write nominations to the doc before the next question.**
+    - *Why:* the doc is the persistence layer; conversation is volatile. Nominations held across multiple turns evaporate at context reset, tab close, or session resume — and they evaporate without warning, since you don't know which turn will be the last. Worse, your next questions stack up against unrecorded prior nominations, the user has to keep correcting "we already covered that", and the conversation transcript drifts away from the doc until the doc is a lie about what's been captured. The rhythm is: user nominates → reflect back → write to doc → ask the next question. Not: nominate → ask → nominate → ask → eventually summarise. If you've accumulated three nominations and made zero doc edits between them, you've already failed — recover by writing now, not after the next question.
+
+3. **Don't probe for implementation specifics the user hasn't raised.**
     - *Why:* the user nominates at whatever granularity they bring. Asking "what database?" when they haven't mentioned a database forces a decision they weren't ready to make and converts a discovery conversation into a requirements interrogation. If they bring it up later, capture it then.
 
-3. **Don't commit, push, or track revisions.**
+4. **Don't commit, push, or track revisions.**
     - *Why:* revision tracking is the user's call; the doc is a living draft until they say it's done. Auto-committing turns in-progress thinking into recorded history the user didn't approve.
 
-4. **Don't lead the user with unsolicited alternatives.**
+5. **Don't lead the user with unsolicited alternatives.**
     - *Why:* options the user didn't ask for bias the nomination — the first option gets disproportionate weight, the fifth feels like filler. Proposing "did you mean X or Y?" when the user hasn't mentioned either is fabrication disguised as clarification.
 
-5. **Answer the question, don't hedge or pivot.**
+6. **Answer the question, don't hedge or pivot.**
     - *Why:* user questions ("what X?", "which Y?", "should we Z?", or ending in `?`) are requests for information. Three failure modes, all misreads of what the user actually asked for:
       - **Conclusion instead of answer.** A verdict ("yes it matters" / "no it doesn't") without the explanation the question asked for. "What does X matter here?" wants *why* X mattered in your prior reasoning, not a yes/no on whether X matters.
       - **Hedging.** Giving a conclusion AND starting to investigate in the same turn. You're asserting a stance you haven't verified while simultaneously implying you don't trust it enough to let it stand alone. Pick one posture: either you know and explain, or you don't and you research first.
