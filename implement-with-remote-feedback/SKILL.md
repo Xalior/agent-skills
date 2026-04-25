@@ -273,24 +273,27 @@ Several are corollaries of one principle: **you execute the plan; you don't exte
 1. **Every commit is pushed, immediately.** No local-only commits, no batching pushes.
     - *Why:* the remote branch is the only place a reviewer sees progress. A local-only commit has no readers. "I'll push them all at the end" is how this workflow degrades into a solo session.
 
-2. **History is append-only. No force push, no amending pushed commits.**
+2. **Write the tracker before the work, not after summarising it.**
+    - *Why:* the tracker on the remote branch is what reviewers see and what a context-reset agent (you, in 30 minutes, with no memory of this conversation) reads to recover state. Holding "what's currently happening" in conversation while the tracker stays stale means three things: the remote view is wrong, the recovery state is missing, and the next push surprises reviewers with code that has no announcement. The rhythm is: open the sprint → write the tracker → commit and push the tracker → start the work; commit code → push → update the tracker → push again. Not: start the work → make a few commits → eventually summarise into the tracker. The tracker update *leads* the work; it doesn't trail it. If you've made three commits without a corresponding tracker entry, you've already failed — recover by writing the tracker now, not after the next commit.
+
+3. **History is append-only. No force push, no amending pushed commits.**
     - *Why:* the monitoring channel rests on sha stability. Rewriting published history invalidates any `Addressed in <sha>` reply, breaks teammates' local branches, and erases the trail. Bad commit landed? Make a new commit that fixes it.
 
-3. **One sprint at a time, executed in the refined order. Re-refinement is blocker-class.**
+4. **One sprint at a time, executed in the refined order. Re-refinement is blocker-class.**
     - *Why:* the refined sprint list is what the PR body, tracker, and user expectation all describe. Batching or silently re-shaping makes those descriptions lies; reviewers lose the ability to reason about progress.
 
-4. **Plan-level Success Criteria stay with the phase the plan assigned them to.**
+5. **Plan-level Success Criteria stay with the phase the plan assigned them to.**
     - *Why:* phrases like "deferred to Phase N", "covered by Phase N instead", "handled in Phase N" are plan mutations in a different spelling. Phase-to-SC assignment is part of the plan; moving it quietly is how Success Criteria go unmet unnoticed. If an SC truly cannot be met in its assigned phase, open a Blocker naming the SC and the reason — don't re-attribute.
 
-5. **Answer the question, don't hedge or pivot.**
+6. **Answer the question, don't hedge or pivot.**
     - *Why:* user questions ("what X?", "which Y?", "should we Z?", or ending in `?`) are requests for information. Three failure modes, all misreads of what the user actually asked for:
       - **Conclusion instead of answer.** A verdict ("yes it matters" / "no it doesn't") without the explanation the question asked for. "What does X matter here?" wants *why* X mattered in your prior reasoning, not a yes/no on whether X matters.
       - **Hedging.** Giving a conclusion AND starting to investigate in the same turn. You're asserting a stance you haven't verified while simultaneously implying you don't trust it enough to let it stand alone. Pick one posture: either you know and explain, or you don't and you research first.
       - **Autonomy-creep.** Treating your own answer as the user's instruction. After options-on-the-table, if the user's next message is a question, the next output is text only — no tool calls beyond read-only research — then stop. Wait for an explicit instruction ("do option 1", "go with your pick", "proceed") before any implementation, tracker edit, or commit. Your recommendation, even one the user implicitly invited, is not an instruction.
     - If you know the answer, give it directly. If you need to research, say so, research, then answer. Don't combine a conclusion with ongoing research in the same turn — that is hedging, not answering.
 
-6. **Don't leak conversation context into committed code.**
+7. **Don't leak conversation context into committed code.**
     - *Why:* comments, identifiers, or string literals that reference "the plan", "the prompt", "the refactor we just did", "so the success criteria still pass" — anything that makes sense only to a reader of this conversation — rot on day one. The codebase outlives the conversation. Why-it-was-done goes in the commit message, PR, or tracker; never in the file. (Code comments warn future readers about non-obvious constraints; they don't recap history.)
 
-7. **Don't lead the user with unsolicited alternatives.**
+8. **Don't lead the user with unsolicited alternatives.**
     - *Why:* presenting options the user didn't ask for biases the election — the first option gets disproportionate weight, the fifth feels like filler. Default specified? Propose the default. Election needed? Present options neutrally. Don't stack the deck.
