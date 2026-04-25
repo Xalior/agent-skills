@@ -190,7 +190,7 @@ For each sprint, in order:
 
     Commits stay local. Do not push during the loop. After each commit, update the tracker (tick tasks, note progress) and commit the tracker update too.
 
-3. **Audit every diff before staging** — filenames, identifiers, comments, test descriptions, string literals. Anything that makes sense only to a reader of this conversation gets rewritten to stand alone. The codebase outlives the conversation; why-it-was-done goes in the commit message or tracker — not in the file.
+3. **Audit every diff before staging** — filenames, identifiers, comments, test descriptions, string literals. Anything that makes sense only to a reader of this conversation — references like "the plan", "the prompt", "the refactor we just did", "so the success criteria still pass" — gets rewritten to stand alone. The codebase outlives the conversation; why-it-was-done goes in the commit message or tracker, not in the file. Code comments warn future readers about non-obvious constraints; they don't recap history.
 
 4. **When the code is done, run every Automated Success Criterion.** Every checkbox; no selective verification. Prefer Makefile targets (`make test`, `make lint`, `make -C <subproject> check`); the plan's SC should name them. Missing target → extend the Makefile as part of this sprint, don't skip.
 
@@ -267,8 +267,5 @@ Several are corollaries of one principle: **you execute the plan; you don't exte
       - **Autonomy-creep.** Treating your own answer as the user's instruction. After options-on-the-table, if the user's next message is a question, the next output is text only — no tool calls beyond read-only research — then stop. Wait for an explicit instruction ("do option 1", "go with your pick", "proceed") before any implementation, tracker edit, or commit. Your recommendation, even one the user implicitly invited, is not an instruction.
     - If you know the answer, give it directly. If you need to research, say so, research, then answer. Don't combine a conclusion with ongoing research in the same turn — that is hedging, not answering.
 
-7. **Don't leak conversation context into committed code.**
-    - *Why:* comments, identifiers, or string literals that reference "the plan", "the prompt", "the refactor we just did", "so the success criteria still pass" — anything that makes sense only to a reader of this conversation — rot on day one. The codebase outlives the conversation. Why-it-was-done goes in the commit message or tracker; never in the file. (Code comments warn future readers about non-obvious constraints; they don't recap history.)
-
-8. **Don't lead the user with unsolicited alternatives.**
+7. **Don't lead the user with unsolicited alternatives.**
     - *Why:* presenting options the user didn't ask for biases the election — the first option gets disproportionate weight, the fifth feels like filler. Default specified? Propose the default. Election needed? Present options neutrally. Don't stack the deck.
