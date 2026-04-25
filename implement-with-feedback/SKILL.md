@@ -248,24 +248,27 @@ Several are corollaries of one principle: **you execute the plan; you don't exte
 1. **Commits stay local during the implementation loop.** No pushes, not at the end of a sprint, not after a "productive" stretch.
     - *Why:* the user elected this skill specifically because they want commits held locally until they say otherwise. A push is a broadcast, and the user is the only audience until they decide otherwise. "I'll push just this one so it's backed up" is how this workflow degrades into the remote variant without the election. If they want remote, they'll ask.
 
-2. **History is append-only. No force push (even later), no amending commits.**
+2. **Write the tracker before the work, not after summarising it.**
+    - *Why:* the tracker on disk is what a context-reset agent (you, in 30 minutes, with no memory of this conversation) reads to recover state, and it's what the user sees when they sit down to review at commit boundaries. Holding "what's currently happening" in conversation while the tracker stays stale means: the recovery state is missing, the next time the user opens the file it doesn't reflect the work, and the conversation transcript becomes the authoritative artifact instead of the tracker. The rhythm is: open the sprint → write the tracker → commit the tracker → start the work; commit code → update the tracker → commit again. Not: start the work → make a few commits → eventually summarise into the tracker. The tracker update *leads* the work; it doesn't trail it. If you've made three commits without a corresponding tracker entry, you've already failed — recover by writing the tracker now, not after the next commit.
+
+3. **History is append-only. No force push (even later), no amending commits.**
     - *Why:* the commit chain is the record of how the work unfolded. Rewriting it — before or after a push — erases that trail. If a bad commit landed, make a new commit that fixes it. This holds even when the user later asks for a push; the no-force-push rule survives the push election.
 
-3. **One sprint at a time, executed in the refined order. Re-refinement is blocker-class.**
+4. **One sprint at a time, executed in the refined order. Re-refinement is blocker-class.**
     - *Why:* the refined sprint list is what the tracker and the user's expectation both describe. Batching or silently re-shaping makes those descriptions lies; the user loses the ability to reason about progress when they come back to review.
 
-4. **Plan-level Success Criteria stay with the phase the plan assigned them to.**
+5. **Plan-level Success Criteria stay with the phase the plan assigned them to.**
     - *Why:* phrases like "deferred to Phase N", "covered by Phase N instead", "handled in Phase N" are plan mutations in a different spelling. Phase-to-SC assignment is part of the plan; moving it quietly is how Success Criteria go unmet unnoticed. If an SC truly cannot be met in its assigned phase, open a Blocker naming the SC and the reason — don't re-attribute.
 
-5. **Answer the question, don't hedge or pivot.**
+6. **Answer the question, don't hedge or pivot.**
     - *Why:* user questions ("what X?", "which Y?", "should we Z?", or ending in `?`) are requests for information. Three failure modes, all misreads of what the user actually asked for:
       - **Conclusion instead of answer.** A verdict ("yes it matters" / "no it doesn't") without the explanation the question asked for. "What does X matter here?" wants *why* X mattered in your prior reasoning, not a yes/no on whether X matters.
       - **Hedging.** Giving a conclusion AND starting to investigate in the same turn. You're asserting a stance you haven't verified while simultaneously implying you don't trust it enough to let it stand alone. Pick one posture: either you know and explain, or you don't and you research first.
       - **Autonomy-creep.** Treating your own answer as the user's instruction. After options-on-the-table, if the user's next message is a question, the next output is text only — no tool calls beyond read-only research — then stop. Wait for an explicit instruction ("do option 1", "go with your pick", "proceed") before any implementation, tracker edit, or commit. Your recommendation, even one the user implicitly invited, is not an instruction.
     - If you know the answer, give it directly. If you need to research, say so, research, then answer. Don't combine a conclusion with ongoing research in the same turn — that is hedging, not answering.
 
-6. **Don't leak conversation context into committed code.**
+7. **Don't leak conversation context into committed code.**
     - *Why:* comments, identifiers, or string literals that reference "the plan", "the prompt", "the refactor we just did", "so the success criteria still pass" — anything that makes sense only to a reader of this conversation — rot on day one. The codebase outlives the conversation. Why-it-was-done goes in the commit message or tracker; never in the file. (Code comments warn future readers about non-obvious constraints; they don't recap history.)
 
-7. **Don't lead the user with unsolicited alternatives.**
+8. **Don't lead the user with unsolicited alternatives.**
     - *Why:* presenting options the user didn't ask for biases the election — the first option gets disproportionate weight, the fifth feels like filler. Default specified? Propose the default. Election needed? Present options neutrally. Don't stack the deck.
