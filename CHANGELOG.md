@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.3.2] — 2026-03-30
+
+### Changed
+- `cmux` — updated browser-pane documentation; reinstated detail around
+  managing browser splits and reading other screens.
+
 ## [0.3.1] — 2026-03-09
 
 ### Changed
