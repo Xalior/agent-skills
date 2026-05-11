@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.6.0] — 2026-04-25
+
+### Added
+- `oneshot-with-remote-feedback` — single-parcel execution variant of
+  `implement-with-remote-feedback` for jobs most reviewable as a whole
+  (refactors, codemods, migrations, bulk transforms). Same hard limits,
+  same git discipline, same anti-fabrication anchor; no sprint loop.
+
 ## [0.5.35] — 2026-04-25
 
 ### Changed
