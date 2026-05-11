@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.3.1] — 2026-03-09
+
+### Changed
+- `cmux` — terseness pass: dropped from ~355 lines to ~104 to preserve
+  context bloat without losing the workflow.
+
 ## [0.3.0] — 2026-03-08
 
 ### Added
