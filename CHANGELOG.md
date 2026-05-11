@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.5.1] — 2026-04-15
+
+### Changed
+- `implement-with-remote-feedback` — Preflight rewritten as a 12-step
+  questionnaire. Steps 7–12 add PR strategy election (from-start | at-end |
+  per-phase | none), baseline verification audit, plan-deferred choices
+  surfacing, and other up-front elections.
+
 ## [0.5.0] — 2026-04-13
 
 ### Added
