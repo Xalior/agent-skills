@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.5.16] — 2026-04-22
+
+### Changed
+- `implement-with-remote-feedback` — terseness pass across SKILL.md and
+  references. No behavioural rules dropped; rhetorical filler, hedging,
+  and ornate phrasings trimmed throughout.
+
 ## [0.5.15] — 2026-04-22
 
 ### Added
