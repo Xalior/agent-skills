@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.5.2] — 2026-04-15
+
+### Changed
+- `plan`, `pre-plan` — stricter guidelines for handling questions with
+  "one obvious answer" (don't fabricate a default; ask).
+
 ## [0.5.1] — 2026-04-15
 
 ### Changed
