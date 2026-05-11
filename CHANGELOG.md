@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.5.32] — 2026-04-25
+
+### Changed
+- `discovery` — write-nominations-immediately elevated to Hard limit #2.
+  Closes a gap where the doc stayed stale and unrecoverable on resume.
+
 ## [0.5.31] — 2026-04-25
 
 ### Changed
