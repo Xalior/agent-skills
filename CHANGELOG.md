@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.7.0] — 2026-04-25
+
+### Added
+- `oneshot-with-feedback` — local-only variant of
+  `oneshot-with-remote-feedback`. Phase-by-phase execution with no sprint
+  loop, no per-phase manual review pauses; all Manual SC reviewed at the
+  end. No push during the loop; the agent offers to push on completion if
+  a PR is wanted.
+
 ## [0.6.0] — 2026-04-25
 
 ### Added
