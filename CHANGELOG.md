@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.5.23] — 2026-04-22
+
+### Changed
+- `implement-with-feedback` — mirrors the remote variant: anti-fabrication
+  anchor in the Execute sprints stance, Hard limits framed as
+  corollaries of it.
+
 ## [0.5.22] — 2026-04-22
 
 ### Changed
