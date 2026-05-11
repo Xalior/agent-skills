@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.5.27] — 2026-04-22
+
+### Changed
+- `discovery` — Hard limit #5 names conclusion-instead-of-answer, hedging,
+  and fabrication-creep (treating own answer as the user's nomination).
+  Closes with the know / don't-know discipline.
+
 ## [0.5.26] — 2026-04-22
 
 ### Changed
