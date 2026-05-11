@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.5.15] — 2026-04-22
+
+### Added
+- `implement-with-remote-feedback` — new Preflight step 12: elect tracker
+  layout. Default `single` keeps current behaviour; `split-by-sprint`
+  separates the tracker per sprint for larger work.
+
 ## [0.5.14] — 2026-04-22
 
 ### Changed
