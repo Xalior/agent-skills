@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.5.9] — 2026-04-18
+
+### Changed
+- `implement-with-feedback`, `implement-with-remote-feedback` —
+  `s/groom/refine/g` across both skills (Sprint Grooming → Sprint
+  Refinement and related vocabulary).
+
 ## [0.5.8] — 2026-04-18
 
 ### Changed
