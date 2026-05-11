@@ -154,13 +154,15 @@ A blocker stops the parcel. Record in `Blockers`, commit, surface to the user. N
 
 ### End-of-parcel review
 
-When every phase has its `Phase Status` line at `Automated SC pass`, the parcel is ready for human review. Two things happen:
+When every phase has its `Phase Status` line at `Automated SC pass`, the parcel is ready for human review. The close-out audit is three passes:
 
-1. **Run all Manual Success Criteria with the user.** Phase by phase, in plan order, surface each Manual SC to the user with the specific thing to observe. Don't skip; don't summarise. The user confirms each. Failures here are a blocker — record, surface, resume.
+1. **Manual Success Criteria pass with the user.** Phase by phase, in plan order, surface each Manual SC to the user with the specific thing to observe. Don't skip; don't summarise. The user confirms each. Failures here are a blocker — record, surface, resume.
 
-2. **Phase-level cumulative gate.** For every phase, verify that phase's full plan-level Success Criteria have been met cumulatively. Record the audit in the tracker.
+2. **Compliance check.** For every phase, verify that phase's full plan-level Success Criteria have been met cumulatively. Record the audit in the tracker.
 
-Once both pass: set the tracker's Status to `Complete`, make a final commit, tell the user the branch is ready. If they want a PR, offer to push the branch and open it.
+3. **Hallucination check.** `git diff main..HEAD` and scan for changes that don't trace to the plan. Helpful refactors you added, defensive code beyond what the plan asked for, comments that reference the conversation, scope you crept into, sub-agent findings that ended up in code rather than informing it. Surface each to the user; they decide what to keep, revise, or remove. The plan is the authority for what belongs in this branch; anything beyond is for the user to confirm before they push.
+
+Once all three pass: set the tracker's Status to `Complete`, make a final commit, tell the user the branch is ready. If they want a PR, offer to push the branch and open it.
 
 ## Local review
 

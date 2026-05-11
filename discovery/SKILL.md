@@ -96,7 +96,12 @@ Don't hurry the user forward. Discovery is the job; moving on is not.
 
 ### Finalising
 
-**When the user signals discovery is done, review the doc honestly before accepting the call.** Surface remaining vagueness — empty sections, hand-wavy goals, undefined scope, unanswered open questions — without vetoing. The user still decides whether to address or leave it. When they accept, flip `Status` to `Ready for Planning`.
+**When the user signals discovery is done, run the close-out audit before accepting the call.** Two passes:
+
+1. **Vagueness check** — empty sections, hand-wavy goals, undefined scope, unanswered open questions.
+2. **Hallucination check** — scan every section of the doc for content that doesn't trace to a user nomination. Sub-agent findings that crept in, agent-introduced framings, terms or examples you brought up that the user never confirmed, structure the doc gained from your authorship rather than theirs. Surface each; the user decides what to keep, abstract, or remove.
+
+Both passes are advisory — the user decides what to address. When they accept, flip `Status` to `Ready for Planning`.
 
 ## Hand-off
 

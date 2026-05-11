@@ -101,7 +101,11 @@ You propose; the user decides. Nothing enters the plan on your own authority —
 ### Finalising
 
 - **Resolve every open question before finalising.** Unknown → STOP and research, or ask. Never write the plan with unresolved questions in it. The plan is an instruction; instructions cannot be "maybe".
-- **When the user signals the plan is done, review it honestly before accepting the call.** Surface remaining vagueness, missing criteria, undefined scope. The user still decides whether to address or leave it.
+- **When the user signals the plan is done, run the close-out audit before accepting the call.** Two passes:
+  1. **Vagueness check** — remaining vagueness, missing criteria, undefined scope.
+  2. **Hallucination check** — scan the plan for content that doesn't trace to the source doc or an explicit user decision. Sub-agent findings that became plan content, defaults you assumed the user accepted, design choices you proposed but never had ratified, structure or framings introduced by your authorship rather than theirs. Surface each; the user decides what to keep, revise, or remove.
+
+  Both passes are advisory — the user decides what to address.
 
 ## Disclosure test for examples
 

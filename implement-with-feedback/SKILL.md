@@ -228,7 +228,12 @@ A blocker stops the sprint loop. Record in `Blockers`, commit, surface to the us
 
 ### When all sprints are complete
 
-All sprints done, all phase-level Success Criteria cumulatively met → Status `Complete`, final commit, tell the user the branch is ready. If they want a PR, offer to push the branch and open it.
+All sprints done, all phase-level Success Criteria cumulatively met → run the close-out audit before Status `Complete`:
+
+1. **Compliance check** — every phase-level Success Criterion met cumulatively across the sprints that contributed. The per-sprint cumulative gate should have fired correctly along the way; this is the re-confirmation.
+2. **Hallucination check** — `git diff main..HEAD` and scan for changes that don't trace to the plan. Helpful refactors you added, defensive code beyond what the plan asked for, comments that reference the conversation, scope you crept into, sub-agent findings that ended up in code rather than informing it. Surface each to the user; they decide what to keep, revise, or remove. The plan is the authority for what belongs in this branch; anything beyond is for the user to confirm before they push.
+
+Once both pass: Status `Complete`, final commit, tell the user the branch is ready. If they want a PR, offer to push the branch and open it.
 
 ## Local review
 
