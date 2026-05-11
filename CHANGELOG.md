@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.5.24] — 2026-04-22
+
+### Changed
+- `implement-with-remote-feedback` — question-handling Hard limit expanded
+  to name three sub-failures: conclusion instead of answer, hedging,
+  and autonomy-creep. Closes with the know / don't-know discipline.
+
 ## [0.5.23] — 2026-04-22
 
 ### Changed
