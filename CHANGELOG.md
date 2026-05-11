@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.5.0] — 2026-04-13
+
+### Added
+- `pre-plan` — interactive requirement refinement (goal, scope, concept)
+  before planning; filesystem is persistence, no git churn, no process logs.
+- `plan` — interactive design of phases, changes, and success criteria;
+  default vertical slices, Automated vs Manual SC split, prefer Makefile
+  targets, no open questions at finalisation.
+
+### Changed
+- `implement-with-feedback` / `implement-with-remote-feedback` — restructured
+  into the Preflight / The Doc / The Work / Never pattern. Now consume a
+  plan doc as input; honour the plan's Approach; pause at Manual criteria;
+  offer revert to `/plan` on scope drift.
+- Typo `implimentation` → `implementation` corrected throughout.
+
 ## [0.4.0] — 2026-04-02
 
 ### Added
