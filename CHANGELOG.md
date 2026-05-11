@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.5.30] — 2026-04-25
+
+### Changed
+- `implement-with-remote-feedback` — tracker-leads-the-work elevated to
+  Hard limit #2. Closes a gap where agents ran ahead with commits and
+  summarised the tracker at the end.
+
 ## [0.5.29] — 2026-04-25
 
 ### Changed
