@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.5.3] — 2026-04-16
+
+### Changed
+- `implement-with-remote-feedback`, `plan`, `pre-plan` — additions to help
+  hold context straight across long sessions.
+
 ## [0.5.2] — 2026-04-15
 
 ### Changed
