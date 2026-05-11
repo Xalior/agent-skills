@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.5.19] — 2026-04-22
+
+### Changed
+- `discovery` — same editor pass: Flow at a glance, The Work restructured
+  into Discover / Iterative rhythm / Research rigor, and anti-fabrication
+  woven throughout.
+
 ## [0.5.18] — 2026-04-22
 
 ### Changed
