@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.5.13] — 2026-04-22
+
+### Changed
+- `implement-with-remote-feedback` — Sprint 3/4. Autonomy Contract and
+  Feedback Integration Loop dissolved into a new temporally-ordered
+  Execute sprints section (stop conditions, in-flight feedback rules,
+  completion). Detail moved to references.
+
 ## [0.5.12] — 2026-04-22
 
 ### Changed
