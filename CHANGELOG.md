@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.5.22] — 2026-04-22
+
+### Changed
+- `implement-with-remote-feedback` — names the anti-fabrication anchor in
+  the Execute sprints stance: "you execute the plan; you don't extend
+  it." Sprint-batching and reassignment rules framed as corollaries.
+
 ## [0.5.21] — 2026-04-22
 
 ### Changed
