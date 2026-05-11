@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.5.7] — 2026-04-17
+
+### Changed
+- `implement-with-feedback`, `implement-with-remote-feedback` — renamed
+  "development phases" to "sprints" throughout, matching the new plan /
+  implement vocabulary split.
+
 ## [0.5.6] — 2026-04-17
 
 ### Changed
