@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.5.8] — 2026-04-18
+
+### Changed
+- `pre-plan` renamed to `discovery`. The `pre-plan` directory is kept as
+  a compatibility symlink. `plan` updated to reference the new name.
+
 ## [0.5.7] — 2026-04-17
 
 ### Changed
