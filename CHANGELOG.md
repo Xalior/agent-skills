@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.5.26] — 2026-04-22
+
+### Changed
+- `plan` — Hard limit #7 now names conclusion-instead-of-answer, hedging,
+  and autonomy-creep (treating own answer as the user's decision), and
+  closes with the know / don't-know discipline.
+
 ## [0.5.25] — 2026-04-22
 
 ### Changed
