@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.7.1] — 2026-04-27
+
+### Changed
+- `discovery`, `plan`, `implement-with-feedback`,
+  `implement-with-remote-feedback`, `oneshot-with-feedback`,
+  `oneshot-with-remote-feedback` — "Investigate before asking" rewritten
+  to name sub-agents as the default for research, preserving main-context
+  for the spec and the work.
+
 ## [0.7.0] — 2026-04-25
 
 ### Added
