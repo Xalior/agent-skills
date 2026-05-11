@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.5.6] — 2026-04-17
+
+### Changed
+- `plan` — nailed down the division of labour: planning produces phases,
+  implementation runs in sprints.
+
 ## [0.5.5] — 2026-04-17
 
 ### Changed
