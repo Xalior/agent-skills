@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.5.28] — 2026-04-23
+
+### Added
+- `discovery` — new Preflight step: a brownfield investigation sweep on
+  fresh sessions, so the agent doesn't walk straight from slug-derivation
+  into the Discover conversation without context.
+
 ## [0.5.27] — 2026-04-22
 
 ### Changed
