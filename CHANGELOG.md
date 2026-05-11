@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.5.10] — 2026-04-21
+
+### Changed
+- `implement-with-remote-feedback` — more guardrails against skipping
+  rules already set in the plan.
+
 ## [0.5.9] — 2026-04-18
 
 ### Changed
