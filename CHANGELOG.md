@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.4.0] — 2026-04-02
+
+### Added
+- `nicelicense` — manage open-source LICENSE files via the nicelicense CLI:
+  add, change, or identify a project's license.
+
 ## [0.3.2] — 2026-03-30
 
 ### Changed
