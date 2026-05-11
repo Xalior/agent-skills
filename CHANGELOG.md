@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.5.5] — 2026-04-17
+
+### Changed
+- `implement-with-feedback` — backported the non-GitHub parts of the remote
+  workflow (clean-tree gate, branch naming, WIP-tracker rhythm) to the
+  local-only variant.
+
 ## [0.5.4] — 2026-04-17
 
 ### Changed
