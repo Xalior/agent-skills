@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.7.2] — 2026-05-11
+
+### Changed
+- `discovery`, `plan`, `implement-with-feedback`,
+  `implement-with-remote-feedback`, `oneshot-with-feedback`,
+  `oneshot-with-remote-feedback` — new named close-out pattern across all
+  six workflow skills: a hallucination check at completion that scans
+  the artifact for content not traceable to user nominations, decisions,
+  or the plan. Sits alongside the existing honest-review / cumulative-gate
+  step, mode-rotated per skill.
+
 ## [0.7.1] — 2026-04-27
 
 ### Changed
