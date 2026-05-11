@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.5.35] — 2026-04-25
+
+### Changed
+- `implement-with-feedback` — retired the duplicate "leak conversation
+  context" Hard limit, matching the remote variant.
+
 ## [0.5.34] — 2026-04-25
 
 ### Changed
