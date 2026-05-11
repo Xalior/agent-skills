@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.5.11] — 2026-04-22
+
+### Changed
+- `implement-with-remote-feedback` — Sprint 1/4 of a skill rewrite. Preflight
+  tightened from ~63 lines of prose to a ~20-line 11-step checklist; all
+  procedural detail extracted to `references/preflight.md`.
+
 ## [0.5.10] — 2026-04-21
 
 ### Changed
