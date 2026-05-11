@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.2.0] — 2026-02-09
+
+### Added
+- `implement-with-feedback` — local-only, git-centric execution loop for
+  long-running implementation work, with clean checkout, branch naming,
+  WIP tracking, and small meaningful commits.
+- `implement-with-remote-feedback` — variant that pushes after every commit
+  so the remote branch becomes the live monitoring channel.
+
 ## [0.1.0] — 2026-02-08
 
 ### Added
