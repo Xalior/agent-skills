@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.5.33] — 2026-04-25
+
+### Changed
+- `plan` — retired two duplicate Hard limits (don't merge Automated /
+  Manual SC, don't leave open questions in the finalised plan); both
+  fully covered by directional rules elsewhere in the file.
+
 ## [0.5.32] — 2026-04-25
 
 ### Changed
