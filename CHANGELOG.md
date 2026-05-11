@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.3.0] — 2026-03-08
+
+### Added
+- `cmux` — control the cmux terminal multiplexer: manage panes, workspaces,
+  windows, browser splits, read other terminal screens, send commands to
+  other panes.
+
 ## [0.2.0] — 2026-02-09
 
 ### Added
