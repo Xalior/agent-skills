@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.5.29] — 2026-04-25
+
+### Changed
+- `plan` — state management elevated to Hard limit #2: write the decision
+  to the doc before the next question. Closes a gap where sessions held
+  decisions in conversation across many turns.
+
 ## [0.5.28] — 2026-04-23
 
 ### Added
