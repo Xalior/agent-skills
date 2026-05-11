@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.5.21] — 2026-04-22
+
+### Changed
+- `plan` — names the load-bearing principle explicitly in the Design
+  stance: "nothing enters the plan on your own authority." Three
+  existing rules tightened against it.
+
 ## [0.5.20] — 2026-04-22
 
 ### Changed
