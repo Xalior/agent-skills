@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.8.1] — 2026-06-02
+
+### Changed
+- `cyoa` — fixed turn ordering so the menu is always the last thing on screen.
+  When a tree log is active, the file edit now happens *before* the scene + menu
+  is written, not after — otherwise the tracker write lands at the end of the
+  turn and the user has to scroll back past bookkeeping every time to find the
+  choices they're meant to answer. Codified as a new top-level principle ("End
+  on the menu") and spelled out in the *Logging the tree* section.
+
 ## [0.8.0] — 2026-06-02
 
 ### Added

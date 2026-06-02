@@ -200,6 +200,13 @@ Keeping it in sync is two easy moves:
 - **A branch is explored and you come back out → strike it through** (`~~…~~`).
   Struck = visited; plain = still open. One glance shows what's left.
 
+**Update the file *before* you write the scene and menu, never after.** The file
+edit is bookkeeping — if it lands at the end of your turn, the tracker write is
+the last thing on screen and the user has to scroll back past it every single
+time to find the menu they're meant to answer. That's gross, and it quietly
+rebuilds the wall. So do all the log writing first, silently, then let the scene +
+menu be the final thing in the message. The menu is always the last word.
+
 It's bookkeeping in service of the person, not paperwork — if it ever feels like
 overhead, the map in your head is a fine fallback.
 
@@ -259,6 +266,9 @@ are worth holding onto, because forgetting them quietly rebuilds that wall:
   from.
 - **The numbers invite, they don't fence.** Off-menu questions are always
   welcome — follow them, then offer the way back.
+- **End on the menu.** It's the thing they act on, so it's the last thing in the
+  message. Do any file or tracker writes first; never leave the user scrolling
+  back past bookkeeping to find their choices.
 - **Stay honest about the content.** When there's source material or a log, let
   the options come from there rather than from guesswork, and read the log back
   before a menu so nothing opened gets quietly lost. Hold this lightly — it's in
