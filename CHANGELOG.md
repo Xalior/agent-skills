@@ -5,6 +5,51 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.8.0] — 2026-06-02
+
+### Added
+- `cyoa` ("Choose Your Own Answer") — a new interaction-style skill that
+  delivers information as a small, navigable branching conversation instead of
+  a wall of text. The core loop is scene (1–4 sentences) → short numbered menu
+  (3–6 plain-language directions) → **stop and wait** → follow the one branch
+  picked → return to a marked-up hub showing explored (✓) and remaining
+  threads. Branches stay bite-sized and nest their own menus when deep; the
+  tree goes as many levels as the user wants to climb. Built for brains that
+  disengage from dense replies (neurodivergent / ADHD readers, conversational
+  learners). Written as a humane rhythm rather than a rulebook — defaults you
+  bend to the person, with the guidance framed by its reasoning: keep replies
+  small, let the menu breathe (offer then wait), keep menus as plain chat text
+  rather than a pop-up choice widget, treat the numbers as an invitation not a
+  fence (off-menu questions fold in), and stay honest about the content. Pitches
+  its language for a capable non-specialist ("medium tier") — skips jargon, goes
+  easy on acronyms/initialisms (plain words first, name once), and avoids talking
+  down. Sticky for the conversation once on, drops cleanly when the user asks for
+  it straight.
+  On invocation it runs a one-question-at-a-time intake (topic → grounding
+  material to preload or search → optional tree log), and when logging is
+  elected it keeps an authoritative markdown map (README-style `├──`/`└──`
+  tree) that adds every menu's options as nodes and strikes through branches as
+  they're explored — doubling as anti-hallucination ground truth (options must
+  match the log / supplied sources) and cold-resume state so no opened-but-
+  unvisited branch is lost.
+
+## [0.7.3] — 2026-05-18
+
+### Changed
+- `implement-with-feedback`, `implement-with-remote-feedback` — codified the
+  cross-tracker carry-forward pattern (split-by-sprint only): when executing
+  Sprint M surfaces a *small* slice blocked by a genuine forward dependency on
+  a later sprint, the agent hands that slice to the target sprint's tracker
+  instead of stalling the whole sprint or breaking dependency order. New
+  `Sprint Refinement → Carrying a dependency-blocked slice forward` section
+  with strict conditions and a two-ended recording protocol; new index-level
+  `Carry-forward Ledger`; phase-level cumulative gate and close-out compliance
+  check now audit the ledger; Blockers "handle inline" entry added. Hard
+  limit 5 rewritten to permit only this recorded mechanism for small slices —
+  whole SCs/tasks/phase-bulk are still never re-attributed, ownership and the
+  phase gate never move. The carry-forward is always announced but is not a
+  stop condition: full agency to power through or escalate.
+
 ## [0.7.2] — 2026-05-11
 
 ### Changed

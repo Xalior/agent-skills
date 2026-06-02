@@ -138,6 +138,7 @@ Index and per-sprint state live in sibling files under `docs/plans/`:
 | Preflight Decisions | index |
 | Sprints (overview + links) | index |
 | Phase-level Success Criteria rollup | index |
+| Carry-forward Ledger | index |
 | Last-seen Feedback State | index |
 | Sprint header (Name, Covers, Success Criteria, Status) | sprint file |
 | Tasks | sprint file |
@@ -147,3 +148,5 @@ Index and per-sprint state live in sibling files under `docs/plans/`:
 | Commits | sprint file |
 
 `Last-seen Feedback State` stays on the index: it's a session-global cursor, and migrating it between sprint files at each boundary would break the "process new items only" diff the feedback loop depends on.
+
+The `Carry-forward Ledger` is the authoritative, session-global list of small execution slices moved between sprints under a genuine forward dependency — origin sprint, target sprint, the slice, the plan-phase SC it serves, and `open`/`discharged` status. It lives on the index because the phase-level cumulative gate and close-out compliance check audit it in one place. See SKILL.md `Sprint Refinement → Carrying a dependency-blocked slice forward` for the mechanism and its strict conditions.

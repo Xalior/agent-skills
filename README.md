@@ -113,6 +113,21 @@ Use this when you need to add a license to a new project, change an existing lic
 
 [📖 Read the full skill documentation](./nicelicense/SKILL.md)
 
+### 🗺️ cyoa
+
+**Choose Your Own Answer — deliver information as a navigable branching conversation instead of a wall of text.**
+
+For brains that nope out at big dense replies. Hands the steering wheel back to the reader:
+- 📖 A sentence or two to set the scene — then get out of the way
+- 🔢 A short numbered menu of directions to explore
+- 🌿 Follow the one branch they pick, bite-sized, then return to the hub
+- ✓ Marks explored branches so the map stays legible
+- 🧭 Off-menu questions always welcome — the numbers lower the cost of choosing, never cage it
+
+Use this when a reply is about to become a long, dense explanation and the user would do better steering it one bite at a time — especially for neurodivergent / ADHD readers or anyone who learns better conversationally.
+
+[📖 Read the full skill documentation](./cyoa/SKILL.md)
+
 ## 🚀 Installation
 
 ### Using the skills CLI
@@ -167,8 +182,10 @@ agent-skills/
 │   └── SKILL.md                      # Local-only git workflow
 ├── implement-with-remote-feedback/
 │   └── SKILL.md                      # Remote-push git workflow
-└── nicelicense/
-    └── SKILL.md                      # License management CLI
+├── nicelicense/
+│   └── SKILL.md                      # License management CLI
+└── cyoa/
+    └── SKILL.md                      # Branching conversational answers
 ```
 ## 🤝 Contributing
 

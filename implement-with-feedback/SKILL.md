@@ -75,7 +75,7 @@ Commit immediately with `chore: init implementation tracker for <slug>`. No push
 
 ### When `Tracker layout: split-by-sprint`
 
-The file above becomes the **index** (session-global state). Per-sprint state — `Tasks`, `Progress Log`, `Decisions & Notes`, `Blockers`, `Commits` — moves to sibling files `plan_<slug>_implementation_sprint_<N>.md`, one per refined sprint. Full mapping in `references/preflight.md → §9`.
+The file above becomes the **index** (session-global state), and also carries a `Carry-forward Ledger` — the authoritative list of execution slices moved between sprints (see *Sprint Refinement → Carrying a dependency-blocked slice forward*). Per-sprint state — `Tasks`, `Progress Log`, `Decisions & Notes`, `Blockers`, `Commits` — moves to sibling files `plan_<slug>_implementation_sprint_<N>.md`, one per refined sprint. Full mapping in `references/preflight.md → §9`.
 
 "The tracker's <section>" below resolves to the right file by layout; the mapping is set once at §9.
 
@@ -131,6 +131,33 @@ Too small if:
 If executing Sprint N surfaces that a later sprint is wrong — wrong split, wrong order, missing scope, too large — that is a blocker. Stop, record, surface, re-refine only on explicit go-ahead. Silently reshaping future sprints is this workflow's most corrosive failure: it makes the refined sprint list a lie, and hides scope changes from the user when they come back to review.
 
 If re-refinement would change phase-level Success Criteria or scope, that is a plan change, not refinement — offer `/plan`. See *Planning docs during implementation* below.
+
+### Carrying a dependency-blocked slice forward (split-by-sprint only)
+
+Sometimes executing Sprint M surfaces that a *small* portion of its work genuinely cannot be completed until a *later* sprint creates a prerequisite — a real forward technical dependency the refined order didn't anticipate. The trackers are the memory of your future self: under `split-by-sprint` you can hand that slice to the sprint that *can* finish it, instead of stalling all of Sprint M or breaking the dependency order.
+
+This is **not** a blocker and **not** re-refinement. It is the sanctioned, fully-traceable alternative to blocking, for small slices only. Re-refinement (a later sprint is wrong — wrong split, order, scope, size) stays blocker-class; this is narrower and does not stop the loop.
+
+**All of these must hold, or it is not a carry-forward:**
+
+1. **Genuine forward dependency.** The slice cannot be done now because a *later, already-refined* sprint creates the prerequisite. Not convenience, not "handled elsewhere", not scope-dodging.
+2. **Small portion only.** A slice — not a whole task, not the bulk of a phase, not a Success Criterion's worth of work. If the blocked part is large, or it means the sprint order itself is wrong, that is re-refinement → blocker-class.
+3. **Target is an existing later sprint.** You may not invent a sprint or reorder to make this work — that is re-refinement → blocker-class.
+4. **Sprint N's scope is unchanged.** You add an attributed, back-referenced task to Sprint N; you do not redefine Sprint N's Success Criteria or shape. Silently reshaping a future sprint is still this workflow's most corrosive failure.
+
+**Recording protocol — all three, or it didn't happen:**
+
+- **Origin (Sprint M).** Leave the slice's `Tasks` checkbox unticked, annotate it `→ carried to Sprint N (see Carry-forward Ledger)`, and record the what / why / which plan-phase SC it serves in Sprint M's `Decisions & Notes`.
+- **Target (Sprint N).** Add an explicit checkbox to Sprint N's `Tasks`: `[ ] Carried-in from Sprint M: <slice> — serves <Phase X, SC Y>; see index Carry-forward Ledger`, and note it in Sprint N's `Decisions & Notes`.
+- **Index Carry-forward Ledger.** Add one row: origin sprint, target sprint, the slice, the plan-phase SC it serves, status `open`.
+
+Commit the tracker updates as you would any tracker change.
+
+**Ownership does not move.** The originating plan-phase Success Criterion stays owned by and verified at its plan phase; only the *execution* of a small slice moves. The phase-level cumulative gate still checks that SC at its phase — now drawing on the carried slice's completion in Sprint N. This is why carry-forward does not violate Hard limit 5: execution moves, attribution and the gate do not.
+
+**Announce, then exercise agency.** Always announce the carry-forward in the conversation when it happens — what slice, why, origin → target, which SC. It is not a stop condition: announcing is mandatory, pausing is not. Default to powering through (it is not a blocker); pause or escalate only if your own judgement says the dependency hints something larger is wrong — in which case it was re-refinement (blocker-class) all along, not a carry-forward.
+
+**A carried slice must close.** A Ledger entry is discharged only when the carried slice is executed and verified in its target sprint and the originating SC is satisfied. The phase-level cumulative gate and the close-out compliance check are responsible for confirming every relevant entry is discharged. An open entry at the gate means the phase is not complete; an open entry at close-out is a blocker, not a completion.
 
 ### Planning docs during implementation
 
@@ -198,7 +225,7 @@ For each sprint, in order:
 
 6. **Pause for Manual Success Criteria.** When the sprint has Manual criteria, STOP after Automated checks pass and tell the user exactly what to observe. Don't start the next sprint until they confirm.
 
-7. **Phase-level cumulative gate.** When a sprint ships the last portion of a phase, verify that phase's full plan-level Success Criteria are met cumulatively across every contributing sprint. Record in the tracker — missing this gate is how phases silently slip.
+7. **Phase-level cumulative gate.** When a sprint ships the last portion of a phase, verify that phase's full plan-level Success Criteria are met cumulatively across every contributing sprint. Under `split-by-sprint`, every Carry-forward Ledger entry whose originating SC belongs to this phase must be discharged first — the carried slice executed and verified in its target sprint. An open entry means the phase is not complete; resume the carried slice or open a Blocker. Record in the tracker — missing this gate is how phases silently slip.
 
 ### Standing rules during execution
 
@@ -225,12 +252,13 @@ A blocker stops the sprint loop. Record in `Blockers`, commit, surface to the us
 - Nit fixes, renames, clear bug reports, typo callouts.
 - Failing tests with obvious cause in just-written code.
 - Unambiguous in-session user feedback that doesn't change scope.
+- A *small* slice of the current sprint blocked by a genuine forward dependency on a later sprint, under `split-by-sprint` — carry it forward (see Sprint Refinement → Carrying a dependency-blocked slice forward). Not inline if it's a whole task, the bulk of a phase, or a Success Criterion's worth, or if it means the sprint order is wrong — that is re-refinement, blocker-class.
 
 ### When all sprints are complete
 
 All sprints done, all phase-level Success Criteria cumulatively met → run the close-out audit before Status `Complete`:
 
-1. **Compliance check** — every phase-level Success Criterion met cumulatively across the sprints that contributed. The per-sprint cumulative gate should have fired correctly along the way; this is the re-confirmation.
+1. **Compliance check** — every phase-level Success Criterion met cumulatively across the sprints that contributed. The per-sprint cumulative gate should have fired correctly along the way; this is the re-confirmation. Under `split-by-sprint`, the Carry-forward Ledger must have zero open entries; an open entry is a blocker, not a completion.
 2. **Hallucination check** — `git diff main..HEAD` and scan for changes that don't trace to the plan. Helpful refactors you added, defensive code beyond what the plan asked for, comments that reference the conversation, scope you crept into, sub-agent findings that ended up in code rather than informing it. Surface each to the user; they decide what to keep, revise, or remove. The plan is the authority for what belongs in this branch; anything beyond is for the user to confirm before they push.
 
 Once both pass: Status `Complete`, final commit, tell the user the branch is ready. If they want a PR, offer to push the branch and open it.
@@ -262,8 +290,8 @@ Several are corollaries of one principle: **you execute the plan; you don't exte
 4. **One sprint at a time, executed in the refined order. Re-refinement is blocker-class.**
     - *Why:* the refined sprint list is what the tracker and the user's expectation both describe. Batching or silently re-shaping makes those descriptions lies; the user loses the ability to reason about progress when they come back to review.
 
-5. **Plan-level Success Criteria stay with the phase the plan assigned them to.**
-    - *Why:* phrases like "deferred to Phase N", "covered by Phase N instead", "handled in Phase N" are plan mutations in a different spelling. Phase-to-SC assignment is part of the plan; moving it quietly is how Success Criteria go unmet unnoticed. If an SC truly cannot be met in its assigned phase, open a Blocker naming the SC and the reason — don't re-attribute.
+5. **Plan-level Success Criteria stay with the phase the plan assigned them to. A whole SC, task, or the bulk of a phase is never re-attributed; the single strict exception is a *small* dependency-blocked execution slice carried forward through the recorded mechanism.**
+    - *Why:* phrases like "deferred to Phase N", "covered by Phase N instead", "handled in Phase N" are plan mutations in a different spelling. Phase-to-SC assignment is part of the plan; moving it quietly is how Success Criteria go unmet unnoticed. The *ownership* of a Success Criterion never moves: it stays attributed to its plan phase and is verified there by the phase-level cumulative gate, no matter which sprint did the work. If a whole SC, a whole task, or the bulk of a phase cannot be met where the plan assigned it, that is not carry-forward — open a Blocker naming the SC and the reason; don't re-attribute. The one strict exception, `split-by-sprint` only: a *small* portion of a sprint's work that is genuinely blocked by a forward dependency on a later sprint may have its **execution** carried into that later sprint via the two-ended recording protocol plus the index Carry-forward Ledger — see *Sprint Refinement → Carrying a dependency-blocked slice forward*. Execution moves; ownership and the gate do not. An unrecorded carry-forward, or one stretched to move a whole task or SC, is exactly the violation this limit names.
 
 6. **Answer the question, don't hedge or pivot.**
     - *Why:* user questions ("what X?", "which Y?", "should we Z?", or ending in `?`) are requests for information. Three failure modes, all misreads of what the user actually asked for:
