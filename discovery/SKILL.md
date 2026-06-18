@@ -80,7 +80,7 @@ Don't hurry the user forward. Discovery is the job; moving on is not.
 
 1. **Work one section at a time** — Goal → Scope (in) → Scope (out) → Approach / Hypothesis. `Open Questions` accumulates throughout as unknowns surface.
 
-2. **Ask one focused question at a time**, about the current section or an open question. Don't batch, don't run down a list. Conversation, not questionnaire.
+2. **Ask one focused question at a time**, about the current section or an open question. Don't batch, don't run down a list. Conversation, not questionnaire. This is a hard rule, not a preference: emit exactly **one** question, then stop and wait for the answer before doing anything else. Do not use a multi-question tool call to put several questions on screen at once. **Never backfill.** If you ever do surface more than one question and the user answers only some of them, the rest are still unanswered — re-ask them one at a time. Treating your own guess at an unanswered question as the user's answer, and writing it into the doc, is fabrication — the exact kind this skill exists to prevent.
 
 3. **Reflect back what you heard before writing it into the doc** — after each answer, restate (only what they said, without adjacent framing or what you think they meant), confirm, then write. Catches misunderstandings cheaply and stops the reflection itself from becoming a fabrication vector.
 

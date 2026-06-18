@@ -75,7 +75,7 @@ You propose; the user decides. Nothing enters the plan on your own authority —
 
 2. **Design one phase at a time, in order.** For each phase, fill Overview, Changes Required, Success Criteria (Automated and Manual, separately). Don't run ahead and design three phases the user hasn't yet seen.
 
-3. **Ask one focused question at a time**, when you need to ask. Don't batch, don't run down a list. Conversation, not questionnaire.
+3. **Ask one focused question at a time**, when you need to ask. Don't batch, don't run down a list. Conversation, not questionnaire. This is a hard rule, not a preference: emit exactly **one** question, then stop and wait for the answer before doing anything else. Do not use a multi-question tool call to put several questions on screen at once. **Never backfill.** If you ever do surface more than one question and the user answers only some of them, the rest are still unanswered — re-ask them one at a time. Treating your own guess at an unanswered question as the user's decision, and writing it into the plan, is fabrication — the exact kind this skill exists to prevent.
 
 4. **Reflect back what you heard before writing it into the doc** — after each answer, restate (only what they said, without adjacent framing or what you think they meant), confirm, then write. Catches misunderstandings cheaply and stops the reflection itself from becoming a fabrication vector.
 

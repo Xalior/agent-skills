@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.8.3] — 2026-06-18
+
+### Changed
+- `discovery`, `plan` — hardened the "one focused question at a time" rule
+  against the partial-answer failure mode. Both skills now make it explicit
+  that exactly **one** question is emitted before stopping to wait, that a
+  multi-question tool call must not be used to put several questions on screen
+  at once, and that backfilling unanswered questions is forbidden: if more than
+  one question is ever surfaced and the user answers only some, the rest stay
+  open and get re-asked one at a time. Guessing an unanswered question and
+  writing it into the doc/plan is named as fabrication, hooking the rule into
+  the anti-fabrication machinery both skills already enforce. `cyoa` left
+  unchanged — its menu-then-return-to-menu loop already handles one-at-a-time
+  by design.
+
 ## [0.8.2] — 2026-06-03
 
 ### Changed
