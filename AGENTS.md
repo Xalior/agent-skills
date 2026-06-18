@@ -189,16 +189,41 @@ description: Clear description with "Use when..." triggers
 ---
 ```
 
+- **`name`** — lowercase, hyphen-separated, ≤ 64 chars, and **must match the directory** (rule #2 above). The lone exception in this repo is `pre-plan`, a deliberate symlink to `discovery`.
+- **`description`** — the *only* part of the skill loaded into context until it triggers, so it carries the entire matching burden. Keep it **≤ 1024 characters**, write it in the **third person** ("Analyze…", "Turn a discovery doc into…", "Use when…"), and pack it with concrete trigger phrases. This is the single highest-leverage field for correct invocation.
+
 ### Optional Fields
 ```yaml
 argument-hint: <type>/<name> [optional-param]
+allowed-tools: Read, Glob, Grep
 ```
+
+- **`argument-hint`** — show expected parameters to the user and the model.
+- **`allowed-tools`** — restrict the skill to a named set of tools. Use it to turn a prose constraint into an enforced guardrail: a read-only analysis skill should declare `Read, Glob, Grep` rather than merely *asking* the model not to write; a CLI-wrapper skill can scope to `Bash, Read`. If omitted, the skill inherits the session's full toolset.
+
+## Progressive Disclosure
+
+A skill is loaded in layers, and you control how much context each layer costs:
+
+1. **Metadata** (`name` + `description`) — always in context, for every skill, every session. Pays rent constantly; keep it tight.
+2. **`SKILL.md` body** — loaded only when the skill triggers. Target **under ~500 lines**. It should read as the *map* of the workflow, not the full territory.
+3. **Bundled resources** (`references/`, scripts, templates) — loaded on demand, only when the body points the model at them.
+
+**Push depth down a layer.** Exhaustive command tables, per-strategy procedure, long preflight detail — anything the model needs *sometimes* but not to understand the shape of the work — belongs in `references/`, with the body carrying a one-line pointer to it.
+
+**Patterns in this repo:**
+- `implement-with-feedback` / `*-remote-feedback` keep the body as the phase map and push step-by-step procedure into `references/preflight.md`, `pr-strategies.md`, `feedback-loop.md`.
+- `cmux` keeps global options, the ID system, and common patterns in the body, and moves the full per-command reference to `references/commands.md` — so the always-on-when-triggered cost stays small even though the CLI surface is huge.
+
+When a body starts growing past ~500 lines or repeating a reference table inline, that's the signal to split.
 
 ## Testing & Iteration
 
 ### Validation Checklist
-- [ ] Name matches directory
-- [ ] Description includes "Use when..." triggers
+- [ ] Name matches directory (lowercase, hyphens, ≤ 64 chars)
+- [ ] Description is third-person, ≤ 1024 chars, and includes "Use when..." triggers
+- [ ] `allowed-tools` declared where the skill has a constraint worth enforcing (read-only, CLI-only)
+- [ ] Body is under ~500 lines; deep/occasional detail pushed to `references/`
 - [ ] Pre-flight checks prevent bad states
 - [ ] Rules section uses NEVER for boundaries
 - [ ] Phases are clearly numbered

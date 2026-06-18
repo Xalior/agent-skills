@@ -1,6 +1,7 @@
 ---
 name: agent-feedback
 description: Analyze other agents' sessions and construct targeted corrective prompts to fix mistakes, correct context drift, or drive home task requirements
+allowed-tools: Read, Glob, Grep
 license: MIT
 ---
 

@@ -1,6 +1,7 @@
 ---
 name: nicelicense
 description: "Add or identify open-source licenses in projects using the nicelicense CLI. Use this skill when the user asks to add a license, change a license, check what license a project uses, or manage LICENSE files."
+allowed-tools: Bash, Read
 license: MIT
 ---
 
