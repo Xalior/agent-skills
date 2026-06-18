@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.8.2] — 2026-06-03
+
+### Changed
+- `agent-feedback`, `cmux`, `nicelicense` — added `allowed-tools` guardrails so
+  each skill's tool surface matches its actual job instead of relying on prose.
+  `agent-feedback` is now enforced read-only (`Read, Glob, Grep`) rather than
+  merely *asking* not to modify files; `cmux` and `nicelicense` scope to
+  `Bash, Read`.
+- `cmux` — split the exhaustive command reference out of `SKILL.md` into
+  `references/commands.md`, applying progressive disclosure. The body now keeps
+  the global options, env defaults, ID/ref system, and common patterns (~95
+  lines); the full per-command surface (windows, panes, the whole browser-control
+  subcommand tree, etc.) loads on demand. Cuts the always-on-when-triggered
+  context cost without losing any command coverage.
+
+### Docs
+- `AGENTS.md` (skill design guide) — brought up to date with current
+  skill-authoring practice it previously omitted: the 1024-char third-person
+  `description` convention, the `name` rules and the deliberate `pre-plan`
+  symlink exception, `allowed-tools` as an enforced guardrail, and a new
+  **Progressive Disclosure** section (metadata → body → bundled resources, the
+  ~500-line body budget, and when to split into `references/`). Validation
+  checklist extended to match.
+
 ## [0.8.1] — 2026-06-02
 
 ### Changed
