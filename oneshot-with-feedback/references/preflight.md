@@ -1,10 +1,10 @@
 # Preflight — detailed procedure
 
-Eight steps. Each outcome lands in a named slot in the tracker's `Preflight Decisions` block; the slot names below match the tracker skeleton. Don't start Execute until every step is resolved.
+Nine steps. Each outcome lands in a named slot in the tracker's `Preflight Decisions` block; the slot names below match the tracker skeleton. Don't start Execute until every step is resolved.
 
 ## 1. Locate the plan
 
-If `$ARGUMENTS` points to a plan doc that exists, use it. Otherwise glob `docs/plans/plan_*.md` and ask the user to pick. No plan → STOP: this skill refines a plan, it does not invent scope. Offer `/plan`.
+If `$ARGUMENTS` points to a plan doc that exists, use it. Otherwise glob `docs/plans/plan_*.{md,html}` and ask the user to pick. No plan → STOP: this skill refines a plan, it does not invent scope. Offer `/plan`.
 
 ## 2. Read the plan in full
 
@@ -75,3 +75,9 @@ Scan the plan for decisions the planner punted to implementation time. Markers (
 Surface each hit upfront as a decision to make now. Resolving at the start keeps the parcel autonomous — mid-parcel decision prompts are exactly what the autonomy stance is trying to prevent. The whole point of this skill is no human pauses until the end.
 
 Record in `Preflight Decisions → Plan-deferred decisions`.
+
+## 9. Elect document format
+
+Ask once, up front: **"Markdown or HTML for the tracker?"** Default `markdown` — the tracker file is `plan_<slug>_implementation.md` and the skeleton in SKILL.md `## The Doc` is written as Markdown. If the user elects `html`, the tracker file is `plan_<slug>_implementation.html`, with the same sections expressed as HTML. The section structure is identical either way; only the file extension and markup change.
+
+Record in `Preflight Decisions → Document format`.

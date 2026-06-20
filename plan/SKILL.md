@@ -12,7 +12,7 @@ Turn a refined discovery session (goal, scope, concept) into a concrete implemen
 
 ## Flow at a glance
 
-1. **Preflight** — locate the source doc (discovery or pre-plan), read it in full, confirm the plan doc path.
+1. **Preflight** — locate the source doc (discovery or pre-plan), read it in full, confirm the plan doc path and format.
 2. **The Doc** — create `docs/plans/plan_<slug>.md` with the skeleton.
 3. **Outline** — propose phase names + one-line summaries; get the user's sign-off on the structure before writing detail.
 4. **Phase-by-phase design** — fill each phase in order (Overview, Changes Required, Success Criteria split Automated/Manual). Confirm each before moving on.
@@ -20,9 +20,9 @@ Turn a refined discovery session (goal, scope, concept) into a concrete implemen
 
 ## Preflight
 
-1. **Locate the source.** This skill starts from a completed document — discovery or pre-plan. If `$ARGUMENTS` points to one, use it. Otherwise glob `docs/discovery/discovery_*.md` and `docs/plans/preplan_*.md` and ask the user to pick. No source → STOP: this skill does not invent scope. Offer `/discovery` or `/pre-plan`.
+1. **Locate the source.** This skill starts from a completed document — discovery or pre-plan. If `$ARGUMENTS` points to one, use it. Otherwise glob `docs/discovery/discovery_*.{md,html}` and `docs/plans/preplan_*.{md,html}` and ask the user to pick. No source → STOP: this skill does not invent scope. Offer `/discovery` or `/pre-plan`.
 2. **Read the source in full.** Read tool, no limit/offset. The source is the arbiter of Goal / Scope / Concept for the whole session; later "is this in scope?" questions get answered by re-reading it. If the source clearly needs changes before planning, say so and offer `/discovery` (or `/pre-plan`). Never switch unilaterally.
-3. **Confirm the plan doc path.** Default `docs/plans/plan_<slug>.md`, where `<slug>` matches the source's slug. Present the single default; don't enumerate alternatives. If the user proposes a different location, accept it.
+3. **Confirm the plan doc path and format.** Default `docs/plans/plan_<slug>.md`, where `<slug>` matches the source's slug. Present the single default; don't enumerate alternatives. If the user proposes a different location, accept it. Ask once, up front, whether the plan should be **Markdown** (`.md`, default) or **HTML** (`.html`); the choice sets the file extension and the format the skeleton is written in — the section structure is identical either way.
 
 ## The Doc
 
@@ -60,6 +60,8 @@ Create the doc with this skeleton. Omit sections that don't apply:
 
 ## References
 ````
+
+The skeleton above is shown in Markdown. If HTML was elected at preflight, write the same sections as an HTML document (`plan_<slug>.html`) — section names as `<h1>`/`<h2>`/`<h3>` headings, content as HTML — keeping the section names identical so a cold agent (and the implementer skills) can navigate either format.
 
 The file on disk is the persistence layer — a cold agent reading this doc plus the linked source must be able to execute without further human input. The doc is a specification, not a conversation log: no process logs, timestamps, or activity tracking.
 

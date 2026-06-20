@@ -12,7 +12,7 @@ This skill is for work where reviewing each piece on its own is more burden than
 
 ## Flow at a glance
 
-1. **Preflight** — 11-step election: plan, clean tree, branch, PR strategy, baseline target, deferred choices, labels, comment-trust scope. Results land in `Preflight Decisions`.
+1. **Preflight** — 12-step election: plan, clean tree, branch, PR strategy, baseline target, deferred choices, labels, comment-trust scope, document format. Results land in `Preflight Decisions`.
 2. **The tracker** — create `docs/plans/plan_<slug>_implementation.md`, commit, push. Living document.
 3. **Execute** — phase by phase in the plan's order. Per-commit rhythm: code → commit → push → feedback → tracker. Run each phase's Automated Success Criteria when its code is done. No human review until the end.
 4. **End-of-parcel review** — run all Manual Success Criteria with the user; cumulative phase-level gate.
@@ -22,11 +22,11 @@ Procedural detail for Preflight, PR strategies, and the feedback loop lives in `
 
 ## Preflight
 
-Eleven steps. Every outcome lands in `Preflight Decisions`. Resolve all eleven before Execute — later behaviour forks on these elections, and getting them right up front is what keeps the parcel autonomous.
+Twelve steps. Every outcome lands in `Preflight Decisions`. Resolve all twelve before Execute — later behaviour forks on these elections, and getting them right up front is what keeps the parcel autonomous.
 
 See `references/preflight.md` for the full procedure on each step: commands, defaults, prompts, failure handling. The checklist here is the map.
 
-1. **Locate the plan.** Use `$ARGUMENTS` if it points to one; otherwise glob `docs/plans/plan_*.md` and ask. No plan → STOP; this skill does not invent scope.
+1. **Locate the plan.** Use `$ARGUMENTS` if it points to one; otherwise glob `docs/plans/plan_*.{md,html}` and ask. No plan → STOP; this skill does not invent scope.
 2. **Read the plan in full.** Read tool, no limit/offset. The plan is the arbiter of scope, phases, and Success Criteria.
 3. **Clean working tree.** `git status`. Dirty → STOP.
 4. **Branch check.** If on `main`/`master`, warn and ask before proceeding.
@@ -37,6 +37,7 @@ See `references/preflight.md` for the full procedure on each step: commands, def
 9. **Surface plan-deferred choices.** Scan the plan for TBD markers; resolve each upfront so the parcel stays autonomous.
 10. **Label setup** (`from-start` only). `gh label create --force in-flight` and `do-not-merge`. Failure is a blocker — labels are load-bearing for that strategy.
 11. **Elect comment trust scope.** Detect repo visibility, propose a default, record the minimum. Runs for all strategies so the threshold is ready if a PR opens later.
+12. **Elect document format.** Markdown (`.md`, default) or HTML (`.html`) for the tracker file? Ask once, up front; the choice sets the file extension and the format the tracker skeleton is written in. Record in `Preflight Decisions → Document format`.
 
 PR creation (under `from-start`) happens immediately after this section, before the first code commit. There is no Sprint Refinement to delay it.
 
@@ -58,6 +59,7 @@ Tracker skeleton at `docs/plans/plan_<slug>_implementation.md`:
 - **Comment trust minimum:** `<admin | maintain | write | triage | read | none>`
 - **Baseline verification:** `<command run + result, or "no baseline target found">`
 - **In-flight labels created:** `<yes | no | n/a>`
+- **Document format:** `<markdown | html>`
 - **Plan-deferred decisions:**
   - `<item>`: `<resolution>`
 
@@ -81,6 +83,8 @@ Tracker skeleton at `docs/plans/plan_<slug>_implementation.md`:
 
 ## Commits
 ````
+
+The skeleton above is shown in Markdown. If HTML was elected at preflight, the tracker file is `plan_<slug>_implementation.html` with the same sections expressed as HTML — section names as headings, lists as `<ul>`. The section structure is identical either way.
 
 The tracker is living — update continuously. It tells the story to anyone reading the remote branch.
 

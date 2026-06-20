@@ -1,10 +1,10 @@
 # Preflight — detailed procedure
 
-Twelve steps. Each outcome lands in a named slot in the tracker's `Preflight Decisions` block; the slot names below match the tracker skeleton. Don't start Sprint Refinement until every step is resolved.
+Thirteen steps. Each outcome lands in a named slot in the tracker's `Preflight Decisions` block; the slot names below match the tracker skeleton. Don't start Sprint Refinement until every step is resolved.
 
 ## 1. Locate the plan
 
-If `$ARGUMENTS` points to a plan doc that exists, use it. Otherwise glob `docs/plans/plan_*.md` and ask the user to pick. No plan → STOP: this skill refines a plan, it does not invent scope. Offer `/plan`.
+If `$ARGUMENTS` points to a plan doc that exists, use it. Otherwise glob `docs/plans/plan_*.{md,html}` and ask the user to pick. No plan → STOP: this skill refines a plan, it does not invent scope. Offer `/plan`.
 
 ## 2. Read the plan in full
 
@@ -150,3 +150,9 @@ Index and per-sprint state live in sibling files under `docs/plans/`:
 `Last-seen Feedback State` stays on the index: it's a session-global cursor, and migrating it between sprint files at each boundary would break the "process new items only" diff the feedback loop depends on.
 
 The `Carry-forward Ledger` is the authoritative, session-global list of small execution slices moved between sprints under a genuine forward dependency — origin sprint, target sprint, the slice, the plan-phase SC it serves, and `open`/`discharged` status. It lives on the index because the phase-level cumulative gate and close-out compliance check audit it in one place. See SKILL.md `Sprint Refinement → Carrying a dependency-blocked slice forward` for the mechanism and its strict conditions.
+
+## 13. Elect document format
+
+Ask once, up front: **"Markdown or HTML for the tracker?"** Default `markdown` — the tracker file is `plan_<slug>_implementation.md` and the skeleton in SKILL.md `## The Doc` is written as Markdown. If the user elects `html`, the tracker file is `plan_<slug>_implementation.html` (and, under `split-by-sprint`, every sibling `plan_<slug>_implementation_sprint_<N>.html`), with the same sections expressed as HTML. The section structure is identical either way; only the file extension and markup change.
+
+Record in `Preflight Decisions → Document format`.

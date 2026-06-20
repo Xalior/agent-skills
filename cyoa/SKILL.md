@@ -61,10 +61,11 @@ mapping, *what truth to draw it from*, and *whether to write it down*.
    read it up front or check it as we go?"
 
 3. **Log the tree?** Ask whether to keep a running map of the conversation as a
-   markdown file, so branches that get opened but aren't explored yet don't get
+   file, so branches that get opened but aren't explored yet don't get
    lost in a long or resumed session. If yes, propose a slug and path — default
-   `docs/cyoa/cyoa_<slug>.md` — and confirm before creating it. If no, just hold
-   the map in your head.
+   `docs/cyoa/cyoa_<slug>.md` — and ask whether the log should be **Markdown**
+   (`.md`, default) or **HTML** (`.html`), then confirm before creating it. If
+   no, just hold the map in your head.
 
 Settle these three, then open with the first scene + menu.
 
@@ -186,9 +187,11 @@ following a fixed ritual.
 
 ## Logging the tree
 
-If the user opted into a log, the markdown file is the authoritative map of the
+If the user opted into a log, the file is the authoritative map of the
 whole conversation — drawn like the directory trees in this repo's README, with
-`├──`, `└──`, and `│` connectors. It does two jobs: it stops opened-but-unvisited
+`├──`, `└──`, and `│` connectors. (If the log is HTML, draw the same map with
+nested `<ul>`/`<li>` lists and mark visited branches with `<del>…</del>` instead
+of `~~…~~` — same structure, HTML idioms.) It does two jobs: it stops opened-but-unvisited
 branches from being forgotten, and it stops *you* from hallucinating or quietly
 reinventing options between turns. Before offering a hub, read the tree back; the
 options you present must match what's recorded.

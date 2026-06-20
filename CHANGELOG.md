@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.8.4] — 2026-06-20
+
+### Changed
+- All document-creating skills — added an up-front preflight question asking
+  whether output files should be **Markdown** (`.md`, default) or **HTML**
+  (`.html`). Affects `discovery` (and its `pre-plan` symlink), `plan`, `cyoa`,
+  and the four implementer skills (`implement-with-feedback`,
+  `implement-with-remote-feedback`, `oneshot-with-feedback`,
+  `oneshot-with-remote-feedback`). For the implementer skills the choice is a
+  new numbered preflight election recorded in a `Document format` slot in the
+  tracker's `Preflight Decisions`; for `discovery`/`plan`/`cyoa` it is asked as
+  a plain conversational question. The chosen format only changes the file
+  extension and markup — section structure is identical either way — and each
+  skill's *The Doc* / logging section now notes the HTML equivalents.
+- `plan` and the four implementer skills — widened their source-doc globs from
+  `*.md` to `*.{md,html}` (e.g. `docs/plans/plan_*.{md,html}`) so the
+  discovery→plan→implement handoff still discovers docs written as HTML.
+  `agent-feedback` left unchanged — it is read-only and creates no document.
+
 ## [0.8.3] — 2026-06-18
 
 ### Changed

@@ -10,14 +10,14 @@ Develop a half-formed idea into a clear statement of goal, scope, and approach, 
 
 ## Flow at a glance
 
-1. **Preflight** — new doc: confirm the path, derive a slug. Resume: read the existing doc in full, investigate everything it references, identify the next open question. Brownfield sweep either way: README, manifest, `docs/`, directory tree, recent commits.
+1. **Preflight** — new doc: confirm the path and format, derive a slug. Resume: read the existing doc in full, investigate everything it references, identify the next open question. Brownfield sweep either way: README, manifest, `docs/`, directory tree, recent commits.
 2. **The Doc** — create `docs/discovery/discovery_<slug>.md` with the skeleton.
 3. **Discovery conversation** — section-by-section: Goal → Scope (in) → Scope (out) → Approach / Hypothesis → Open Questions. One question at a time; write the user's answer in immediately.
 4. **Finalise** — user signals done → honest review → flip `Status` to `Ready for Planning`. Hand off to `/plan`.
 
 ## Preflight
 
-1. **Confirm the doc path.** Default `docs/discovery/discovery_<slug>.md`. Present the single default; don't enumerate alternatives. If the user proposes a different location or backend, accept it.
+1. **Confirm the doc path and format.** Default `docs/discovery/discovery_<slug>.md`. Present the single default; don't enumerate alternatives. If the user proposes a different location or backend, accept it. Ask once, up front, whether the doc should be **Markdown** (`.md`, default) or **HTML** (`.html`); the choice sets the file extension and the format the skeleton is written in — the section structure is identical either way.
 
 2. **New vs resume.** `$ARGUMENTS` points to an existing discovery doc? Resume it. Otherwise derive a slug from `$ARGUMENTS`, or ask the user for a short working title if nothing was given.
 
@@ -61,6 +61,8 @@ Create the doc with this skeleton:
 ## Approach / Hypothesis
 ## Open Questions
 ````
+
+The skeleton above is shown in Markdown. If HTML was elected at preflight, write the same sections as an HTML document (`discovery_<slug>.html`) — section names as `<h1>`/`<h2>` headings, content as HTML — keeping the section names identical so a cold agent (and `/plan`) can navigate either format.
 
 The file on disk is the persistence layer — a cold agent reading it must be able to tell where discovery stands from the contents alone. The doc is about the idea, not about the conversation: no process logs, timestamps, or activity tracking.
 

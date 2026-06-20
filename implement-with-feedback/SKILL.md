@@ -10,7 +10,7 @@ Execute a plan into code, locally. The plan defines **phases** (design units); i
 
 ## Flow at a glance
 
-1. **Preflight** — 9-step election: plan, clean tree, branch, baseline target, deferred choices, tracker layout. Results land in `Preflight Decisions`.
+1. **Preflight** — 10-step election: plan, clean tree, branch, baseline target, deferred choices, tracker layout, document format. Results land in `Preflight Decisions`.
 2. **The tracker** — create `docs/plans/plan_<slug>_implementation.md`, commit. Living document.
 3. **Sprint Refinement** — decompose the plan's phases into reviewable sprints in one pass.
 4. **Execute sprints** — one at a time. Per-sprint rhythm: code → commit → tracker update. Stop only at sprint boundaries or blockers.
@@ -20,11 +20,11 @@ Preflight procedural detail lives in `references/preflight.md`.
 
 ## Preflight
 
-Nine steps. Every outcome lands in `Preflight Decisions`. Resolve all nine before Sprint Refinement — getting them right up front is what keeps the sprint loop autonomous.
+Ten steps. Every outcome lands in `Preflight Decisions`. Resolve all ten before Sprint Refinement — getting them right up front is what keeps the sprint loop autonomous.
 
 See `references/preflight.md` for the full procedure on each step: commands, defaults, prompts, failure handling. The checklist here is the map.
 
-1. **Locate the plan.** Use `$ARGUMENTS` if it points to one; otherwise glob `docs/plans/plan_*.md` and ask. No plan → STOP; this skill does not invent scope.
+1. **Locate the plan.** Use `$ARGUMENTS` if it points to one; otherwise glob `docs/plans/plan_*.{md,html}` and ask. No plan → STOP; this skill does not invent scope.
 2. **Read the plan in full.** Read tool, no limit/offset. The plan is the arbiter of scope, phases, and Success Criteria.
 3. **Clean working tree.** `git status`. Dirty → STOP.
 4. **Branch check.** If on `main`/`master`, warn and ask before proceeding.
@@ -33,6 +33,7 @@ See `references/preflight.md` for the full procedure on each step: commands, def
 7. **Baseline verification audit.** Find the repo's test target, ask whether to run it against the base branch now.
 8. **Surface plan-deferred choices.** Scan the plan for TBD markers; resolve each upfront so the sprint loop stays autonomous.
 9. **Elect tracker layout.** `single` (default — one file) or `split-by-sprint` (index + one file per sprint). Recommend `split-by-sprint` when the work parcel is large enough that a single tracker will bloat.
+10. **Elect document format.** Markdown (`.md`, default) or HTML (`.html`) for the tracker file(s)? Ask once, up front; the choice sets the file extension and the format the tracker skeleton is written in. Record in `Preflight Decisions → Document format`.
 
 ## The Doc
 
@@ -49,6 +50,7 @@ Tracker skeleton at `docs/plans/plan_<slug>_implementation.md`:
 
 - **Baseline verification:** `<command run + result, or "no baseline target found">`
 - **Tracker layout:** `<single | split-by-sprint>`
+- **Document format:** `<markdown | html>`
 - **Plan-deferred decisions:**
   - `<item>`: `<resolution>`
 
@@ -68,6 +70,8 @@ Tracker skeleton at `docs/plans/plan_<slug>_implementation.md`:
 
 ## Commits
 ````
+
+The skeleton above is shown in Markdown. If HTML was elected at preflight, the tracker file is `plan_<slug>_implementation.html` (and any split-by-sprint siblings use `.html` too), with the same sections expressed as HTML — section names as headings, lists as `<ul>`. The section structure is identical either way.
 
 The tracker is living — update continuously. It's the record of how the work unfolded.
 
