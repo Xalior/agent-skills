@@ -83,6 +83,36 @@ Use this when working with a team lead, mentor, or when your work needs to be vi
 
 [📖 Read the full skill documentation](./implement-with-remote-feedback/SKILL.md)
 
+### ⚡ oneshot-with-feedback
+
+**Execute a plan as a single uninterrupted parcel, locally — the user reviews the finished result at the end.**
+
+The no-sprint-loop sibling of `implement-with-feedback`, for work best reviewed as a whole:
+- 🎯 No sprint loop, no per-phase review pauses — phases run in plan order, end to end
+- ✅ Manual success criteria batched and reviewed once, at the end
+- 💾 Same git discipline underneath: small logical commits and a living tracker doc
+- 🔒 LOCAL-ONLY — never pushes during execution; offers a push/PR at completion
+- 🧰 Built for refactors, codemods, migrations, and bulk transforms
+
+Use this when per-sprint review would be busywork rather than value and you want commits kept local until you're ready.
+
+[📖 Read the full skill documentation](./oneshot-with-feedback/SKILL.md)
+
+### 📡 oneshot-with-remote-feedback
+
+**Execute a plan as a single uninterrupted parcel, pushing every commit so the remote branch is the live monitoring channel.**
+
+Same single-parcel execution as above, but published as it happens:
+- 🚀 Push after every commit — others can watch progress in real time
+- 🔀 PR strategy elected up front: from-start, at-end (the natural default), or none
+- 🎯 No sprint loop; the human reviews the finished result once, at the end
+- 🛡️ Same hard limits and anti-fabrication anchor as the sprint-loop variant
+- 🧰 Built for refactors, codemods, migrations, and bulk transforms
+
+Use this when the work is most reviewable as a whole but collaborators need live visibility while it runs.
+
+[📖 Read the full skill documentation](./oneshot-with-remote-feedback/SKILL.md)
+
 ### 🖥️ cmux
 
 **Control the cmux terminal multiplexer from your agent.**
@@ -127,6 +157,21 @@ For brains that nope out at big dense replies. Hands the steering wheel back to 
 Use this when a reply is about to become a long, dense explanation and the user would do better steering it one bite at a time — especially for neurodivergent / ADHD readers or anyone who learns better conversationally.
 
 [📖 Read the full skill documentation](./cyoa/SKILL.md)
+
+### 📤 plandrop
+
+**Scaffold a finished static HTML document from a template and publish it to a unique, secure hostname on your local network.**
+
+Wraps the `npx plandrop` CLI for a scaffold → fill in → publish → share workflow:
+- 🏠 Mint a per-project host into `.plandrop` (domain, host, passphrase — never committed)
+- 📄 Scaffold docs from Bootstrap/Bootswatch templates fetched live from the server
+- 🚀 Publish over authenticated WebDAV and get the full shareable URL back
+- 🔄 Docs left open in a browser self-update when you re-upload
+- 🐳 No host yet? `npx plandrop server` stands up a full local stack via Docker
+
+Use this when you want to start an HTML plan/doc from a template, or push a finished HTML doc somewhere shareable on the LAN.
+
+[📖 Read the full skill documentation](./plandrop/SKILL.md)
 
 ## 🚀 Installation
 
@@ -182,10 +227,16 @@ agent-skills/
 │   └── SKILL.md                      # Local-only git workflow
 ├── implement-with-remote-feedback/
 │   └── SKILL.md                      # Remote-push git workflow
+├── oneshot-with-feedback/
+│   └── SKILL.md                      # Single-parcel local execution
+├── oneshot-with-remote-feedback/
+│   └── SKILL.md                      # Single-parcel remote-push execution
 ├── nicelicense/
 │   └── SKILL.md                      # License management CLI
-└── cyoa/
-    └── SKILL.md                      # Branching conversational answers
+├── cyoa/
+│   └── SKILL.md                      # Branching conversational answers
+└── plandrop/
+    └── SKILL.md                      # Scaffold & publish HTML docs on the LAN
 ```
 ## 🤝 Contributing
 

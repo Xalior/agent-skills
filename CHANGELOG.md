@@ -5,7 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
-## [0.8.4] — 2026-06-20
+## [0.9.0] — 2026-07-08
+
+### Added
+- `plandrop` — scaffold a finished static HTML document from a plandrop
+  template and publish it to a unique, secure hostname on the local network,
+  then share the link. Wraps the `npx plandrop` CLI as a four-step workflow:
+  ensure a host exists (`create` writes a `.plandrop` carrying the
+  domain/host/passphrase — never committed), scaffold from a template
+  (`newdoc`, Bootstrap/Bootswatch set fetched live from the server rather than
+  guessed), fill in the content region, and `upload` over authenticated WebDAV
+  — a single-file upload prints the full shareable URL. Docs are
+  self-contained and bound to a concrete template at scaffold time (re-theming
+  after creation is out of scope — scaffold a fresh one), and a doc left open
+  in a browser self-updates on re-upload. Also covers `rotate`, `remove`,
+  `init`, and standing up a full local stack with `npx plandrop server`
+  (Docker). `allowed-tools` scoped to `Bash, Read, Edit, Write`.
 
 ### Changed
 - All document-creating skills — added an up-front preflight question asking
