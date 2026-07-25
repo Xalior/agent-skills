@@ -22,7 +22,10 @@ npx plandrop [HASH] <command> [params]
 Run via `npx`. Arg-1 disambiguates by length: a `<8`-char token is a command, a `≥8`-char
 token is a host hash.
 `npx plandrop help` lists every command; `npx plandrop help <command>` (or
-`<command> --help`) prints its usage, flags, and examples.
+`<command> --help`) prints its usage, flags, and examples. `npx plandrop --version` (or
+`-v`) prints the CLI's own version and exits; the same version is echoed in the help
+header, in `/api/templates`' response, and stamped into `.plandrop` on every write (the
+client that last wrote the file).
 
 ## Getting set up (install / onboarding)
 
@@ -51,9 +54,11 @@ When asked to start a document "with plandrop" / "using the plandrop skill":
    ```bash
    npx plandrop create --domain https://plandrop.example.com   # writes .plandrop (0600)
    ```
-   `.plandrop` holds `{ domain, host, passphrase, template? }`. It carries the passphrase
-   that grants write access to the host — see **Guardrails** below for how to treat it. If
-   nothing is resolvable at all, use the onboarding flow above instead of guessing.
+   `.plandrop` holds `{ domain, host, passphrase, template?, hookWatch?, hookPublish?,
+   hookRoot?, version }` — the last few record the autosync hook's settings and the
+   plandrop client version that last wrote the file. It carries the passphrase that grants
+   write access to the host — see **Guardrails** below for how to treat it. If nothing is
+   resolvable at all, use the onboarding flow above instead of guessing.
 
 2. **Scaffold the doc from a template.**
    ```bash
@@ -61,10 +66,11 @@ When asked to start a document "with plandrop" / "using the plandrop skill":
    npx plandrop newdoc plan_q3.html --template darkly
    ```
    `newdoc` pulls the chosen template's starter from the server and writes the named local
-   file, with asset links already pointing at `.plandrop/<concrete-template>/…` (served
-   same-origin once published). It **refuses to overwrite** an existing file without
-   `--force`. Template precedence: `--template` flag > `.plandrop` `template` field >
-   user config `template` > the server default.
+   file, with root-absolute asset links already pointing at `/.plandrop/<concrete-template>/…`
+   — they resolve against the host root wherever the doc ends up published, root or ten
+   folders down. It **refuses to overwrite** an existing file without `--force`. Template
+   precedence: `--template` flag > `.plandrop` `template` field > user config `template` >
+   the server default.
 
 3. **Fill in the content.** Edit the file's content region (the template's body) — leave
    the `<head>`, asset links, and the self-update script intact.
@@ -83,7 +89,12 @@ side on one host seamlessly. Upload as-is by default; only rename (`upload <file
 e.g. to `index.html`) when the user asks.
 
 Saving a document doesn't need a manual re-`upload` if the autosync hook is installed (see
-**Getting set up** above, or `hooks` below) — it republishes on save automatically.
+**Getting set up** above, or `hooks` below) — it republishes on save automatically. The
+hook can publish under three roots: **mirroring the project path** (the silent default —
+a save at `docs/plans/x.html` publishes to `/docs/plans/x.html`), **relative to a directory**
+(`--hook-root <dir>`, e.g. `--hook-root docs` publishes that same save to `/plans/x.html`),
+or **flat at the host root** (`--hook-flat`, publishing it to `/x.html` regardless of depth).
+Interactive setup asks which, defaulting to relative-to-the-watched-directory.
 
 ## Picking a template
 
@@ -111,10 +122,10 @@ Operator-supplied templates appear namespaced as `user/<name>` and are selected 
 
 | Command | What it does |
 |---------|--------------|
-| `create` | Mint a host (label + passphrase) into `.plandrop`. `--force` replaces an existing one; `--hook`/`--no-hook`/`--hook-path` control the autosync-hook offer. |
+| `create` | Mint a host (label + passphrase) into `.plandrop`. `--force` replaces an existing one; `--hook`/`--no-hook`/`--hook-path`/`--hook-root <dir>`/`--hook-flat` control the autosync-hook offer (any hook-taking flag implies `--hook`; `--hook-root` and `--hook-flat` are mutually exclusive). |
 | `newdoc <file> [--template]` | Scaffold a template-based doc onto the local filesystem. `--force` overwrites. |
-| `upload <path> [remote]` | Push a file or directory over authenticated WebDAV. A single file with no remote mirrors its cwd-relative path; a named directory's contents land at `/<remote-or-dirname>/…`, defaulting to its own name (`.` as the remote flattens into the host root). The bare cwd (`upload .`, no remote) always flattens to the host root too — its basename is incidental, never a folder you asked for. Each uploaded file prints its own shareable URL. |
-| `hooks [path]` | Install or update the autosync hook in the current project **without** minting a host — for a project whose host already exists. Idempotent: an equivalent hook already present is left alone. |
+| `upload <path> [remote]` | Push a file or directory over authenticated WebDAV. A single file with no remote mirrors its cwd-relative path; a named directory's contents land at `/<remote-or-dirname>/…`, defaulting to its own name (`.` as the remote flattens into the host root). The bare cwd (`upload .`, no remote) always flattens to the host root too — its basename is incidental, never a folder you asked for. Nothing hidden ever publishes (see **Guardrails**). Each uploaded file prints its own shareable URL. |
+| `hooks [path]` | Install, update, or **upgrade** the autosync hook in the current project **without** minting a host — for a project whose host already exists. `--hook-root <dir>`/`--hook-flat` set the publish root the same way `create` does. An existing plandrop hook is found by fingerprint (however it's shaped) and replaced in place rather than duplicated; a bare `plandrop hooks` with no flags silently re-applies whatever was last recorded in `.plandrop`, which is how a client upgrade refreshes an older hook shape without being told the settings again. |
 | `rotate` | Change the host passphrase (old one stops working immediately). |
 | `remove` | Delete the host, its content, and the local `.plandrop`. |
 | `init` | Record a default domain (and template) in the per-user config or a local `.plandrop` — merges, never clobbers; prints the path it wrote. |
@@ -132,6 +143,19 @@ it, but `create`/`upload` need a real host.
 
 ## Guardrails
 
+- **Nothing hidden ever publishes, and that's by design — don't fight it.** A directory
+  upload automatically skips every dot-prefixed name it walks (dot-directories pruned whole
+  and never descended into, dot-files one at a time) and reports every omission just as
+  loudly as an upload — a `skipped <path> (<reason>)` line for each. An explicitly-named
+  dotfile upload (`upload .plandrop`, `upload .env`) is
+  **refused outright**, not silently obeyed. Treat both as working as intended: don't rename
+  a file to dodge the refusal, don't treat a skip line as a bug to route around, and never
+  suggest a workaround to publish something hidden — if the user wants it published, the
+  fix is renaming it (their call, not yours), not finding a clever path past the guard. The
+  `.plandrop*` family (the credential file plus editor/backup copies beside it) is the one
+  the refusal exists for: it holds the host's passphrase, and everything plandrop serves is
+  world-readable. The two exceptions are exact matches, **`.header.html`** / **`.footer.html`**
+  (the listing chrome) — they upload like any other file.
 - **`.plandrop` holds the host passphrase and grants write access to it — treat it as a
   credential when deciding whether to commit it.** Committing it is a legitimate choice in
   a private repo (anyone with write access to the repo already has write access to the

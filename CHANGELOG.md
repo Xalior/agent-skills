@@ -5,6 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.9.4] — 2026-07-25
+
+### Changed
+- `plandrop` — updated for the 0.4.0 CLI's hidden-file guard and hook/version
+  surface (shipped as 0.5.0):
+  - **Nothing hidden publishes.** A directory upload skips every dot-prefixed
+    name (dot-directories pruned whole, dot-files one at a time), reporting
+    each skip as loudly as an upload; naming a dotfile explicitly is refused
+    outright rather than obeyed. New guardrail tells the agent not to fight
+    the skip lines or work around the refusal — the `.plandrop*` family is
+    the host credential and is never publishable; `.header.html`/`.footer.html`
+    (listing chrome) are the two exact-name exceptions.
+  - **Hook publish roots.** `create`/`hooks` gain `--hook-root <dir>` and
+    `--hook-flat` alongside the project-mirror default; interactive setup now
+    asks where to publish (default: relative to the watched directory), and
+    `INSTALL.md`'s guided flow carries the same second question.
+  - **Hook upgrades.** An existing plandrop hook is found by fingerprint and
+    replaced in place, never duplicated; the watch glob and publish root are
+    recorded in `.plandrop` (`hookWatch`/`hookPublish`/`hookRoot`), so a bare
+    `plandrop hooks` re-applies them — the upgrade path a client version bump
+    relies on.
+  - **Version surface.** `--version`/`-v`, the version in the help header,
+    `/api/templates`' version field, and `.plandrop`'s own `version` (the
+    writing client) are now documented.
+  - Corrected the scaffolded-doc asset-link claim: links are root-absolute
+    (`/.plandrop/<template>/…`), not relative — they resolve against the host
+    root wherever the doc is published, not just alongside it.
+
 ## [0.9.3] — 2026-07-25
 
 ### Changed

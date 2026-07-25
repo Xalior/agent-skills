@@ -84,31 +84,52 @@ HTML doc automatically?"
 - **Yes, watch a different path** — ask for the glob.
 - **No** — publish manually with `upload` when ready.
 
-`create`'s own interactive `[Y/n]` offer for this same question only fires at a real TTY;
-an agent invoking it via a tool call never hits one, so that offer is always a no-op here.
-This question is the only place the hook gets asked — never ask it a second time by also
-answering `create`'s prompt.
+If the answer is yes, ask one more (**AskUserQuestion**): "Where should saved files
+publish to?"
+
+- **Relative to the watched directory** (recommended — matches the CLI's own default for
+  an interactive answer): a save at `docs/plans/x.html`, watching `docs/**/*.html`,
+  publishes to `/plans/x.html`.
+- **Mirroring the full project path** — that same save publishes to `/docs/plans/x.html`.
+- **Flat at the host root** — that same save publishes to `/x.html` regardless of depth.
+
+`create`'s own interactive `[Y/n]` + publish-root offer for this same pair of questions
+only fires at a real TTY; an agent invoking it via a tool call never hits one, so that
+offer is always a no-op here. This is the only place the hook gets asked — never ask it a
+second time by also answering `create`'s prompt.
 
 Now run the commands, combining Step 2 and Step 3's answers into one `create` call so the
 host and hook are set up together:
 
 ```sh
-# host + hook, default glob:
-npx plandrop create --domain <domain> --hook-path "docs/**/*.html"
+# host + hook, default glob, default (relative-to-watched-dir) publish root:
+npx plandrop create --domain <domain> --hook-path "docs/**/*.html" --hook-root docs
 
-# host + hook, custom glob:
+# host + hook, custom glob, mirroring the full project path (the CLI's silent default —
+# no --hook-root/--hook-flat needed):
 npx plandrop create --domain <domain> --hook-path "<glob>"
+
+# host + hook, flat at the host root regardless of the saved file's depth:
+npx plandrop create --domain <domain> --hook-path "<glob>" --hook-flat
 
 # host, no hook:
 npx plandrop create --domain <domain> --no-hook
 
-# host already existed (Step 0 found one) but no hook yet — create wasn't run, so use
-# the standalone installer instead:
-npx plandrop hooks "docs/**/*.html"
+# host already existed (Step 0 found one) but no hook yet, or an older hook needs
+# upgrading to the current shape — create wasn't run, so use the standalone installer
+# instead (any of the flags above apply the same way):
+npx plandrop hooks "docs/**/*.html" --hook-root docs
 ```
 
-`create` and `hooks` both report whether anything actually changed ("wrote …" vs. "already
-… nothing changed") — relay that to the user rather than assuming.
+`--hook-root <dir>` and `--hook-flat` are mutually exclusive. Any hook-taking flag
+implies `--hook`, and every choice — glob and publish root alike — is recorded into
+`.plandrop` (`hookWatch`/`hookPublish`/`hookRoot`), so a bare `plandrop hooks` later
+re-applies them rather than asking again; this is also how a plandrop version upgrade
+refreshes an older hook's shape without needing to be told the settings a second time —
+an existing hook is found by fingerprint and replaced in place, never left duplicated.
+
+`create` and `hooks` both report whether anything actually changed ("wrote …" / "updated
+…" vs. "already … nothing changed") — relay that to the user rather than assuming.
 
 **Hooks are read at session start.** Tell the user autosync begins from their *next*
 session, not this one.
