@@ -103,10 +103,10 @@ host and hook are set up together:
 
 ```sh
 # host + hook, default glob, default (relative-to-watched-dir) publish root:
-npx plandrop create --domain <domain> --hook-path "docs/**/*.html" --hook-root docs
+npx plandrop create --domain <domain> --hook-path "docs/**/*.html" --local-root docs
 
 # host + hook, custom glob, mirroring the full project path (the CLI's silent default —
-# no --hook-root/--hook-flat needed):
+# no --local-root/--hook-flat needed):
 npx plandrop create --domain <domain> --hook-path "<glob>"
 
 # host + hook, flat at the host root regardless of the saved file's depth:
@@ -118,12 +118,12 @@ npx plandrop create --domain <domain> --no-hook
 # host already existed (Step 0 found one) but no hook yet, or an older hook needs
 # upgrading to the current shape — create wasn't run, so use the standalone installer
 # instead (any of the flags above apply the same way):
-npx plandrop hooks "docs/**/*.html" --hook-root docs
+npx plandrop hooks "docs/**/*.html" --local-root docs
 ```
 
-`--hook-root <dir>` and `--hook-flat` are mutually exclusive. Any hook-taking flag
+`--local-root <dir>` and `--hook-flat` are mutually exclusive. Any hook-taking flag
 implies `--hook`, and every choice — glob and publish root alike — is recorded into
-`.plandrop` (`hookWatch`/`hookPublish`/`hookRoot`), so a bare `plandrop hooks` later
+`.plandrop` (`hookWatch`/`hookPublish`/`localRoot`), so a bare `plandrop hooks` later
 re-applies them rather than asking again; this is also how a plandrop version upgrade
 refreshes an older hook's shape without needing to be told the settings a second time —
 an existing hook is found by fingerprint and replaced in place, never left duplicated.

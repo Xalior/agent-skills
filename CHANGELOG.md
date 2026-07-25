@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.9.5] — 2026-07-26
+
+### Changed
+- `plandrop` — tracks the CLI's 0.6.0 rename: the hook publish-root flag is
+  `--local-root` (was `--hook-root`) and the `.plandrop` key is `localRoot`
+  (was `hookRoot`) — the value names the local root remote paths are resolved
+  against, which is not a hook-only concern. Semantics, `--hook-flat`
+  exclusivity, and implied `--hook` are unchanged.
+
 ## [0.9.4] — 2026-07-25
 
 ### Changed
