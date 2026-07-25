@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.9.3] — 2026-07-25
+
+### Changed
+- `plandrop` — updated the directory-upload rule for the CLI's 0.4.1
+  refinement: `upload .` (the bare current directory, no remote argument) now
+  flattens to the host root, same as the explicit `.` remote, rather than
+  minting a folder named after the cwd's incidental basename. A named
+  directory (`upload ./evidence`) is unaffected — it still defaults to its
+  own name.
+
 ## [0.9.2] — 2026-07-25
 
 ### Docs

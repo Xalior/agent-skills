@@ -113,7 +113,7 @@ Operator-supplied templates appear namespaced as `user/<name>` and are selected 
 |---------|--------------|
 | `create` | Mint a host (label + passphrase) into `.plandrop`. `--force` replaces an existing one; `--hook`/`--no-hook`/`--hook-path` control the autosync-hook offer. |
 | `newdoc <file> [--template]` | Scaffold a template-based doc onto the local filesystem. `--force` overwrites. |
-| `upload <path> [remote]` | Push a file or directory over authenticated WebDAV. A single file with no remote mirrors its cwd-relative path; a directory's contents land at `/<remote-or-dirname>/…` (`.` flattens into the host root). Each uploaded file prints its own shareable URL. |
+| `upload <path> [remote]` | Push a file or directory over authenticated WebDAV. A single file with no remote mirrors its cwd-relative path; a named directory's contents land at `/<remote-or-dirname>/…`, defaulting to its own name (`.` as the remote flattens into the host root). The bare cwd (`upload .`, no remote) always flattens to the host root too — its basename is incidental, never a folder you asked for. Each uploaded file prints its own shareable URL. |
 | `hooks [path]` | Install or update the autosync hook in the current project **without** minting a host — for a project whose host already exists. Idempotent: an equivalent hook already present is left alone. |
 | `rotate` | Change the host passphrase (old one stops working immediately). |
 | `remove` | Delete the host, its content, and the local `.plandrop`. |
