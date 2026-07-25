@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.9.1] — 2026-07-25
+
+### Changed
+- `plandrop` — brought up to date with the 0.4.0 CLI surface and split off a
+  guided `INSTALL.md` onboarding flow (which server, mint a host, install the
+  autosync hook, and how `.plandrop` relates to git — each a short
+  `AskUserQuestion` with a recommended default, skipped when existing state
+  already answers it). Corrected three stale behaviour claims against the
+  real CLI: the bold "NEVER commit `.plandrop`" warning is now the neutral
+  treat-it-as-a-credential framing plus an explicit rule never to remove an
+  already-committed `.plandrop`; directory uploads land under the
+  remote-arg-or-directory-name destination (`.` is the explicit flatten),
+  each file printing its own URL, not "the host root"; and a single file with
+  no remote argument mirrors its cwd-relative path (`docs/plans/x.html` →
+  `/docs/plans/x.html`), not just its bare filename. Also documents the
+  standalone `hooks` command (installs the autosync hook without minting a
+  host) and mentions the bundled `f1terminal` (Fanny's First Terminal)
+  dual-appearance theme alongside the Bootswatch set.
+
 ## [0.9.0] — 2026-07-08
 
 ### Added
