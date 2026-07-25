@@ -163,7 +163,7 @@ Use this when a reply is about to become a long, dense explanation and the user 
 **Scaffold a finished static HTML document from a template and publish it to a unique, secure hostname on your local network.**
 
 Wraps the `npx plandrop` CLI for a scaffold → fill in → publish → share workflow:
-- 🏠 Mint a per-project host into `.plandrop` (domain, host, passphrase — never committed)
+- 🏠 Mint a per-project host into `.plandrop` (domain, host, passphrase — treat it as a credential when deciding whether to commit it)
 - 📄 Scaffold docs from Bootstrap/Bootswatch templates fetched live from the server
 - 🚀 Publish over authenticated WebDAV and get the full shareable URL back
 - 🔄 Docs left open in a browser self-update when you re-upload

@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.9.2] — 2026-07-25
+
+### Docs
+- `README.md` — fixed the `plandrop` entry's `.plandrop` bullet, which still
+  carried the "never committed" scare-wording the skill itself moved away
+  from in 0.9.1. Now reads as the same neutral treat-it-as-a-credential
+  framing: committing it is a legitimate choice in a private repo, and
+  gitignoring is the cautious default anywhere the repo is shared or public.
+
 ## [0.9.1] — 2026-07-25
 
 ### Changed
