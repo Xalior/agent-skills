@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.9.7] — 2026-07-26
+
+### Changed
+- `plandrop` — frontmatter pins `model: haiku`. Every flow the skill runs —
+  install onboarding, template scaffold, upload, link share — is
+  deterministic CLI mechanics, so the invoking turn drops to the cheap
+  model instead of burning the session's frontier model on it. Authoring
+  the *content* of a doc still happens in ordinary turns on the session
+  model; the pin applies only to turns the skill itself drives (harnesses
+  without frontmatter model support simply ignore it).
+
 ## [0.9.6] — 2026-07-26
 
 ### Changed
