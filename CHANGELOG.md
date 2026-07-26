@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.9.10] — 2026-07-26
+
+### Changed
+- `plandrop` — tracks CLI 0.5.4: a **directory** upload honours `localRoot`
+  too, so the command table no longer teaches the own-name rule as
+  unconditional. With `localRoot: "docs"`, `upload docs` fills the host root
+  and `upload docs/plans` fills `/plans/…` — the same places those files land
+  one at a time; with no `localRoot` a directory still lands under its own
+  name. (Only single-file uploads resolved against the recorded root before,
+  so an agent following the old row published a `docs/` folder the recorded
+  root says *is* the host root.)
+
 ## [0.9.9] — 2026-07-26
 
 ### Changed
