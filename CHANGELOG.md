@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.9.8] — 2026-07-26
+
+### Changed
+- `plandrop` — tracks CLI 0.5.3's publish-root default alignment: with no mode
+  flag and nothing recorded, `create --hook`/`hooks` now default to
+  publishing **relative to the watched directory** on every path — the
+  non-TTY runs an agent drives land in the same place the interactive
+  prompts preselect (previously the silent path fell to mirror, a mode no
+  prompt would default to). `INSTALL.md`'s command block drops the
+  now-redundant `--local-root docs` from the recommended calls; mirror is
+  selected explicitly with an empty `--local-root=""` (the documented
+  non-interactive spelling). Also tracks `create` no longer recording a
+  `template` in `.plandrop` unless `--template` names one, so the per-user
+  config's `template` preference stays live in `newdoc`'s fallback chain
+  (flag > dotfile > user config > server default). And tracks `upload`
+  honouring `localRoot`: a single-file upload with no explicit remote mirrors
+  against the recorded local root, landing exactly where the autosync hook
+  publishes the same save, from anywhere in the project.
+
 ## [0.9.7] — 2026-07-26
 
 ### Changed

@@ -87,8 +87,8 @@ HTML doc automatically?"
 If the answer is yes, ask one more (**AskUserQuestion**): "Where should saved files
 publish to?"
 
-- **Relative to the watched directory** (recommended — matches the CLI's own default for
-  an interactive answer): a save at `docs/plans/x.html`, watching `docs/**/*.html`,
+- **Relative to the watched directory** (recommended — the CLI's own default, prompted
+  or scripted alike): a save at `docs/plans/x.html`, watching `docs/**/*.html`,
   publishes to `/plans/x.html`.
 - **Mirroring the full project path** — that same save publishes to `/docs/plans/x.html`.
 - **Flat at the host root** — that same save publishes to `/x.html` regardless of depth.
@@ -102,12 +102,15 @@ Now run the commands, combining Step 2 and Step 3's answers into one `create` ca
 host and hook are set up together:
 
 ```sh
-# host + hook, default glob, default (relative-to-watched-dir) publish root:
-npx plandrop create --domain <domain> --hook-path "docs/**/*.html" --local-root docs
+# host + hook, default glob, default publish root (relative to the watched
+# directory — the no-flags default, interactive or not):
+npx plandrop create --domain <domain> --hook
 
-# host + hook, custom glob, mirroring the full project path (the CLI's silent default —
-# no --local-root/--hook-flat needed):
+# host + hook, custom glob (the publish root defaults to that glob's own directory):
 npx plandrop create --domain <domain> --hook-path "<glob>"
+
+# host + hook, mirroring the full project path (an empty --local-root selects mirror):
+npx plandrop create --domain <domain> --hook-path "<glob>" --local-root=""
 
 # host + hook, flat at the host root regardless of the saved file's depth:
 npx plandrop create --domain <domain> --hook-path "<glob>" --hook-flat
@@ -118,7 +121,7 @@ npx plandrop create --domain <domain> --no-hook
 # host already existed (Step 0 found one) but no hook yet, or an older hook needs
 # upgrading to the current shape — create wasn't run, so use the standalone installer
 # instead (any of the flags above apply the same way):
-npx plandrop hooks "docs/**/*.html" --local-root docs
+npx plandrop hooks "docs/**/*.html"
 ```
 
 `--local-root <dir>` and `--hook-flat` are mutually exclusive. Any hook-taking flag
