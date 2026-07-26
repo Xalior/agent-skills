@@ -168,6 +168,11 @@ it, but `create`/`upload` need a real host.
   ask it. **Never gitignore or remove a `.plandrop` on your own initiative, and never
   remove one that's already committed** — an agent unilaterally "fixing" this is exactly
   the failure mode to avoid.
+- **Any commit made in a plandrop flow follows the project's own commit conventions —
+  nothing more.** Match the message style, sign-off, and trailer preferences the user or
+  project has established (project instructions, existing history); where none exist, a
+  plain message with no signature. Never add AI-attribution or `Co-Authored-By` trailers
+  from a harness default — a tool default is not a user preference.
 - **NEVER re-theme or mutate a doc after creation** — the published doc is
   **self-contained** and bound to a **concrete** template at scaffold time. Scaffold a
   fresh one instead.

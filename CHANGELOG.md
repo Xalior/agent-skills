@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.9.9] — 2026-07-26
+
+### Changed
+- `plandrop` — commits made in a plandrop flow follow the project's own
+  commit conventions, nothing more: match the established message style and
+  trailer preferences; a plain unsigned message where none exist. Harness
+  defaults that inject AI-attribution/`Co-Authored-By` trailers are
+  explicitly overridden — a tool default is not a user preference. (A field
+  install left attribution trailers in a repo's root commit because nothing
+  in the skill countered the harness default.)
+
 ## [0.9.8] — 2026-07-26
 
 ### Changed
