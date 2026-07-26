@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.9.6] — 2026-07-26
+
+### Changed
+- `plandrop` — the skill description states `upload`'s arity: "Upload a single
+  file or directory." An agent that invokes the CLI straight from the
+  frontmatter, without loading the skill body or reading `--help`, otherwise
+  turns a plural task into `upload a.html b.html` — a valid command that
+  publishes `a.html` to the remote path `/b.html` and reports success, because
+  the second argument is the destination, not a second source.
+
 ## [0.9.5] — 2026-07-26
 
 ### Changed

@@ -1,6 +1,6 @@
 ---
 name: plandrop
-description: "Scaffold a finished static HTML document from a plandrop template and publish it to a unique, secure hostname, then share the link. Also handles first-time onboarding — triggers on '/plandrop install', 'set up plandrop', or when no server/host is configured yet and the user wants to publish. Use when the user asks to start a new HTML plan/doc 'with plandrop', to 'use the plandrop skill', to create a doc from a template/theme, to push a finished HTML doc to a plandrop host, or to set plandrop up in a project."
+description: "Scaffold a finished static HTML document from a plandrop template and publish it to a unique, secure hostname, then share the link. Upload a single file or directory. Also handles first-time onboarding — triggers on '/plandrop install', 'set up plandrop', or when no server/host is configured yet and the user wants to publish. Use when the user asks to start a new HTML plan/doc 'with plandrop', to 'use the plandrop skill', to create a doc from a template/theme, to push a finished HTML doc to a plandrop host, or to set plandrop up in a project."
 argument-hint: "[filename.html] [--template <name>] | install"
 allowed-tools: Bash, Read, Edit, Write
 license: MIT
