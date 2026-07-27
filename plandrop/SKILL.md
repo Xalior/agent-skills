@@ -1,6 +1,6 @@
 ---
 name: plandrop
-description: "Scaffold a finished static HTML document from a plandrop template and publish it to a unique, secure hostname, then share the link. Upload a single file or directory. Also handles first-time onboarding — triggers on '/plandrop install', 'set up plandrop', or when no server/host is configured yet and the user wants to publish. Use when the user asks to start a new HTML plan/doc 'with plandrop', to 'use the plandrop skill', to create a doc from a template/theme, to push a finished HTML doc to a plandrop host, or to set plandrop up in a project. Where the autosync hook is installed, a save under its watched path republishes itself — don't load this skill, re-upload, or fetch the URL to confirm it landed; only a file outside that path still needs an explicit upload."
+description: "Scaffold a static HTML doc from a plandrop template, publish it to a unique secure hostname, and share the link; uploads a file or a directory. Covers first-time setup too ('/plandrop install', 'set up plandrop', or nothing configured yet). Use when asked to start a doc 'with plandrop' or 'the plandrop skill', pick a template/theme, push a finished HTML doc to a plandrop host, or set plandrop up in a project. Not for a save under the autosync hook's watched path — that republishes itself, so don't re-upload or check the URL."
 argument-hint: "[filename.html] [--template <name>] | install"
 allowed-tools: Bash, Read, Edit, Write
 model: haiku
