@@ -1,6 +1,6 @@
 ---
 name: plandrop
-description: "Scaffold a finished static HTML document from a plandrop template and publish it to a unique, secure hostname, then share the link. Upload a single file or directory. Also handles first-time onboarding — triggers on '/plandrop install', 'set up plandrop', or when no server/host is configured yet and the user wants to publish. Use when the user asks to start a new HTML plan/doc 'with plandrop', to 'use the plandrop skill', to create a doc from a template/theme, to push a finished HTML doc to a plandrop host, or to set plandrop up in a project. Where the autosync hook is installed, an edited doc republishes itself on save — don't load this skill, re-upload, or fetch the URL to confirm it landed."
+description: "Scaffold a finished static HTML document from a plandrop template and publish it to a unique, secure hostname, then share the link. Upload a single file or directory. Also handles first-time onboarding — triggers on '/plandrop install', 'set up plandrop', or when no server/host is configured yet and the user wants to publish. Use when the user asks to start a new HTML plan/doc 'with plandrop', to 'use the plandrop skill', to create a doc from a template/theme, to push a finished HTML doc to a plandrop host, or to set plandrop up in a project. Where the autosync hook is installed, a save under its watched path republishes itself — don't load this skill, re-upload, or fetch the URL to confirm it landed; only a file outside that path still needs an explicit upload."
 argument-hint: "[filename.html] [--template <name>] | install"
 allowed-tools: Bash, Read, Edit, Write
 model: haiku
@@ -91,9 +91,11 @@ automatically, so several documents live side by side on one host seamlessly. Up
 e.g. to `index.html`) when the user asks.
 
 Saving a document doesn't need a manual re-`upload` if the autosync hook is installed (see
-**Getting set up** above, or `hooks` below) — it republishes on save automatically, and
-**that is the publish path: trust it.** Don't re-`upload` "to be sure" and don't fetch the
-live URL to check the save landed — the hook reports its own failures. The
+**Getting set up** above, or `hooks` below) — it republishes on save automatically, and for
+files under the path it watches **that is the publish path: trust it.** Don't re-`upload`
+"to be sure" and don't fetch the live URL to check the save landed — the hook reports its
+own failures. The hook only covers the glob it was installed with (`docs/**/*.html` by
+default); a file saved outside that path publishes only when you `upload` it yourself. The
 hook can publish under three roots: **relative to a directory** (`--local-root <dir>`;
 watching `docs/**/*.html`, a save at `docs/plans/x.html` publishes to `/plans/x.html`),
 **mirroring the project path** (`--local-root=""`; that same save publishes to
