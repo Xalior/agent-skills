@@ -5,6 +5,56 @@ All notable changes to this project will be documented in this file.
 The format is loosely based on [Keep a Changelog](https://keepachangelog.com/).
 Patch bumps cover edits to existing skills; minor bumps cover new skills.
 
+## [0.9.15] — 2026-07-28
+
+### Changed
+- `plandrop` — tracks the CLI's server-origin asset links and new host
+  front-page tooling. `newdoc` now writes asset links that name the template
+  server outright, so a fresh doc renders styled the moment it is written —
+  opened straight from disk as well as published at any depth (the links
+  were root-absolute before, resolving only against a publish host). New
+  section **The host's front page**: a host root with no `index.html` is
+  served as a file listing, and `npx plandrop index` publishes the
+  header/footer that wrap it from a template, with an optional hero
+  fragment — written outside any autosync-watched path so the hero is never
+  published as a doc in its own right, summarising the README rather than
+  pasting it, and skipped when an existing `index.html` means no listing is
+  shown at all. The command table gains `index` and `fixcss` (rewrites
+  theme asset links in local docs to name the server outright — repairs
+  docs whose origin-less links only render on the host they were published
+  to).
+
+## [0.9.14] — 2026-07-27
+
+### Changed
+- `plandrop` — the description drops "plandrop template" for "template":
+  the skill is plandrop, so its templates need no qualifier.
+
+## [0.9.13] — 2026-07-27
+
+### Changed
+- `plandrop` — the description slimmed back down from five sentences of
+  overlapping trigger phrasings to about half the words, same coverage —
+  scaffold, publish, setup, the don't-fight-the-hook rule — so it stays
+  cheap to keep in context.
+
+## [0.9.12] — 2026-07-27
+
+### Changed
+- `plandrop` — the trust-the-hook rule is scoped to the watched path. The
+  autosync hook only covers the glob it was installed with, so "a save
+  republishes itself" is true under that path and false everywhere else;
+  description and body now say which is which, and a doc saved outside the
+  watched path still gets an explicit upload.
+
+## [0.9.11] — 2026-07-27
+
+### Changed
+- `plandrop` — where the autosync hook is installed, a save already
+  republishes the doc: the frontmatter description now says so (it is in
+  context whether or not the skill is loaded), so an agent skips the manual
+  re-upload-and-verify without having to be sent to the skill body first.
+
 ## [0.9.10] — 2026-07-26
 
 ### Changed

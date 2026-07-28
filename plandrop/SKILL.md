@@ -67,9 +67,10 @@ When asked to start a document "with plandrop" / "using the plandrop skill":
    npx plandrop newdoc plan_q3.html --template darkly
    ```
    `newdoc` pulls the chosen template's starter from the server and writes the named local
-   file, with root-absolute asset links already pointing at `/.plandrop/<concrete-template>/…`
-   — they resolve against the host root wherever the doc ends up published, root or ten
-   folders down. It **refuses to overwrite** an existing file without `--force`. Template
+   file, with asset links that name the template server outright
+   (`https://<server>/.plandrop/<concrete-template>/…`). They resolve from any origin — the
+   file renders styled the moment it is written, opened straight from disk, as well as
+   published at any depth. It **refuses to overwrite** an existing file without `--force`. Template
    precedence: `--template` flag > `.plandrop` `template` field > user config `template` >
    the server default.
 
@@ -86,9 +87,10 @@ When asked to start a document "with plandrop" / "using the plandrop skill":
 **Keep each file's own name.** With no remote argument, a file publishes at the same
 subpath it occupies under the `.plandrop`'s recorded `localRoot` — or under the current
 directory when none is recorded (`localRoot: "docs"`: `docs/plans/x.html` → `/plans/x.html`;
-no `localRoot`: → `/docs/plans/x.html`) — and the host's index page is generated
-automatically, so several documents live side by side on one host seamlessly. Upload as-is by default; only rename (`upload <file> <remote>`,
-e.g. to `index.html`) when the user asks.
+no `localRoot`: → `/docs/plans/x.html`) — and a directory with no `index.html` is served
+as a file listing, so several documents live side by side on one host without anything
+having to index them (see [The host's front page](#the-hosts-front-page)). Upload as-is by
+default; only rename (`upload <file> <remote>`, e.g. to `index.html`) when the user asks.
 
 Saving a document doesn't need a manual re-`upload` if the autosync hook is installed (see
 **Getting set up** above, or `hooks` below) — it republishes on save automatically, and for
@@ -103,6 +105,40 @@ watching `docs/**/*.html`, a save at `docs/plans/x.html` publishes to `/plans/x.
 `/x.html` regardless of depth). **Relative to the watched directory is the default
 everywhere** — the interactive prompt preselects it and a run with no mode flag applies
 it, so a scripted install lands exactly where a human pressing Enter would.
+
+## The host's front page
+
+A host root with no `index.html` is served as a **file listing**. That listing is what
+anyone opening the bare host link sees first, so it is worth making it say what the host
+holds. `npx plandrop index` publishes the header and footer that wrap it, taken from a
+template, so the listing matches the documents beside it rather than the server's default
+theme.
+
+To introduce the host, pass an HTML **fragment** — a heading and a paragraph or two, not a
+whole document. The natural source is the project's own README: read it, write a short
+summary as HTML to a **temporary file outside the project**, and pass that path:
+
+```bash
+# Write the fragment somewhere the autosync hook does not watch.
+cat > "${TMPDIR:-/tmp}/plandrop_hero.html" <<'EOF'
+<h1>Acme widget planning</h1>
+<p>Design notes and sprint plans. Start with <a href="plan_q3.html">the Q3 plan</a>.</p>
+EOF
+npx plandrop index "${TMPDIR:-/tmp}/plandrop_hero.html"
+```
+
+Three things to get right:
+
+- **Write the fragment outside any watched path.** A file written under the autosync
+  hook's glob is published as a document in its own right, which is not what a hero is for.
+  A temp directory avoids this and leaves nothing behind in the project.
+- **Summarise the README, do not paste it.** The hero introduces the listing in a few
+  lines; a full README wall pushes the file list off the screen.
+- **Check whether a listing is even shown.** If the host root already has an `index.html`,
+  that page is served instead and the listing never renders, so `index` changes nothing a
+  visitor sees. Say so rather than running it pointlessly.
+
+`index` writes the host root only — subdirectory listings keep the server's default theme.
 
 ## Picking a template
 
@@ -133,6 +169,8 @@ Operator-supplied templates appear namespaced as `user/<name>` and are selected 
 | `create` | Mint a host (label + passphrase) into `.plandrop`. `--force` replaces an existing one; `--hook`/`--no-hook`/`--hook-path`/`--local-root <dir>`/`--hook-flat` control the autosync-hook offer (any hook-taking flag implies `--hook`; `--local-root` and `--hook-flat` are mutually exclusive). |
 | `newdoc <file> [--template]` | Scaffold a template-based doc onto the local filesystem. `--force` overwrites. |
 | `upload <path> [remote]` | Push a file or directory over authenticated WebDAV. With no remote, **both** a file and a directory mirror their path relative to the `.plandrop`'s recorded `localRoot` when one is set (landing exactly where the autosync hook publishes the same save), else relative to the cwd — so with `localRoot: "docs"`, `upload docs` fills the host root and `upload docs/plans` fills `/plans/…`, while with no `localRoot` a directory lands under its own name (`/docs/…`). A path outside that root falls back to its bare name, except the cwd: `upload .` publishes what's here to the host root, its basename never a folder you asked for. A named remote wins and is used as given (`.` flattens a directory into the host root). Nothing hidden ever publishes (see **Guardrails**). Each uploaded file prints its own shareable URL. |
+| `index [hero-file]` | Publish `.header.html` + `.footer.html` at the **host root** — the header and footer the server wraps a directory listing in when a directory has no `index.html`. Takes them from a template, so the listing matches the docs beside it instead of the server's default theme. An optional local HTML **fragment** is placed at the end of the header, rendering between the page heading and the file list. Root only: the server resolves the pair per directory, so subdirectory listings keep the server default. Re-running is safe (both files replaced, hero never doubled). `--template <name>` follows `newdoc`'s precedence. |
+| `fixcss` | Rewrite theme asset links in **local** HTML docs under the publish root so each names the server outright — repairs docs whose links have no origin and so only render on the host they were published to. Rewrites in place; prints every changed file. |
 | `hooks [path]` | Install, update, or **upgrade** the autosync hook in the current project **without** minting a host — for a project whose host already exists. `--local-root <dir>`/`--hook-flat` set the publish root the same way `create` does. An existing plandrop hook is found by fingerprint (however it's shaped) and replaced in place rather than duplicated; a bare `plandrop hooks` with no flags silently applies whatever was last recorded in `.plandrop` — or, when nothing was, the same defaults the interactive prompts preselect (watch `docs/**/*.html`, publish relative to the watched directory) — which is how a client upgrade refreshes an older hook shape without being told the settings again. |
 | `rotate` | Change the host passphrase (old one stops working immediately). |
 | `remove` | Delete the host, its content, and the local `.plandrop`. |
